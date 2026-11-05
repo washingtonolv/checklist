@@ -1,0 +1,31 @@
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { requireAdmin } from "@/lib/auth-server";
+import { getBackend } from "@/lib/backend";
+import { Card, PageHeader } from "@/components/ui";
+import { UserForm } from "@/components/forms/UserForm";
+
+export const dynamic = "force-dynamic";
+
+export default async function NewUserPage() {
+  const user = await requireAdmin();
+  const stores = await getBackend().listStores(user);
+
+  return (
+    <div className="mx-auto max-w-3xl">
+      <Link href="/usuarios" className="mb-4 inline-flex items-center gap-1.5 text-xs font-semibold text-pink/55 hover:text-pink">
+        <ArrowLeft className="h-4 w-4" />
+        Voltar para usuários
+      </Link>
+      <PageHeader
+        eyebrow="Cadastro"
+        title="Novo usuário"
+        subtitle="Defina o perfil de acesso e vincule o responsável às lojas da rede."
+      />
+      <Card className="p-5 sm:p-6">
+        <UserForm stores={stores.map((store) => ({ id: store.id, name: store.name }))} />
+      </Card>
+    </div>
+  );
+}
+
