@@ -71,7 +71,7 @@ let state={page:'painel',store:'',status:'',category:'',search:''};
 let currentUser=null;
 try{
   const saved=sessionStorage.getItem('dd_checklist_demo_user');
-  if(saved!==null && /^\\d+$/.test(saved) && USERS[Number(saved)]) currentUser=USERS[Number(saved)];
+  if(saved!==null && /^\d+$/.test(saved) && USERS[Number(saved)]) currentUser=USERS[Number(saved)];
 }catch(_){}
 const demoQuery=new URLSearchParams(window.location.search).get('demo');
 const demoLinks={admin:0,supervisor:1,supervisor2:2,gerente:3,gerente2:4,gerente3:5};
@@ -96,7 +96,7 @@ function visibleHistory(){
   const names=new Set(accessibleStores().map(s=>s.name));
   return history.filter(x=>names.has(x.store));
 }
-function initials(name){return name.split(/\\s+/).filter(Boolean).slice(0,2).map(x=>x[0]?.toUpperCase()).join('')}
+function initials(name){return name.split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]?.toUpperCase()).join('')}
 function loginMarkup(){
   return '<section class="auth-panel">'+
     '<div class="auth-brand"><span>D<i>&amp;</i>D</span><span style="font-size:12px;font-weight:800;letter-spacing:1px;color:#8b7480">CHECKLIST OPERACIONAL</span></div>'+
