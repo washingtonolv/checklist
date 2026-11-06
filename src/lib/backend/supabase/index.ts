@@ -371,7 +371,8 @@ export function createSupabaseBackend(): Backend {
         email: input.email,
         password: input.password,
         email_confirm: true,
-        user_metadata: { name: input.name, role: input.role }
+        user_metadata: { name: input.name },
+        app_metadata: { role: input.role }
       });
       if (error || !data.user) fail(error, "Não foi possível criar o usuário.");
       const userId = data.user.id;
@@ -417,7 +418,12 @@ export function createSupabaseBackend(): Backend {
       const { data: profile } = await admin.from("profiles").select("role").eq("id", id).maybeSingle();
       if (!profile) throw new Error("Usuário não encontrado.");
       if (profile.role === "admin") throw new Error("O usuário administrador não pode ser editado por este módulo.");
-      const authUpdate: Record<string, unknown> = { email: input.email, email_confirm: true };
+      const authUpdate: Record<string, unknown> = {
+        email: input.email,
+        email_confirm: true,
+        user_metadata: { name: input.name },
+        app_metadata: { role: input.role }
+      };
       if (input.password) authUpdate.password = input.password;
       const { error: authError } = await admin.auth.admin.updateUserById(id, authUpdate);
       if (authError) fail(authError, "Não foi possível atualizar o acesso do usuário.");

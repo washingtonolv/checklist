@@ -93,7 +93,8 @@ async function ensureUser({ email, password, name, role }) {
       email,
       password,
       email_confirm: true,
-      user_metadata: { name, role }
+      user_metadata: { name },
+      app_metadata: { role }
     });
     if (error) fail(`Erro ao criar usuário ${email}`, error);
     id = data.user.id;
