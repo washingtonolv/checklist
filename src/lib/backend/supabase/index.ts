@@ -1,4 +1,4 @@
-import { assertAdmin, canReview } from "../../access";
+import { assertAdmin, assertGeneralAdmin, isGeneralAdmin, GENERAL_ADMIN_ID, canReview } from "../../access";
 import { MAX_PHOTOS_PER_TASK } from "../../constants";
 import { todayKey } from "../../dates";
 import type {
@@ -341,7 +341,7 @@ export function createSupabaseBackend(): Backend {
       assertAdmin(actor);
       const supabase = createSupabaseServerClient();
       const [profilesResult, storesResult, linksResult] = await Promise.all([
-        supabase.from("profiles").select("id,name,email,role,active,created_at").neq("role", "admin").order("name"),
+        supabase.from("profiles").select("id,name,email,role,active,created_at").neq("id", GENERAL_ADMIN_ID).order("name"),
         supabase.from("stores").select("id,name,manager_id"),
         supabase.from("store_supervisors").select("store_id,supervisor_id")
       ]);
@@ -373,6 +373,7 @@ export function createSupabaseBackend(): Backend {
 
     async createUser(actor, input) {
       assertAdmin(actor);
+      if (input.role === "admin") assertGeneralAdmin(actor);
       if (input.role === "manager" && input.storeIds.length > 1) {
         throw new Error("Um gerente de loja pode estar vinculado a apenas uma loja.");
       }
@@ -427,7 +428,8 @@ export function createSupabaseBackend(): Backend {
       const admin = createSupabaseAdminClient();
       const { data: profile } = await admin.from("profiles").select("role").eq("id", id).maybeSingle();
       if (!profile) throw new Error("Usuário não encontrado.");
-      if (profile.role === "admin") throw new Error("O usuário administrador não pode ser editado por este módulo.");
+      if (id === GENERAL_ADMIN_ID) throw new Error("O Administrador Geral é protegido.");
+      if (profile.role === "admin" || input.role === "admin" || !input.active) assertGeneralAdmin(actor);
       const authUpdate: Record<string, unknown> = {
         email: input.email,
         email_confirm: true,

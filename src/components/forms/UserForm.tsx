@@ -22,13 +22,15 @@ function Submit({ editing }: { editing: boolean }) {
 
 export function UserForm({
   user,
-  stores
+  stores,
+  canManageAdmins = false
 }: {
   user?: UserAccount;
+  canManageAdmins?: boolean;
   stores: { id: string; name: string }[];
 }) {
   const [state, action] = useFormState(saveUserAction, initialActionState);
-  const [role, setRole] = useState<"supervisor" | "manager">(user?.role === "manager" ? "manager" : "supervisor");
+  const [role, setRole] = useState<"admin" | "supervisor" | "manager">(user?.role ?? "supervisor");
   const editing = Boolean(user);
   const selectedStoreIds = user?.storeIds ?? [];
 
@@ -56,8 +58,9 @@ export function UserForm({
             name="role"
             className="input"
             value={role}
-            onChange={(event) => setRole(event.target.value as "supervisor" | "manager")}
+            onChange={(event) => setRole(event.target.value as "admin" | "supervisor" | "manager")}
           >
+            {canManageAdmins ? <option value="admin">Administrador</option> : null}
             <option value="supervisor">{ROLE_LABELS.supervisor}</option>
             <option value="manager">{ROLE_LABELS.manager}</option>
           </select>
@@ -81,7 +84,7 @@ export function UserForm({
 
       <div>
         <p className="label">Lojas vinculadas {role === "manager" ? "*" : ""}</p>
-        {stores.length ? (
+        {role === "admin" ? <p className="hint">Acesso a todas as lojas. Somente o Administrador Geral pode remover usuários ou criar administradores.</p> : stores.length ? (
           role === "manager" ? (
             <select name="storeIds" className="input" defaultValue={selectedStoreIds[0] ?? ""} required>
               <option value="">Selecione a loja do gerente</option>

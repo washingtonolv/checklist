@@ -31,7 +31,7 @@ export const userCreateSchema = z.object({
   name: z.string().trim().min(2, "Informe o nome do usuário."),
   email: z.string().trim().email("Informe um e-mail válido."),
   password: z.string().min(8, "A senha deve ter no mínimo 8 caracteres."),
-  role: z.enum(["supervisor", "manager"]),
+  role: z.enum(["admin", "supervisor", "manager"]),
   active: z.boolean().default(true),
   storeIds: z.array(z.string().uuid()).default([])
 });
@@ -44,7 +44,7 @@ export const userUpdateSchema = z.object({
     .optional()
     .transform((value) => (value?.trim() ? value : undefined))
     .refine((value) => !value || value.length >= 8, "A senha deve ter no mínimo 8 caracteres."),
-  role: z.enum(["supervisor", "manager"]),
+  role: z.enum(["admin", "supervisor", "manager"]),
   active: z.boolean().default(true),
   storeIds: z.array(z.string().uuid()).default([])
 });

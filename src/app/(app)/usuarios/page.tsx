@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { isGeneralAdmin } from "@/lib/access";
+import { RemoveUserButton } from "@/components/forms/RemoveUserButton";
 import { CheckCircle2, Plus, ShieldCheck, Store, UserRound, Users } from "@/components/ui/material-icons";
 import { requireAdmin } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
@@ -91,7 +93,8 @@ export default async function UsersPage({
                     <td className="text-xs text-ink/70">{formatDate(person.createdAt)}</td>
                     <td>
                       <div className="flex justify-end">
-                        <Link href={`/usuarios/${person.id}/editar`} className="btn-secondary btn-sm">Editar</Link>
+                        {(person.role !== "admin" || isGeneralAdmin(user)) ? <Link href={`/usuarios/${person.id}/editar`} className="btn-secondary btn-sm">Editar</Link> : null}
+                        {isGeneralAdmin(user) ? <RemoveUserButton id={person.id} name={person.name} /> : null}
                       </div>
                     </td>
                   </tr>

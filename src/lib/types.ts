@@ -64,7 +64,7 @@ export interface UserInput {
   name: string;
   email: string;
   password?: string;
-  role: Exclude<Role, "admin">;
+  role: Role;
   active: boolean;
   storeIds: string[];
 }

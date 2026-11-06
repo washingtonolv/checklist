@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { isGeneralAdmin } from "@/lib/access";
 import { ArrowLeft } from "@/components/ui/material-icons";
 import { requireAdmin } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
@@ -23,7 +24,7 @@ export default async function NewUserPage() {
         subtitle="Defina o perfil de acesso e vincule o responsável às lojas da rede."
       />
       <Card className="p-5 sm:p-6">
-        <UserForm stores={stores.map((store) => ({ id: store.id, name: store.name }))} />
+        <UserForm canManageAdmins={isGeneralAdmin(user)} stores={stores.map((store) => ({ id: store.id, name: store.name }))} />
       </Card>
     </div>
   );

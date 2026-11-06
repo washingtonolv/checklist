@@ -9,7 +9,7 @@ import type {
 export const APP_NAME = "Checklist Operacional D&D";
 
 export const ROLE_LABELS: Record<Role, string> = {
-  admin: "Gerente Comercial",
+  admin: "Administrador",
   supervisor: "Supervisor",
   manager: "Gerente de Loja"
 };

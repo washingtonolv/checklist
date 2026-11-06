@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { isGeneralAdmin } from "@/lib/access";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "@/components/ui/material-icons";
 import { requireAdmin } from "@/lib/auth-server";
@@ -29,7 +30,7 @@ export default async function EditUserPage({ params }: { params: { id: string } 
         subtitle="Atualize os dados de acesso, o perfil e as lojas vinculadas."
       />
       <Card className="p-5 sm:p-6">
-        <UserForm user={account} stores={stores.map((store) => ({ id: store.id, name: store.name }))} />
+        <UserForm canManageAdmins={isGeneralAdmin(user)} user={account} stores={stores.map((store) => ({ id: store.id, name: store.name }))} />
       </Card>
     </div>
   );

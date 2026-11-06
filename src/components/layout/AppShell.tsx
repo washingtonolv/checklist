@@ -17,6 +17,7 @@ import {
   X
 } from "@/components/ui/material-icons";
 import type { Role, SessionUser } from "@/lib/types";
+import { isGeneralAdmin } from "@/lib/access";
 import { NAV_ITEMS, ROLE_LABELS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { logoutAction } from "@/actions/auth";
@@ -110,7 +111,7 @@ export function AppShell({
           <Avatar name={user.name} size={36} />
           <div className="min-w-0">
             <p className="truncate text-sm font-bold text-white">{user.name}</p>
-            <p className="truncate text-[11px] text-white">{ROLE_LABELS[user.role]}</p>
+            <p className="truncate text-[11px] text-white">{isGeneralAdmin(user) ? "Administrador Geral" : ROLE_LABELS[user.role]}</p>
           </div>
         </div>
         <form action={logoutAction}>
@@ -197,5 +198,6 @@ export function AppShell({
     </div>
   );
 }
+
 
 

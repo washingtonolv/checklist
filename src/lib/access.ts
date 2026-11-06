@@ -27,3 +27,12 @@ export function canReview(actor: SessionUser): boolean {
   return actor.role === "admin" || actor.role === "supervisor";
 }
 
+
+// Immutable application owner, bound to the verified Supabase Auth identity.
+export const GENERAL_ADMIN_ID = "313596fc-5730-42e6-a8fd-a694d2ef5832";
+export function isGeneralAdmin(actor: SessionUser): boolean {
+  return actor.id === GENERAL_ADMIN_ID && actor.role === "admin" && actor.active;
+}
+export function assertGeneralAdmin(actor: SessionUser): void {
+  if (!isGeneralAdmin(actor)) throw new Error("Somente o Administrador Geral pode executar esta ação.");
+}
