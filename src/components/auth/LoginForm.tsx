@@ -94,7 +94,7 @@ export function LoginForm({
             <button
               type="button"
               onClick={() => setShowPassword((value) => !value)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-ink/70 hover:bg-pink/5 hover:text-ink"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-ink/70 hover:bg-ink/5 hover:text-ink"
               aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}

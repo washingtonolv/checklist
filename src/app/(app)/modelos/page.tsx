@@ -98,7 +98,7 @@ export default async function TemplatesPage({
                           {template.recurrence === "once" && template.onceDueDate ? template.onceDueDate : template.dueTime}
                         </td>
                         <td>
-                          <span className={cn("badge", template.photoRequirement === "required" ? "bg-pink text-white" : "border border-ink/15 bg-surface text-ink/65")}>
+                          <span className={cn("badge", template.photoRequirement === "required" ? "bg-ink text-white" : "border border-ink/15 bg-surface text-ink/65")}>
                             <Camera className="h-3.5 w-3.5" />
                             {PHOTO_LABELS[template.photoRequirement]}
                           </span>
@@ -117,7 +117,7 @@ export default async function TemplatesPage({
                           </div>
                         </td>
                         <td>
-                          <span className={cn("badge", template.active ? "bg-pink text-white" : "border border-ink/20 bg-surface text-ink/70")}>
+                          <span className={cn("badge", template.active ? "bg-ink text-white" : "border border-ink/20 bg-surface text-ink/70")}>
                             {template.active ? "Ativo" : "Inativo"}
                           </span>
                         </td>

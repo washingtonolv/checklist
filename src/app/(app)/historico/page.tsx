@@ -61,7 +61,7 @@ export default async function HistoryPage({
           href={tabHref("execucoes")}
           className={cn(
             "rounded-full border px-4 py-2 text-xs font-semibold",
-            tab === "execucoes" ? "border-ink bg-pink text-white" : "border-ink/15 bg-surface text-ink/65 hover:border-turquesa"
+            tab === "execucoes" ? "border-ink bg-ink text-white" : "border-ink/15 bg-surface text-ink/65 hover:border-turquesa"
           )}
         >
           <Activity className="mr-1.5 inline h-3.5 w-3.5" />
@@ -72,7 +72,7 @@ export default async function HistoryPage({
             href={tabHref("auditoria")}
             className={cn(
               "rounded-full border px-4 py-2 text-xs font-semibold",
-              tab === "auditoria" ? "border-ink bg-pink text-white" : "border-ink/15 bg-surface text-ink/65 hover:border-turquesa"
+              tab === "auditoria" ? "border-ink bg-ink text-white" : "border-ink/15 bg-surface text-ink/65 hover:border-turquesa"
             )}
           >
             <ShieldCheck className="mr-1.5 inline h-3.5 w-3.5" />
@@ -191,7 +191,7 @@ export default async function HistoryPage({
                     <tr key={entry.id}>
                       <td className="whitespace-nowrap text-xs text-ink/70">{formatDateTime(entry.createdAt)}</td>
                       <td className="text-xs font-semibold text-ink/70">{entry.actorName}</td>
-                      <td><span className="badge bg-pink/10 text-ink">{entry.action}</span></td>
+                      <td><span className="badge bg-ink/10 text-ink">{entry.action}</span></td>
                       <td className="text-xs text-ink/70">{entry.entityType}</td>
                       <td className="max-w-[360px] break-words text-[11px] text-ink/70">{JSON.stringify(entry.details)}</td>
                     </tr>

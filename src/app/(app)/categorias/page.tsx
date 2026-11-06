@@ -69,7 +69,7 @@ export default async function CategoriesPage({
                       <td><span className="badge bg-turquesa/15 text-ink">{category.templateCount ?? 0}</span></td>
                       <td className="text-xs text-ink/70">{category.sortOrder}</td>
                       <td>
-                        <span className={cn("badge", category.active ? "bg-pink text-white" : "border border-ink/20 bg-surface text-ink/70")}>
+                        <span className={cn("badge", category.active ? "bg-ink text-white" : "border border-ink/20 bg-surface text-ink/70")}>
                           {category.active ? "Ativa" : "Inativa"}
                         </span>
                       </td>

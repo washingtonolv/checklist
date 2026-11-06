@@ -62,7 +62,7 @@ export default async function TaskDetailPage({ params }: { params: { id: string 
           <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status={task.status} />
             {overdue ? (
-              <span className="badge border border-ink bg-pink/5 text-ink">
+              <span className="badge border border-ink bg-ink/5 text-ink">
                 <AlertTriangle className="h-3.5 w-3.5" />
                 Atrasada
               </span>
@@ -110,7 +110,7 @@ export default async function TaskDetailPage({ params }: { params: { id: string 
                   <PhotoUploader taskId={task.id} photoCount={task.photoCount} required={task.photoRequirement === "required"} />
                 </div>
               ) : (
-                <p className="rounded-xl border border-ink/15 bg-pink/5 px-3 py-2 text-xs text-ink/70">
+                <p className="rounded-xl border border-ink/15 bg-ink/5 px-3 py-2 text-xs text-ink/70">
                   Atividade concluída. A inclusão de novas evidências exige reabertura pela supervisão.
                 </p>
               )}

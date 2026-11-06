@@ -79,7 +79,7 @@ export default async function StoresPage({
                         )}
                       </td>
                       <td>
-                        <span className={cn("badge", store.active ? "bg-pink text-white" : "border border-ink/20 bg-surface text-ink/70")}>
+                        <span className={cn("badge", store.active ? "bg-ink text-white" : "border border-ink/20 bg-surface text-ink/70")}>
                           {store.active ? "Ativa" : "Inativa"}
                         </span>
                       </td>
@@ -103,7 +103,7 @@ export default async function StoresPage({
                   <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-turquesa/15 text-ink">
                     <Building2 className="h-5 w-5" />
                   </span>
-                  <span className={cn("badge", store.active ? "bg-pink text-white" : "border border-ink/20 bg-surface text-ink/70")}>
+                  <span className={cn("badge", store.active ? "bg-ink text-white" : "border border-ink/20 bg-surface text-ink/70")}>
                     {store.active ? "Ativa" : "Inativa"}
                   </span>
                 </div>

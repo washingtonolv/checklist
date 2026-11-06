@@ -108,7 +108,7 @@ export function PhotoUploader({
           {photoCount} de {MAX_PHOTOS_PER_TASK} fotos · limite {MAX_PHOTO_MB} MB por imagem
         </p>
         {required && photoCount === 0 ? (
-          <span className="badge border border-ink bg-pink/5 text-ink">Foto obrigatória</span>
+          <span className="badge border border-ink bg-ink/5 text-ink">Foto obrigatória</span>
         ) : null}
       </div>
 
@@ -145,7 +145,7 @@ export function PhotoUploader({
         </p>
       )}
 
-      {error ? <p className="rounded-lg border border-ink/30 bg-pink/5 px-3 py-2 text-xs text-ink">{error}</p> : null}
+      {error ? <p className="rounded-lg border border-ink/30 bg-ink/5 px-3 py-2 text-xs text-ink">{error}</p> : null}
 
       {previews.length ? (
         <div className="space-y-3 rounded-xl border border-ink/10 bg-turquesa/5 p-3">
@@ -157,7 +157,7 @@ export function PhotoUploader({
                 <button
                   type="button"
                   onClick={() => removePreview(index)}
-                  className="absolute right-1 top-1 rounded-full bg-surface/90 p-1 text-ink shadow hover:bg-pink hover:text-white"
+                  className="absolute right-1 top-1 rounded-full bg-surface/90 p-1 text-ink shadow hover:bg-ink hover:text-white"
                   aria-label="Remover prévia"
                 >
                   <Trash2 className="h-3.5 w-3.5" />

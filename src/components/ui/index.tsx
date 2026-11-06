@@ -111,7 +111,7 @@ export function ProgressBar({
         </div>
       ) : null}
       <div
-        className="h-2 w-full overflow-hidden rounded-full bg-pink/10"
+        className="h-2 w-full overflow-hidden rounded-full bg-ink/10"
         role="progressbar"
         aria-valuenow={safe}
         aria-valuemin={0}

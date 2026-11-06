@@ -1,19 +1,23 @@
 /* TEMA D&D — altere cores e fontes aqui, sem editar as telas.
-   Cores em canais RGB, separados por espaços (ex.: #891745 = 137 23 69).
+   Cores em canais RGB, separados por espaços (ex.: #CD4664 = 205 70 100).
    Isso mantém funcionando as transparências do Tailwind: bg-brand/10.
    Referência de composição: Shopify Polaris, adaptada à identidade D&D. */
 :root {
-  /* Identidade */
-  --color-brand: 137 23 69;           /* vinho D&D — botões e seleção */
-  --color-accent: 18 217 239;        /* turquesa D&D — destaques suaves */
+  /* Regra 60/30/10: branco dominante, preto secundário, rosa de destaque.
+     Proporção de hierarquia visual; nunca pintar texto ou status para atingir uma quota. */
+  --color-brand: 205 70 100;          /* #CD4664 — ações principais e seleção */
+  --color-brand-hover: 181 56 84;
+  --color-brand-active: 158 44 70;
+  --color-accent: 0 0 0;             /* #000000 — superfícies e hierarquia secundárias */
   --color-on-brand: 255 255 255;
   /* Superfícies e legibilidade */
-  --color-background: 241 242 244;
+  --color-background: 255 255 255;   /* #FFFFFF — dominante */
   --color-surface: 255 255 255;
-  --color-surface-hover: 246 246 247;
-  --color-text: 32 34 35;
-  --color-text-muted: 97 106 117;
-  --color-border: 216 220 224;
+  --color-surface-hover: 247 247 247;
+  --color-text: 0 0 0;
+  --color-text-muted: 89 89 89;
+  --color-border: 220 220 220;
+  --color-input-border: 118 118 118;
   /* Estados — sempre acompanhados de texto/ícone */
   --color-success: 12 81 50;
   --color-success-bg: 227 241 223;
@@ -31,5 +35,5 @@
   --radius-card: 12px;
   --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04), 0 0 0 1px rgb(0 0 0 / 0.02);
   --shadow-control: 0 1px 0 rgb(0 0 0 / 0.08);
-  --focus-ring: 0 0 0 3px rgb(var(--color-brand) / 0.22);
+  --focus-ring: 0 0 0 3px rgb(var(--color-brand) / 0.3);
 }

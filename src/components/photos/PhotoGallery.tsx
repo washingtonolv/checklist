@@ -69,7 +69,7 @@ export function PhotoGallery({
             ) : (
               <span className="flex h-full items-center justify-center text-xs text-ink/70">Prévia indisponível</span>
             )}
-            <span className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-pink/80 to-transparent px-2.5 pb-2 pt-6 text-[10px] font-semibold text-white">
+            <span className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-ink/80 to-transparent px-2.5 pb-2 pt-6 text-[10px] font-semibold text-white">
               <span className="truncate">{photo.isOriginal ? "Original" : "Otimizada"}</span>
               <ZoomIn className="h-3.5 w-3.5" />
             </span>
@@ -79,7 +79,7 @@ export function PhotoGallery({
 
       {selected ? (
         <div
-          className="fixed inset-0 z-[80] flex items-center justify-center bg-pink/70 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-ink/70 p-4 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-label="Visualização da evidência"
@@ -95,7 +95,7 @@ export function PhotoGallery({
               </div>
               <button
                 type="button"
-                className="rounded-lg p-2 text-ink/70 hover:bg-pink/5 hover:text-ink"
+                className="rounded-lg p-2 text-ink/70 hover:bg-ink/5 hover:text-ink"
                 onClick={() => setSelected(null)}
                 aria-label="Fechar"
               >

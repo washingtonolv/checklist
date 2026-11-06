@@ -113,7 +113,7 @@ export default async function TasksPage({
       <div className="mb-5 flex gap-2 overflow-x-auto pb-1">
         <Link
           href={tabHref("")}
-          className={cn("shrink-0 rounded-full border px-3.5 py-2 text-xs font-semibold", !filters.status ? "border-ink bg-pink text-white" : "border-ink/15 bg-surface text-ink/65 hover:border-turquesa")}
+          className={cn("shrink-0 rounded-full border px-3.5 py-2 text-xs font-semibold", !filters.status ? "border-ink bg-ink text-white" : "border-ink/15 bg-surface text-ink/65 hover:border-turquesa")}
         >
           Todas
         </Link>
@@ -121,7 +121,7 @@ export default async function TasksPage({
           <Link
             key={status}
             href={tabHref(status)}
-            className={cn("shrink-0 rounded-full border px-3.5 py-2 text-xs font-semibold", filters.status === status ? "border-ink bg-pink text-white" : "border-ink/15 bg-surface text-ink/65 hover:border-turquesa")}
+            className={cn("shrink-0 rounded-full border px-3.5 py-2 text-xs font-semibold", filters.status === status ? "border-ink bg-ink text-white" : "border-ink/15 bg-surface text-ink/65 hover:border-turquesa")}
           >
             {STATUS_LABELS[status]}
           </Link>
@@ -144,7 +144,7 @@ export default async function TasksPage({
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                   <StatusBadge status={task.status} />
                   {overdue && task.status !== "completed" ? (
-                    <span className="badge border border-ink bg-pink/5 text-ink">
+                    <span className="badge border border-ink bg-ink/5 text-ink">
                       <AlertTriangle className="h-3.5 w-3.5" />
                       Atrasada
                     </span>
@@ -160,7 +160,7 @@ export default async function TasksPage({
                     {task.storeName} · {task.storeCode}
                   </p>
                   <p className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-pink/40" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-ink/40" />
                     {task.categoryName}
                   </p>
                   <p className="flex items-center gap-2">
