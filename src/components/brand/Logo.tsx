@@ -11,13 +11,13 @@ export function Logo({
   href?: string | null;
   className?: string;
 }) {
-  const widths = { sm: 132, md: 178, lg: 300 };
+  const widths = { sm: 160, md: 178, lg: 300 };
   const image = (
     <Image
-      src="/brand/logo-dd.svg"
-      alt="D&D Checklist Operacional"
+      src="/brand/logo-dd-white.png"
+      alt="D&D Cosméticos"
       width={widths[size]}
-      height={Math.round(widths[size] / 3)}
+      height={Math.round(widths[size] * 379 / 658)}
       priority={size === "lg"}
       className={cn("h-auto w-auto object-contain", className)}
     />

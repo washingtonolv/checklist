@@ -69,7 +69,7 @@ export function AppShell({
   const sidebar = (
     <div className="flex h-full flex-col">
       <div className="flex items-center justify-between px-5 pb-4 pt-6">
-        <div className="rounded-lg bg-white p-2"><Logo size="sm" href="/painel" /></div>
+        <Logo size="sm" href="/painel" />
         <button
           type="button"
           className="sidebar-close rounded-lg p-2 text-white lg:hidden"
@@ -197,4 +197,5 @@ export function AppShell({
     </div>
   );
 }
+
 
