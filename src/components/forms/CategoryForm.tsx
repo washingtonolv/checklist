@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useFormState, useFormStatus } from "react-dom";
-import { FolderTree, Save } from "lucide-react";
+import { FolderTree, Save } from "@/components/ui/material-icons";
 import { saveCategoryAction } from "@/actions/categories";
 import { initialActionState } from "@/actions/state";
 import { Alert } from "@/components/ui";

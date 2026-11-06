@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { Camera, CalendarClock, Save } from "lucide-react";
+import { Camera, CalendarClock, Save } from "@/components/ui/material-icons";
 import { saveTemplateAction } from "@/actions/templates";
 import { initialActionState } from "@/actions/state";
 import { Alert } from "@/components/ui";

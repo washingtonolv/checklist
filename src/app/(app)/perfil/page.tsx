@@ -1,4 +1,4 @@
-import { KeyRound, Mail, ShieldCheck, Store, UserRound } from "lucide-react";
+import { KeyRound, Mail, ShieldCheck, Store, UserRound } from "@/components/ui/material-icons";
 import { requireUser } from "@/lib/auth-server";
 import { getBackend, isLocalMode } from "@/lib/backend";
 import { ROLE_DESCRIPTIONS, ROLE_LABELS } from "@/lib/constants";

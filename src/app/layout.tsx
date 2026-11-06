@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
+import { AlertTriangle, CheckCircle2, Info, Loader2, XCircle } from "@/components/ui/material-icons";
 import "./globals.css";
 import { APP_NAME } from "@/lib/constants";
 
@@ -36,6 +37,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <Toaster
           position="top-right"
+          icons={{
+            success: <CheckCircle2 className="h-5 w-5" />,
+            error: <XCircle className="h-5 w-5" />,
+            info: <Info className="h-5 w-5" />,
+            warning: <AlertTriangle className="h-5 w-5" />,
+            loading: <Loader2 className="h-5 w-5 animate-spin" />
+          }}
           toastOptions={{
             style: {
               border: "1px solid rgb(var(--color-border))",
@@ -50,4 +58,5 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
+
 

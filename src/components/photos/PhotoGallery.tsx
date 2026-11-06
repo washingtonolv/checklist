@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Download, Trash2, X, ZoomIn } from "lucide-react";
+import { Download, Trash2, X, ZoomIn } from "@/components/ui/material-icons";
 import { toast } from "sonner";
 import { deletePhotoAction } from "@/actions/tasks";
 import type { TaskPhoto } from "@/lib/types";

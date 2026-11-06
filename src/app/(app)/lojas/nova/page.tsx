@@ -1,4 +1,4 @@
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "@/components/ui/material-icons";
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";

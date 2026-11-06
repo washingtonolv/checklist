@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { Save, ShieldCheck } from "lucide-react";
+import { Save, ShieldCheck } from "@/components/ui/material-icons";
 import { saveUserAction } from "@/actions/users";
 import { initialActionState } from "@/actions/state";
 import { Alert } from "@/components/ui";

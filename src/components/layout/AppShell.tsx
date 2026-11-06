@@ -15,7 +15,7 @@ import {
   Store,
   Users,
   X
-} from "lucide-react";
+} from "@/components/ui/material-icons";
 import type { Role, SessionUser } from "@/lib/types";
 import { NAV_ITEMS, ROLE_LABELS } from "@/lib/constants";
 import { cn } from "@/lib/utils";

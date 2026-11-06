@@ -11,7 +11,7 @@ import {
   Send,
   ThumbsUp,
   XCircle
-} from "lucide-react";
+} from "@/components/ui/material-icons";
 import { toast } from "sonner";
 import {
   approveTaskAction,

@@ -11,7 +11,7 @@ import {
   ListChecks,
   Plus,
   Store
-} from "lucide-react";
+} from "@/components/ui/material-icons";
 import { requireUser } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
 import { computeDashboard } from "@/lib/dashboard";

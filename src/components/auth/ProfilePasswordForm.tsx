@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormState, useFormStatus } from "react-dom";
-import { KeyRound } from "lucide-react";
+import { KeyRound } from "@/components/ui/material-icons";
 import { updatePasswordAction } from "@/actions/auth";
 import { initialActionState } from "@/actions/state";
 import { Alert } from "@/components/ui";

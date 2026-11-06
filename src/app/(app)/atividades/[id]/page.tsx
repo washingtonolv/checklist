@@ -14,7 +14,7 @@ import {
   ShieldCheck,
   Store,
   UserRound
-} from "lucide-react";
+} from "@/components/ui/material-icons";
 import { requireUser } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
 import { ACTION_LABELS, RECURRENCE_LABELS, STATUS_LABELS } from "@/lib/constants";

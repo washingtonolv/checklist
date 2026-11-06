@@ -12,7 +12,7 @@ import {
   Pencil,
   UserRound,
   Users
-} from "lucide-react";
+} from "@/components/ui/material-icons";
 import { requireUser } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
 import { dueLabel, formatDate, formatDateTime, isOverdue, monthRange } from "@/lib/dates";
