@@ -87,7 +87,7 @@ input[type="checkbox"], input[type="radio"] { accent-color: rgb(var(--color-bran
   .card, .card-flat { box-shadow: none; }
 }
 
-/* Roxo da referência na navegação lateral. */
+/* Navegação lateral sincronizada com os tokens de cor. */
 .app-sidebar {
   background: var(--sidebar-background);
   color: #ffffff;
@@ -107,4 +107,61 @@ input[type="checkbox"], input[type="radio"] { accent-color: rgb(var(--color-bran
 .app-sidebar :focus-visible {
   outline: 2px solid #ffffff;
   outline-offset: 3px;
+}
+
+/* Microinterações: feedback sem alterar o tamanho ou o fluxo dos elementos. */
+button, a, .badge {
+  transition-property: background-color, border-color, color, box-shadow, opacity;
+  transition-duration: var(--motion-fast);
+  transition-timing-function: var(--motion-ease);
+}
+.btn, .sidebar-nav-link, a.card, button.card {
+  transition-property: background-color, border-color, color, box-shadow, opacity, transform;
+  transition-duration: var(--motion-fast);
+  transition-timing-function: var(--motion-ease);
+}
+.card, .card-flat {
+  transition: box-shadow var(--motion-normal) var(--motion-ease),
+    border-color var(--motion-fast) var(--motion-ease);
+}
+.input {
+  transition: border-color var(--motion-fast) var(--motion-ease),
+    box-shadow var(--motion-fast) var(--motion-ease),
+    background-color var(--motion-fast) var(--motion-ease);
+}
+.input:focus { box-shadow: 0 0 0 3px rgb(var(--color-brand) / 0.12); }
+.table tbody tr { transition: background-color var(--motion-fast) var(--motion-ease); }
+button[aria-busy="true"] { cursor: progress; }
+.btn:not(:disabled):not([aria-disabled="true"]):active { transform: scale(0.985); }
+@media (hover: hover) and (pointer: fine) {
+  .btn:not(:disabled):not([aria-disabled="true"]):hover { transform: translateY(-1px); }
+  .btn:not(:disabled):not([aria-disabled="true"]):hover:active { transform: scale(0.985); }
+  .card:hover { box-shadow: var(--shadow-card-hover); }
+  a.card:hover, button.card:hover { transform: translateY(-2px); }
+  .sidebar-nav-link:hover { transform: translateX(2px); }
+  .input:not(:disabled):hover:not(:focus) { border-color: rgb(var(--gray-600)); }
+}
+@keyframes dd-reveal {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes dd-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dd-menu-in {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: none; }
+}
+.auth-content, #conteudo > :first-child {
+  animation: dd-reveal var(--motion-normal) var(--motion-ease) both;
+}
+.mobile-menu-backdrop, [role="alert"], [role="dialog"] {
+  animation: dd-fade var(--motion-fast) var(--motion-ease) both;
+}
+.mobile-menu-panel { animation: dd-menu-in var(--motion-normal) var(--motion-ease) both; }
+@media (prefers-reduced-motion: reduce) {
+  .auth-content, #conteudo > :first-child, .mobile-menu-backdrop,
+  .mobile-menu-panel, [role="alert"], [role="dialog"] { animation: none; }
+  .btn, .sidebar-nav-link, a.card, button.card { transform: none !important; }
+}
+@media print {
+  .auth-content, #conteudo > :first-child { animation: none; }
 }

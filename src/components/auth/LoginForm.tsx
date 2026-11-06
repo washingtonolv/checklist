@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useFormState, useFormStatus } from "react-dom";
 import { useState } from "react";
-import { Eye, EyeOff, LogIn } from "@/components/ui/material-icons";
+import { Eye, EyeOff, Loader2, LogIn } from "@/components/ui/material-icons";
 import { loginAction } from "@/actions/auth";
 import { initialActionState } from "@/actions/state";
 import { Alert } from "@/components/ui";
@@ -17,8 +17,8 @@ interface DemoCredential {
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" className="btn-primary w-full py-3" disabled={pending}>
-      <LogIn className="h-4 w-4" />
+    <button type="submit" className="btn-primary w-full py-3" disabled={pending} aria-busy={pending}>
+      {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : <LogIn className="h-4 w-4" />}
       {pending ? "Entrando..." : "Entrar na plataforma"}
     </button>
   );

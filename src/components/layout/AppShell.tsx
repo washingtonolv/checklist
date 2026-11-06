@@ -138,11 +138,11 @@ export function AppShell({
         <div className="fixed inset-0 z-50 lg:hidden">
           <button
             type="button"
-            className="absolute inset-0 bg-pink/30 backdrop-blur-sm"
+            className="mobile-menu-backdrop absolute inset-0 bg-pink/30 backdrop-blur-sm"
             onClick={() => setOpen(false)}
             aria-label="Fechar menu"
           />
-          <aside className="app-sidebar absolute inset-y-0 left-0 w-[286px] max-w-[86vw] border-r border-line bg-surface shadow-2xl">
+          <aside className="mobile-menu-panel app-sidebar absolute inset-y-0 left-0 w-[286px] max-w-[86vw] border-r border-line bg-surface shadow-2xl">
             {sidebar}
           </aside>
         </div>
