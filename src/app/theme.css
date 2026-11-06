@@ -49,8 +49,8 @@
   --color-surface-hover: var(--gray-50);
   --color-text: var(--gray-900);
   --color-text-muted: var(--gray-600);
-  --color-border: var(--gray-200);
-  --color-input-border: var(--gray-500);
+  --color-border: 238 238 238;       /* #EEEEEE — divisórias e contornos suaves */
+  --color-input-border: 148 148 148; /* #949494 — campos suaves e identificáveis */
   /* Estados — sempre acompanhados de texto/ícone */
   --color-success: 12 81 50;
   --color-success-bg: 227 241 223;
@@ -66,7 +66,7 @@
   /* Forma e elevação */
   --radius-control: 8px;
   --radius-card: 12px;
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04), 0 0 0 1px rgb(0 0 0 / 0.02);
+  --shadow-card: 0 1px 3px rgb(0 0 0 / 0.03);
   --shadow-control: 0 1px 0 rgb(0 0 0 / 0.08);
   --focus-ring: 0 0 0 3px rgb(var(--color-brand) / 0.22);
 }
