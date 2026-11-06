@@ -24,7 +24,7 @@
   --color-danger: 159 33 36;
   --color-danger-bg: 255 238 238;
   /* Fontes — substitua a família abaixo; os títulos podem ter outra fonte. */
-  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-body: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   --font-heading: var(--font-body);
   /* Forma e elevação */
   --radius-control: 8px;
