@@ -805,3 +805,7 @@ drop policy template_stores_admin_write on public.template_stores;
  create policy template_stores_admin_insert on public.template_stores for insert to authenticated with check((select private.dd_is_admin()));
  create policy template_stores_admin_update on public.template_stores for update to authenticated using((select private.dd_is_admin())) with check((select private.dd_is_admin()));
  create policy template_stores_admin_delete on public.template_stores for delete to authenticated using((select private.dd_is_admin()));
+-- Optional unique username; assignment is restricted to the server.
+alter table public.profiles add column username text unique check (username is null or username ~ '^[a-z0-9_.-]{3,40}$');
+revoke update on public.profiles from authenticated;
+grant update(name) on public.profiles to authenticated;

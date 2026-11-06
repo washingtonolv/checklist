@@ -42,7 +42,7 @@ export function LoginForm({
         <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-ink/70">Acesso restrito</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-ink">Bem-vinda de volta</h1>
         <p className="mt-2 text-sm text-ink/70">
-          Entre com seu e-mail corporativo para acompanhar as atividades das lojas.
+          Entre com seu e-mail ou usuário para acompanhar as atividades das lojas.
         </p>
       </div>
 
@@ -56,18 +56,18 @@ export function LoginForm({
         <input type="hidden" name="next" value={next} />
         <div>
           <label htmlFor="email" className="label">
-            E-mail
+            E-mail ou usuário
           </label>
           <input
             id="email"
             name="email"
-            type="email"
-            autoComplete="email"
+            type="text"
+            autoComplete="username"
             required
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             className="input"
-            placeholder="seu.nome@dd.com.br"
+            placeholder="E-mail ou usuário"
           />
         </div>
         <div>

@@ -211,6 +211,16 @@ export function createSupabaseBackend(): Backend {
         };
       },
       async signIn(email, password) {
+        const identifier = email.trim().toLowerCase();
+        if (!identifier.includes("@")) {
+          const admin = createSupabaseAdminClient();
+          const { data: profile, error: lookupError } = await admin.from("profiles")
+            .select("email").eq("username", identifier).eq("active", true).maybeSingle();
+          if (lookupError || !profile) throw new Error("E-mail, usuário ou senha inválidos.");
+          email = profile.email;
+        } else {
+          email = identifier;
+        }
         const supabase = createSupabaseServerClient();
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) fail(error, "Não foi possível entrar.");
