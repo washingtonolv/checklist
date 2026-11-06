@@ -29,8 +29,24 @@ input[type="checkbox"], input[type="radio"] { accent-color: rgb(var(--color-bran
     @apply inline-flex min-h-[40px] cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
   }
   .btn-primary {
-    @apply btn bg-brand shadow-soft hover:bg-brand/90;
-    color: rgb(var(--color-on-brand));
+    @apply btn shadow-soft;
+    background: var(--action-primary);
+    color: #ffffff;
+  }
+  .btn-primary:hover:not(:disabled):not([aria-disabled="true"]) {
+    background: var(--action-shade-10);
+  }
+  .btn-primary:active:not(:disabled):not([aria-disabled="true"]) {
+    background: var(--action-shade-20);
+  }
+  .btn-primary:focus-visible {
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px var(--action-shade-30);
+  }
+  .btn-primary:disabled, .btn-primary[aria-disabled="true"] {
+    background: var(--action-tint-80);
+    color: var(--action-shade-20);
+    opacity: 1;
+    cursor: not-allowed;
   }
   .btn-secondary { @apply btn border border-line bg-surface text-ink hover:bg-canvas; }
   .btn-ghost { @apply btn border border-line bg-surface text-ink hover:bg-canvas; }

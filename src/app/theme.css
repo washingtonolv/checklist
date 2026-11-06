@@ -7,6 +7,27 @@
   --color-brand: 137 23 69;           /* vinho D&D — botões e seleção */
   --color-accent: 18 217 239;        /* turquesa D&D — destaques suaves */
   --color-on-brand: 255 255 255;
+
+  /* Paper Hearts — ações principais; independente da identidade e dos status. */
+  --action-primary: #cd4664;
+  --action-shade-10: #b93f5a;
+  --action-shade-20: #a43850;
+  --action-shade-30: #903146;
+  --action-shade-40: #7b2a3c;
+  --action-shade-50: #672332;
+  --action-shade-60: #521c28;
+  --action-shade-70: #3e151e;
+  --action-shade-80: #290e14;
+  --action-shade-90: #15070a;
+  --action-tint-10: #d25974;
+  --action-tint-20: #d76b83;
+  --action-tint-30: #dc7e93;
+  --action-tint-40: #e190a2;
+  --action-tint-50: #e6a3b2;
+  --action-tint-60: #ebb5c1;
+  --action-tint-70: #f0c8d1;
+  --action-tint-80: #f5dae0;
+  --action-tint-90: #faedf0;
   /* Superfícies e legibilidade */
   --color-background: 241 242 244;
   --color-surface: 255 255 255;
