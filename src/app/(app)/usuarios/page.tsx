@@ -84,7 +84,7 @@ export default async function UsersPage({
                       )}
                     </td>
                     <td>
-                      <span className={cn("badge", person.active ? "bg-ink text-white" : "border border-ink/20 bg-surface text-ink/70")}>
+                      <span className={cn("badge", person.active ? "bg-pink text-white" : "border border-ink/20 bg-surface text-ink/70")}>
                         {person.active ? "Ativo" : "Inativo"}
                       </span>
                     </td>

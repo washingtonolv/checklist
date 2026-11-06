@@ -69,10 +69,10 @@ export function AppShell({
   const sidebar = (
     <div className="flex h-full flex-col">
       <div className="flex items-center justify-between px-5 pb-4 pt-6">
-        <Logo size="sm" href="/painel" className="grayscale brightness-0 invert" />
+        <Logo size="sm" href="/painel" />
         <button
           type="button"
-          className="rounded-lg p-2 text-ink/70 hover:bg-ink/5 lg:hidden"
+          className="rounded-lg p-2 text-ink/70 hover:bg-pink/5 lg:hidden"
           onClick={() => setOpen(false)}
           aria-label="Fechar menu"
         >
@@ -91,15 +91,15 @@ export function AppShell({
               className={cn(
                 "group relative flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition",
                 active
-                  ? "bg-brand text-white"
-                  : "text-ink/65 hover:bg-ink/5 hover:text-ink"
+                  ? "bg-brand/8 text-brand"
+                  : "text-ink/65 hover:bg-pink/5 hover:text-ink"
               )}
               aria-current={active ? "page" : undefined}
             >
               {active ? (
-                <span className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-white" />
+                <span className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-brand" />
               ) : null}
-              <Icon className={cn("h-[18px] w-[18px]", active ? "text-white" : "text-ink/70 group-hover:text-ink")} />
+              <Icon className={cn("h-[18px] w-[18px]", active ? "text-brand" : "text-ink/70 group-hover:text-ink")} />
               {item.label}
             </Link>
           );
@@ -130,7 +130,7 @@ export function AppShell({
 
   return (
     <div className="min-h-[100dvh] lg:pl-[248px]">
-      <aside className="app-sidebar fixed inset-y-0 left-0 z-40 hidden w-[248px] border-r border-line bg-surface lg:block">
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-[248px] border-r border-line bg-surface lg:block">
         {sidebar}
       </aside>
 
@@ -138,11 +138,11 @@ export function AppShell({
         <div className="fixed inset-0 z-50 lg:hidden">
           <button
             type="button"
-            className="absolute inset-0 bg-ink/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-pink/30 backdrop-blur-sm"
             onClick={() => setOpen(false)}
             aria-label="Fechar menu"
           />
-          <aside className="app-sidebar absolute inset-y-0 left-0 w-[286px] max-w-[86vw] border-r border-line bg-surface shadow-2xl">
+          <aside className="absolute inset-y-0 left-0 w-[286px] max-w-[86vw] border-r border-line bg-surface shadow-2xl">
             {sidebar}
           </aside>
         </div>
@@ -153,7 +153,7 @@ export function AppShell({
           <div className="flex min-w-0 items-center gap-3">
             <button
               type="button"
-              className="rounded-lg p-2 text-ink hover:bg-ink/5 lg:hidden"
+              className="rounded-lg p-2 text-ink hover:bg-pink/5 lg:hidden"
               onClick={() => setOpen(true)}
               aria-label="Abrir menu"
               aria-expanded={open}
@@ -176,7 +176,7 @@ export function AppShell({
               </span>
             </Link>
             <form action={logoutAction} className="hidden sm:block">
-              <button type="submit" className="rounded-lg p-2 text-ink/70 hover:bg-ink/5 hover:text-ink" aria-label="Sair">
+              <button type="submit" className="rounded-lg p-2 text-ink/70 hover:bg-pink/5 hover:text-ink" aria-label="Sair">
                 <LogOut className="h-4 w-4" />
               </button>
             </form>

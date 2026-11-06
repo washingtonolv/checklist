@@ -74,7 +74,7 @@ export default async function StoreDetailPage({ params }: { params: { id: string
         subtitle="Indicadores do mês, equipe responsável e histórico recente da unidade."
         actions={
           <div className="flex flex-wrap items-center gap-2">
-            <span className={cn("badge", store.active ? "bg-ink text-white" : "border border-ink/20 bg-surface text-ink/70")}>
+            <span className={cn("badge", store.active ? "bg-pink text-white" : "border border-ink/20 bg-surface text-ink/70")}>
               {store.active ? "Loja ativa" : "Loja inativa"}
             </span>
             {canManage ? (

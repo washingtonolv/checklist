@@ -2,9 +2,9 @@ import Image from "next/image";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-[100dvh] lg:grid lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+    <div className="min-h-[100dvh] lg:grid lg:grid-cols-[1.05fr_1fr]">
       <section
-        className="flex items-center justify-center bg-ink px-4 py-6 sm:p-8 lg:sticky lg:top-0 lg:h-[100dvh] lg:p-6"
+        className="flex items-center justify-center bg-[#07547d] px-4 py-6 sm:p-8 lg:sticky lg:top-0 lg:h-[100dvh] lg:p-6"
         aria-label="Apresentação do Checklist Operacional D&D"
       >
         <Image
@@ -14,7 +14,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           height={1227}
           priority
           sizes="(min-width: 1024px) 52vw, (min-width: 640px) 640px, 100vw"
-          className="h-auto w-full max-w-[640px] grayscale lg:max-h-full lg:w-auto lg:max-w-full lg:object-contain"
+          className="h-auto w-full max-w-[640px] lg:max-h-full lg:w-auto lg:max-w-full lg:object-contain"
         />
       </section>
 

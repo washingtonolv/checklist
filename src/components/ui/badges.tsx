@@ -41,7 +41,7 @@ export function PhotoBadge({
 }) {
   const config = {
     required: {
-      className: "border border-ink/25 bg-ink/5 text-ink",
+      className: "border border-ink/25 bg-pink/5 text-ink",
       icon: <Camera className="h-3.5 w-3.5" />
     },
     optional: {
@@ -64,7 +64,7 @@ export function PhotoBadge({
 
 export function RoleBadge({ role, className }: { role: Role; className?: string }) {
   const config: Record<Role, string> = {
-    admin: "border border-ink/20 bg-ink/5 text-ink",
+    admin: "border border-brand/20 bg-brand/10 text-brand",
     supervisor: "status-info",
     manager: "status-neutral"
   };

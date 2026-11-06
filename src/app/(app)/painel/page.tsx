@@ -266,7 +266,7 @@ export default async function DashboardPage({
                   <div key={store.storeId}>
                     <div className="mb-1.5 flex items-center justify-between gap-3">
                       <div className="flex min-w-0 items-center gap-2">
-                        <span className={cn("flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold", index === 0 ? "bg-ink text-white" : "bg-turquesa/20 text-ink")}>
+                        <span className={cn("flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold", index === 0 ? "bg-pink text-white" : "bg-turquesa/20 text-ink")}>
                           {index + 1}
                         </span>
                         <div className="min-w-0">
@@ -303,7 +303,7 @@ export default async function DashboardPage({
                       <p className="truncate text-sm font-semibold text-ink">{store.storeName}</p>
                       <p className="text-[11px] text-ink/70">{store.overdue} atrasadas · {store.total} previstas</p>
                     </div>
-                    <span className="badge bg-ink/10 text-ink">{store.pending} pendentes</span>
+                    <span className="badge bg-pink/10 text-ink">{store.pending} pendentes</span>
                   </Link>
                 ))}
               </div>

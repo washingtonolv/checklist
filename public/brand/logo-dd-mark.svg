@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 260" width="260" height="260" role="img" aria-label="D&amp;D">
   <defs>
     <linearGradient id="ddTurqMark" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#CD4664"/>
-      <stop offset="100%" stop-color="#CD4664" stop-opacity="0.72"/>
+      <stop offset="0%" stop-color="#12D9EF"/>
+      <stop offset="100%" stop-color="#12D9EF" stop-opacity="0.72"/>
     </linearGradient>
   </defs>
   <rect x="0" y="0" width="260" height="260" rx="64" fill="url(#ddTurqMark)"/>
   <path d="M64 62h74c45 0 76 28 76 68s-31 68-76 68H64V62Zm44 38v60h28c21 0 36-12 36-30s-15-30-36-30h-28Z" fill="#FFFFFF"/>
-  <path d="M120 132h62c15 0 25 8 25 20s-10 20-25 20h-62v-40Z" fill="#000000"/>
-  <path d="M190 196c18 8 28 20 28 34 0 14-12 24-28 24h-30v-32h18c6 0 10-3 10-8 0-6-5-9-12-10l14-8Z" fill="#000000" opacity="0.9"/>
+  <path d="M120 132h62c15 0 25 8 25 20s-10 20-25 20h-62v-40Z" fill="#891745"/>
+  <path d="M190 196c18 8 28 20 28 34 0 14-12 24-28 24h-30v-32h18c6 0 10-3 10-8 0-6-5-9-12-10l14-8Z" fill="#891745" opacity="0.9"/>
 </svg>
 
