@@ -23,10 +23,10 @@
   --color-accent: var(--gray-500);
   --color-on-brand: var(--gray-0);
 
-  /* Roxo extraído da região central da referência enviada. */
-  --sidebar-background: #773b70;
-  --sidebar-hover: #6b3565;
-  --sidebar-selected: #5f2f5a;
+  /* Menu sincronizado com os estados dos botões Paper Hearts. */
+  --sidebar-background: var(--action-primary);
+  --sidebar-hover: var(--action-shade-10);
+  --sidebar-selected: var(--action-shade-20);
 
   /* Paper Hearts — ações principais; independente da identidade e dos status. */
   --action-primary: #cd4664;
@@ -71,7 +71,7 @@
   /* Forma e elevação */
   --radius-control: 8px;
   --radius-card: 12px;
-  --shadow-card: 0 1px 3px rgb(0 0 0 / 0.03);
+  --shadow-card: 0 2px 6px rgb(0 0 0 / 0.035), 0 6px 18px -8px rgb(0 0 0 / 0.07);
   --shadow-control: 0 1px 0 rgb(0 0 0 / 0.08);
   --focus-ring: 0 0 0 3px rgb(var(--color-brand) / 0.22);
 }
