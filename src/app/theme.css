@@ -23,6 +23,11 @@
   --color-accent: var(--gray-500);
   --color-on-brand: var(--gray-0);
 
+  /* Roxo extraído da região central da referência enviada. */
+  --sidebar-background: #773b70;
+  --sidebar-hover: #6b3565;
+  --sidebar-selected: #5f2f5a;
+
   /* Paper Hearts — ações principais; independente da identidade e dos status. */
   --action-primary: #cd4664;
   --action-shade-10: #b93f5a;

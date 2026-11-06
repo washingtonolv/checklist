@@ -87,23 +87,23 @@ input[type="checkbox"], input[type="radio"] { accent-color: rgb(var(--color-bran
   .card, .card-flat { box-shadow: none; }
 }
 
-/* Paper Hearts na navegação lateral, sem afetar o conteúdo branco. */
+/* Roxo da referência na navegação lateral. */
 .app-sidebar {
-  background: var(--action-primary);
+  background: var(--sidebar-background);
   color: #ffffff;
-  border-color: var(--action-shade-10);
+  border-color: var(--sidebar-hover);
 }
 .app-sidebar .sidebar-nav-link { color: #ffffff; }
-.app-sidebar .sidebar-nav-link:hover { background: var(--action-shade-10); }
+.app-sidebar .sidebar-nav-link:hover { background: var(--sidebar-hover); }
 .app-sidebar .sidebar-nav-active,
-.app-sidebar .sidebar-nav-active:hover { background: var(--action-shade-20); }
-.app-sidebar .sidebar-profile { background: var(--action-shade-10); }
+.app-sidebar .sidebar-nav-active:hover { background: var(--sidebar-selected); }
+.app-sidebar .sidebar-profile { background: var(--sidebar-hover); }
 .app-sidebar .sidebar-profile [aria-hidden="true"] {
   background: #ffffff;
-  color: var(--action-shade-20);
+  color: var(--sidebar-selected);
 }
 .app-sidebar .sidebar-exit:hover,
-.app-sidebar .sidebar-close:hover { background: var(--action-shade-10); }
+.app-sidebar .sidebar-close:hover { background: var(--sidebar-hover); }
 .app-sidebar :focus-visible {
   outline: 2px solid #ffffff;
   outline-offset: 3px;
