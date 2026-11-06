@@ -27,7 +27,10 @@ export const storeSchema = z.object({
   active: z.boolean().default(true)
 });
 
+export const usernameSchema = z.string().trim().toLowerCase().regex(/^[a-z0-9_.-]{3,40}$/, "Use de 3 a 40 letras, números, pontos, traços ou sublinhados, sem espaços.");
+
 export const userCreateSchema = z.object({
+  username: usernameSchema,
   name: z.string().trim().min(2, "Informe o nome do usuário."),
   email: z.string().trim().email("Informe um e-mail válido."),
   password: z.string().min(8, "A senha deve ter no mínimo 8 caracteres."),
@@ -37,6 +40,7 @@ export const userCreateSchema = z.object({
 });
 
 export const userUpdateSchema = z.object({
+  username: usernameSchema,
   name: z.string().trim().min(2, "Informe o nome do usuário."),
   email: z.string().trim().email("Informe um e-mail válido."),
   password: z

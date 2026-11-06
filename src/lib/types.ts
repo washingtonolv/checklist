@@ -50,6 +50,7 @@ export interface StoreInput {
 }
 
 export interface UserAccount {
+  username?: string | null;
   id: string;
   name: string;
   email: string;
@@ -61,6 +62,7 @@ export interface UserAccount {
 }
 
 export interface UserInput {
+  username?: string;
   name: string;
   email: string;
   password?: string;

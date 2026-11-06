@@ -39,6 +39,11 @@ export function UserForm({
       {user ? <input type="hidden" name="id" value={user.id} /> : null}
       {state?.error ? <Alert tone="error">{state.error}</Alert> : null}
 
+      <div>
+        <label htmlFor="username" className="label">Nome de usuário *</label>
+        <input id="username" name="username" required minLength={3} maxLength={40} pattern="[a-zA-Z0-9_.\-]{3,40}" defaultValue={user?.username ?? ""} className="input" autoComplete="off" autoCapitalize="none" spellCheck={false} placeholder="Ex.: maria.silva" />
+        <p className="hint">A pessoa poderá entrar com este usuário ou com o e-mail, usando a mesma senha. Não use espaços ou acentos.</p>
+      </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="name" className="label">Nome completo *</label>

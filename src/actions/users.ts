@@ -25,6 +25,7 @@ export async function saveUserAction(_prev: ActionState, formData: FormData): Pr
   const actor = await requireAdmin();
   const id = formString(formData.get("id"));
   const raw = {
+    username: formString(formData.get("username")) || undefined,
     name: formString(formData.get("name")),
     email: formString(formData.get("email")),
     password: formString(formData.get("password")),

@@ -36,6 +36,7 @@ function fail(error: { message: string } | null, fallback: string): never {
 
 function translateError(message: string, fallback: string): string {
   const lower = message.toLowerCase();
+  if (lower.includes("duplicate key") && lower.includes("username")) return "Este nome de usuário já está em uso.";
   if (lower.includes("duplicate key") && lower.includes("code")) return "Já existe uma loja com este código.";
   if (lower.includes("duplicate key")) return "Este registro já existe.";
   if (lower.includes("row-level security")) return "Você não tem permissão para executar esta ação.";
@@ -341,7 +342,7 @@ export function createSupabaseBackend(): Backend {
       assertAdmin(actor);
       const supabase = createSupabaseServerClient();
       const [profilesResult, storesResult, linksResult] = await Promise.all([
-        supabase.from("profiles").select("id,name,email,role,active,created_at").neq("id", GENERAL_ADMIN_ID).order("name"),
+        supabase.from("profiles").select("id,name,email,username,role,active,created_at").neq("id", GENERAL_ADMIN_ID).order("name"),
         supabase.from("stores").select("id,name,manager_id"),
         supabase.from("store_supervisors").select("store_id,supervisor_id")
       ]);
@@ -361,6 +362,7 @@ export function createSupabaseBackend(): Backend {
           active: profile.active,
           storeIds: [...storeIds],
           storeNames: [...storeIds].map((storeId) => storesById.get(storeId)?.name).filter(Boolean),
+          username: profile.username,
           createdAt: profile.created_at
         } satisfies UserAccount;
       });
@@ -390,6 +392,7 @@ export function createSupabaseBackend(): Backend {
       try {
         const { error: profileError } = await admin.from("profiles").upsert({
           id: userId,
+          username: input.username ?? null,
           name: input.name,
           email: input.email,
           role: input.role,
@@ -430,6 +433,11 @@ export function createSupabaseBackend(): Backend {
       if (!profile) throw new Error("Usuário não encontrado.");
       if (id === GENERAL_ADMIN_ID) throw new Error("O Administrador Geral é protegido.");
       if (profile.role === "admin" || input.role === "admin" || !input.active) assertGeneralAdmin(actor);
+      if (input.username) {
+        const { data: duplicate, error: checkError } = await admin.from("profiles").select("id").eq("username", input.username).neq("id", id).maybeSingle();
+        if (checkError) fail(checkError, "Não foi possível validar o usuário.");
+        if (duplicate) throw new Error("Este nome de usuário já está em uso.");
+      }
       const authUpdate: Record<string, unknown> = {
         email: input.email,
         email_confirm: true,
@@ -441,7 +449,7 @@ export function createSupabaseBackend(): Backend {
       if (authError) fail(authError, "Não foi possível atualizar o acesso do usuário.");
       const { error: profileError } = await admin
         .from("profiles")
-        .update({ name: input.name, email: input.email, role: input.role, active: input.active })
+        .update({ name: input.name, email: input.email, username: input.username, role: input.role, active: input.active })
         .eq("id", id);
       if (profileError) fail(profileError, "Não foi possível atualizar o perfil.");
       await admin.from("stores").update({ manager_id: null }).eq("manager_id", id);

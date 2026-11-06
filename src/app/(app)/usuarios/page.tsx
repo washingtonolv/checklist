@@ -67,6 +67,7 @@ export default async function UsersPage({
                         <div>
                           <p className="font-bold text-ink">{person.name}</p>
                           <p className="text-[11px] text-ink/70">{person.email}</p>
+                          {person.username ? <p className="text-[11px] text-ink/70">Usuário: {person.username}</p> : null}
                         </div>
                       </div>
                     </td>
