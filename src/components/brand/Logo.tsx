@@ -11,7 +11,7 @@ export function Logo({
   href?: string | null;
   className?: string;
 }) {
-  const widths = { sm: 160, md: 178, lg: 300 };
+  const widths = { sm: 140, md: 178, lg: 300 };
   const image = (
     <Image
       src="/brand/logo-dd-white.png"
