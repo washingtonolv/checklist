@@ -24,7 +24,7 @@ export default async function EditTemplatePage({ params }: { params: { id: strin
 
   return (
     <div className="mx-auto max-w-4xl">
-      <Link href="/modelos" className="mb-4 inline-flex items-center gap-1.5 text-xs font-semibold text-pink/55 hover:text-pink">
+      <Link href="/modelos" className="mb-4 inline-flex items-center gap-1.5 text-xs font-semibold text-ink/70 hover:text-ink">
         <ArrowLeft className="h-4 w-4" />
         Voltar para modelos
       </Link>

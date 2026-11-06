@@ -13,7 +13,7 @@ export default async function NewUserPage() {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <Link href="/usuarios" className="mb-4 inline-flex items-center gap-1.5 text-xs font-semibold text-pink/55 hover:text-pink">
+      <Link href="/usuarios" className="mb-4 inline-flex items-center gap-1.5 text-xs font-semibold text-ink/70 hover:text-ink">
         <ArrowLeft className="h-4 w-4" />
         Voltar para usuários
       </Link>

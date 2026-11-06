@@ -58,7 +58,7 @@ export default async function StoresPage({
                   {stores.map((store) => (
                     <tr key={store.id}>
                       <td>
-                        <Link href={`/lojas/${store.id}`} className="flex items-center gap-2 font-bold text-pink hover:underline">
+                        <Link href={`/lojas/${store.id}`} className="flex items-center gap-2 font-bold text-ink hover:underline">
                           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-turquesa/15">
                             <Store className="h-4 w-4" />
                           </span>
@@ -66,20 +66,20 @@ export default async function StoresPage({
                         </Link>
                       </td>
                       <td className="font-mono text-xs">{store.code}</td>
-                      <td>{store.managerName ?? <span className="text-pink/40">Não vinculado</span>}</td>
+                      <td>{store.managerName ?? <span className="text-ink/70">Não vinculado</span>}</td>
                       <td>
                         {store.supervisors.length ? (
                           <div className="flex flex-wrap gap-1">
                             {store.supervisors.map((supervisor) => (
-                              <span key={supervisor.id} className="badge bg-turquesa/15 text-pink">{supervisor.name}</span>
+                              <span key={supervisor.id} className="badge bg-turquesa/15 text-ink">{supervisor.name}</span>
                             ))}
                           </div>
                         ) : (
-                          <span className="text-pink/40">—</span>
+                          <span className="text-ink/70">—</span>
                         )}
                       </td>
                       <td>
-                        <span className={cn("badge", store.active ? "bg-pink text-white" : "border border-pink/20 bg-white text-pink/55")}>
+                        <span className={cn("badge", store.active ? "bg-pink text-white" : "border border-ink/20 bg-surface text-ink/70")}>
                           {store.active ? "Ativa" : "Inativa"}
                         </span>
                       </td>
@@ -100,18 +100,18 @@ export default async function StoresPage({
             {stores.map((store) => (
               <Link key={store.id} href={`/lojas/${store.id}`} className="card group p-5 transition hover:-translate-y-0.5 hover:border-turquesa">
                 <div className="mb-4 flex items-start justify-between gap-3">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-turquesa/15 text-pink">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-turquesa/15 text-ink">
                     <Building2 className="h-5 w-5" />
                   </span>
-                  <span className={cn("badge", store.active ? "bg-pink text-white" : "border border-pink/20 bg-white text-pink/55")}>
+                  <span className={cn("badge", store.active ? "bg-pink text-white" : "border border-ink/20 bg-surface text-ink/70")}>
                     {store.active ? "Ativa" : "Inativa"}
                   </span>
                 </div>
-                <h2 className="text-lg font-bold text-pink group-hover:underline group-hover:decoration-turquesa group-hover:decoration-2 group-hover:underline-offset-4">{store.name}</h2>
-                <p className="mt-0.5 flex items-center gap-1.5 text-xs text-pink/50"><MapPin className="h-3.5 w-3.5" />{store.code}</p>
-                <div className="mt-4 space-y-2 text-xs text-pink/65">
-                  <p className="flex items-center gap-2"><UserRound className="h-3.5 w-3.5 text-pink/40" />{store.managerName ?? "Sem gerente vinculado"}</p>
-                  <p className="flex items-center gap-2"><Users className="h-3.5 w-3.5 text-pink/40" />{store.supervisors.map((item) => item.name).join(", ") || "Sem supervisor"}</p>
+                <h2 className="text-lg font-bold text-ink group-hover:underline group-hover:decoration-turquesa group-hover:decoration-2 group-hover:underline-offset-4">{store.name}</h2>
+                <p className="mt-0.5 flex items-center gap-1.5 text-xs text-ink/70"><MapPin className="h-3.5 w-3.5" />{store.code}</p>
+                <div className="mt-4 space-y-2 text-xs text-ink/65">
+                  <p className="flex items-center gap-2"><UserRound className="h-3.5 w-3.5 text-ink/70" />{store.managerName ?? "Sem gerente vinculado"}</p>
+                  <p className="flex items-center gap-2"><Users className="h-3.5 w-3.5 text-ink/70" />{store.supervisors.map((item) => item.name).join(", ") || "Sem supervisor"}</p>
                 </div>
               </Link>
             ))}

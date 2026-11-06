@@ -58,18 +58,18 @@ export default async function CategoriesPage({
                   {categories.map((category) => (
                     <tr key={category.id}>
                       <td>
-                        <div className="flex items-center gap-2 font-bold text-pink">
+                        <div className="flex items-center gap-2 font-bold text-ink">
                           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-turquesa/15">
                             <Layers className="h-4 w-4" />
                           </span>
                           {category.name}
                         </div>
                       </td>
-                      <td className="max-w-[280px] text-xs text-pink/60">{category.description || "—"}</td>
-                      <td><span className="badge bg-turquesa/15 text-pink">{category.templateCount ?? 0}</span></td>
-                      <td className="text-xs text-pink/60">{category.sortOrder}</td>
+                      <td className="max-w-[280px] text-xs text-ink/70">{category.description || "—"}</td>
+                      <td><span className="badge bg-turquesa/15 text-ink">{category.templateCount ?? 0}</span></td>
+                      <td className="text-xs text-ink/70">{category.sortOrder}</td>
                       <td>
-                        <span className={cn("badge", category.active ? "bg-pink text-white" : "border border-pink/20 bg-white text-pink/55")}>
+                        <span className={cn("badge", category.active ? "bg-pink text-white" : "border border-ink/20 bg-surface text-ink/70")}>
                           {category.active ? "Ativa" : "Inativa"}
                         </span>
                       </td>

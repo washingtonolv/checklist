@@ -25,7 +25,7 @@ export function PhotoGallery({
   const router = useRouter();
 
   if (!photos.length) {
-    return <p className="text-sm text-pink/50">{emptyMessage}</p>;
+    return <p className="text-sm text-ink/70">{emptyMessage}</p>;
   }
 
   const grid = {
@@ -56,7 +56,7 @@ export function PhotoGallery({
             key={photo.id}
             type="button"
             onClick={() => setSelected(photo)}
-            className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-pink/10 bg-turquesa/5 text-left"
+            className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-ink/10 bg-turquesa/5 text-left"
           >
             {photo.url ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -67,7 +67,7 @@ export function PhotoGallery({
                 className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
               />
             ) : (
-              <span className="flex h-full items-center justify-center text-xs text-pink/50">Prévia indisponível</span>
+              <span className="flex h-full items-center justify-center text-xs text-ink/70">Prévia indisponível</span>
             )}
             <span className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-pink/80 to-transparent px-2.5 pb-2 pt-6 text-[10px] font-semibold text-white">
               <span className="truncate">{photo.isOriginal ? "Original" : "Otimizada"}</span>
@@ -85,17 +85,17 @@ export function PhotoGallery({
           aria-label="Visualização da evidência"
           onClick={() => setSelected(null)}
         >
-          <div className="max-h-[92vh] w-full max-w-4xl overflow-auto rounded-2xl bg-white shadow-2xl" onClick={(event) => event.stopPropagation()}>
-            <div className="flex items-center justify-between gap-3 border-b border-pink/10 px-4 py-3">
+          <div className="max-h-[92vh] w-full max-w-4xl overflow-auto rounded-2xl bg-surface shadow-2xl" onClick={(event) => event.stopPropagation()}>
+            <div className="flex items-center justify-between gap-3 border-b border-ink/10 px-4 py-3">
               <div>
-                <p className="text-sm font-bold text-pink">Evidência fotográfica</p>
-                <p className="text-[11px] text-pink/55">
+                <p className="text-sm font-bold text-ink">Evidência fotográfica</p>
+                <p className="text-[11px] text-ink/70">
                   {formatDateTime(selected.createdAt)} · {formatBytes(selected.sizeBytes)} · {selected.uploadedByName}
                 </p>
               </div>
               <button
                 type="button"
-                className="rounded-lg p-2 text-pink/60 hover:bg-pink/5 hover:text-pink"
+                className="rounded-lg p-2 text-ink/70 hover:bg-pink/5 hover:text-ink"
                 onClick={() => setSelected(null)}
                 aria-label="Fechar"
               >
@@ -107,7 +107,7 @@ export function PhotoGallery({
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={selected.url} alt="Evidência ampliada" className="mx-auto max-h-[68vh] w-auto rounded-xl object-contain" />
               ) : (
-                <p className="p-10 text-center text-sm text-pink/50">Prévia indisponível.</p>
+                <p className="p-10 text-center text-sm text-ink/70">Prévia indisponível.</p>
               )}
             </div>
             <div className="flex flex-wrap items-center justify-end gap-2 px-4 py-3">

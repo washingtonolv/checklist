@@ -59,12 +59,12 @@ export default async function UsersPage({
                   <tr key={person.id}>
                     <td>
                       <div className="flex items-center gap-2">
-                        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-turquesa/15 text-pink">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-turquesa/15 text-ink">
                           <UserRound className="h-4 w-4" />
                         </span>
                         <div>
-                          <p className="font-bold text-pink">{person.name}</p>
-                          <p className="text-[11px] text-pink/50">{person.email}</p>
+                          <p className="font-bold text-ink">{person.name}</p>
+                          <p className="text-[11px] text-ink/70">{person.email}</p>
                         </div>
                       </div>
                     </td>
@@ -73,22 +73,22 @@ export default async function UsersPage({
                       {person.storeNames.length ? (
                         <div className="flex flex-wrap gap-1">
                           {person.storeNames.map((name) => (
-                            <span key={name} className="badge bg-turquesa/15 text-pink">
+                            <span key={name} className="badge bg-turquesa/15 text-ink">
                               <Store className="h-3 w-3" />
                               {name}
                             </span>
                           ))}
                         </div>
                       ) : (
-                        <span className="text-xs text-pink/45">Sem vínculo</span>
+                        <span className="text-xs text-ink/70">Sem vínculo</span>
                       )}
                     </td>
                     <td>
-                      <span className={cn("badge", person.active ? "bg-pink text-white" : "border border-pink/20 bg-white text-pink/55")}>
+                      <span className={cn("badge", person.active ? "bg-pink text-white" : "border border-ink/20 bg-surface text-ink/70")}>
                         {person.active ? "Ativo" : "Inativo"}
                       </span>
                     </td>
-                    <td className="text-xs text-pink/60">{formatDate(person.createdAt)}</td>
+                    <td className="text-xs text-ink/70">{formatDate(person.createdAt)}</td>
                     <td>
                       <div className="flex justify-end">
                         <Link href={`/usuarios/${person.id}/editar`} className="btn-secondary btn-sm">Editar</Link>
@@ -111,7 +111,7 @@ export default async function UsersPage({
         </Card>
       )}
 
-      <div className="mt-5 flex flex-wrap items-center gap-3 rounded-2xl border border-dashed border-pink/15 px-4 py-3 text-[11px] text-pink/50">
+      <div className="mt-5 flex flex-wrap items-center gap-3 rounded-2xl border border-dashed border-ink/15 px-4 py-3 text-[11px] text-ink/70">
         <ShieldCheck className="h-4 w-4" />
         As permissões são aplicadas no banco de dados e na camada de servidor, não apenas na interface.
         <span className="hidden sm:inline">·</span>

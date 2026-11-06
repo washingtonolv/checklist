@@ -16,26 +16,11 @@ import { cn } from "@/lib/utils";
 
 export function StatusBadge({ status, className }: { status: TaskStatus; className?: string }) {
   const config: Record<TaskStatus, { className: string; icon: ReactNode }> = {
-    pending: {
-      className: "border border-pink/20 bg-pink/5 text-pink",
-      icon: <CircleDashed className="h-3.5 w-3.5" />
-    },
-    in_progress: {
-      className: "border border-turquesa bg-turquesa/15 text-pink",
-      icon: <LoaderCircle className="h-3.5 w-3.5" />
-    },
-    completed: {
-      className: "border border-pink bg-pink text-white",
-      icon: <CheckCircle2 className="h-3.5 w-3.5" />
-    },
-    correction_requested: {
-      className: "border border-dashed border-pink bg-white text-pink",
-      icon: <AlertTriangle className="h-3.5 w-3.5" />
-    },
-    rejected: {
-      className: "border-2 border-pink bg-white text-pink",
-      icon: <XCircle className="h-3.5 w-3.5" />
-    }
+    pending: { className: "status-warning", icon: <CircleDashed className="h-3.5 w-3.5" /> },
+    in_progress: { className: "status-info", icon: <LoaderCircle className="h-3.5 w-3.5" /> },
+    completed: { className: "status-success", icon: <CheckCircle2 className="h-3.5 w-3.5" /> },
+    correction_requested: { className: "status-warning border-dashed", icon: <AlertTriangle className="h-3.5 w-3.5" /> },
+    rejected: { className: "status-danger", icon: <XCircle className="h-3.5 w-3.5" /> }
   };
   return (
     <span className={cn("badge", config[status].className, className)}>
@@ -56,15 +41,15 @@ export function PhotoBadge({
 }) {
   const config = {
     required: {
-      className: "border border-pink/25 bg-pink/5 text-pink",
+      className: "border border-ink/25 bg-pink/5 text-ink",
       icon: <Camera className="h-3.5 w-3.5" />
     },
     optional: {
-      className: "border border-turquesa/50 bg-turquesa/10 text-pink",
+      className: "border border-turquesa/50 bg-turquesa/10 text-ink",
       icon: <Camera className="h-3.5 w-3.5" />
     },
     none: {
-      className: "border border-pink/15 bg-white text-pink/55",
+      className: "border border-ink/15 bg-surface text-ink/70",
       icon: <CameraOff className="h-3.5 w-3.5" />
     }
   };
@@ -79,9 +64,9 @@ export function PhotoBadge({
 
 export function RoleBadge({ role, className }: { role: Role; className?: string }) {
   const config: Record<Role, string> = {
-    admin: "bg-pink text-white",
-    supervisor: "bg-turquesa text-pink",
-    manager: "border border-pink/25 bg-white text-pink"
+    admin: "border border-brand/20 bg-brand/10 text-brand",
+    supervisor: "status-info",
+    manager: "status-neutral"
   };
   return (
     <span className={cn("badge", config[role], className)}>

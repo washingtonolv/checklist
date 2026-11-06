@@ -92,15 +92,15 @@ export function UserForm({
           ) : (
             <div className="grid gap-2 sm:grid-cols-2">
               {stores.map((store) => (
-                <label key={store.id} className="flex cursor-pointer items-center gap-3 rounded-xl border border-pink/15 bg-white px-3.5 py-2.5 hover:border-turquesa">
+                <label key={store.id} className="flex cursor-pointer items-center gap-3 rounded-xl border border-ink/15 bg-surface px-3.5 py-2.5 hover:border-turquesa">
                   <input
                     type="checkbox"
                     name="storeIds"
                     value={store.id}
                     defaultChecked={selectedStoreIds.includes(store.id)}
-                    className="h-4 w-4 accent-[#891745]"
+                    className="h-4 w-4 accent-brand"
                   />
-                  <span className="text-sm text-pink/75">{store.name}</span>
+                  <span className="text-sm text-ink/75">{store.name}</span>
                 </label>
               ))}
             </div>
@@ -115,15 +115,15 @@ export function UserForm({
         </p>
       </div>
 
-      <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-pink/15 bg-white px-3.5 py-2.5">
-        <input type="checkbox" name="active" defaultChecked={user?.active ?? true} className="h-4 w-4 accent-[#891745]" />
-        <span className="flex items-center gap-2 text-sm font-semibold text-pink/75">
-          <ShieldCheck className="h-4 w-4 text-pink/45" />
+      <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-ink/15 bg-surface px-3.5 py-2.5">
+        <input type="checkbox" name="active" defaultChecked={user?.active ?? true} className="h-4 w-4 accent-brand" />
+        <span className="flex items-center gap-2 text-sm font-semibold text-ink/75">
+          <ShieldCheck className="h-4 w-4 text-ink/70" />
           Usuário ativo
         </span>
       </label>
 
-      <div className="flex flex-wrap items-center justify-end gap-2 border-t border-pink/10 pt-4">
+      <div className="flex flex-wrap items-center justify-end gap-2 border-t border-ink/10 pt-4">
         <Link href="/usuarios" className="btn-ghost">Cancelar</Link>
         <Submit editing={editing} />
       </div>

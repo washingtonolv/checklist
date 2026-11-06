@@ -232,20 +232,20 @@ export default async function DashboardPage({
           <div className="flex flex-col items-center gap-5 p-6">
             <div
               className="relative flex h-40 w-40 items-center justify-center rounded-full"
-              style={{ background: `conic-gradient(#891745 ${data.executionRate * 3.6}deg, rgba(18,217,239,0.2) 0deg)` }}
+              style={{ background: `conic-gradient(rgb(var(--color-success)) ${data.executionRate * 3.6}deg, rgb(var(--color-border)) 0deg)` }}
               role="img"
               aria-label={`Execução geral: ${data.executionRate}%`}
             >
-              <div className="flex h-28 w-28 flex-col items-center justify-center rounded-full bg-white shadow-inner">
-                <span className="text-4xl font-black text-pink">{data.executionRate}%</span>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-pink/50">execução</span>
+              <div className="flex h-28 w-28 flex-col items-center justify-center rounded-full bg-surface shadow-inner">
+                <span className="text-4xl font-semibold text-ink">{data.executionRate}%</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-ink/70">execução</span>
               </div>
             </div>
             <div className="w-full space-y-2">
               {data.statusBreakdown.map((item) => (
                 <div key={item.status} className="flex items-center justify-between gap-3 text-xs">
-                  <span className="text-pink/65">{item.label}</span>
-                  <span className="font-bold text-pink">{item.count}</span>
+                  <span className="text-ink/65">{item.label}</span>
+                  <span className="font-bold text-ink">{item.count}</span>
                 </div>
               ))}
             </div>
@@ -266,15 +266,15 @@ export default async function DashboardPage({
                   <div key={store.storeId}>
                     <div className="mb-1.5 flex items-center justify-between gap-3">
                       <div className="flex min-w-0 items-center gap-2">
-                        <span className={cn("flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-black", index === 0 ? "bg-pink text-white" : "bg-turquesa/20 text-pink")}>
+                        <span className={cn("flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold", index === 0 ? "bg-pink text-white" : "bg-turquesa/20 text-ink")}>
                           {index + 1}
                         </span>
                         <div className="min-w-0">
-                          <p className="truncate text-sm font-bold text-pink">{store.storeName}</p>
-                          <p className="text-[11px] text-pink/50">{store.storeCode} · {store.completed}/{store.total} concluídas</p>
+                          <p className="truncate text-sm font-bold text-ink">{store.storeName}</p>
+                          <p className="text-[11px] text-ink/70">{store.storeCode} · {store.completed}/{store.total} concluídas</p>
                         </div>
                       </div>
-                      <span className="text-sm font-black text-pink">{store.rate}%</span>
+                      <span className="text-sm font-semibold text-ink">{store.rate}%</span>
                     </div>
                     <ProgressBar value={store.rate} />
                   </div>
@@ -298,17 +298,17 @@ export default async function DashboardPage({
             {data.pendingRanking.length ? (
               <div className="space-y-3">
                 {data.pendingRanking.slice(0, 6).map((store) => (
-                  <Link key={store.storeId} href={`/lojas/${store.storeId}`} className="flex items-center justify-between gap-3 rounded-xl border border-pink/10 px-3 py-2.5 hover:border-turquesa hover:bg-turquesa/5">
+                  <Link key={store.storeId} href={`/lojas/${store.storeId}`} className="flex items-center justify-between gap-3 rounded-xl border border-ink/10 px-3 py-2.5 hover:border-turquesa hover:bg-turquesa/5">
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-pink">{store.storeName}</p>
-                      <p className="text-[11px] text-pink/50">{store.overdue} atrasadas · {store.total} previstas</p>
+                      <p className="truncate text-sm font-semibold text-ink">{store.storeName}</p>
+                      <p className="text-[11px] text-ink/70">{store.overdue} atrasadas · {store.total} previstas</p>
                     </div>
-                    <span className="badge bg-pink/10 text-pink">{store.pending} pendentes</span>
+                    <span className="badge bg-pink/10 text-ink">{store.pending} pendentes</span>
                   </Link>
                 ))}
               </div>
             ) : (
-              <p className="py-6 text-center text-sm text-pink/50">Nenhuma pendência no período.</p>
+              <p className="py-6 text-center text-sm text-ink/70">Nenhuma pendência no período.</p>
             )}
           </div>
         </Card>
@@ -319,17 +319,17 @@ export default async function DashboardPage({
             {data.overdueTasks.length ? (
               <div className="space-y-3">
                 {data.overdueTasks.map((task) => (
-                  <Link key={task.id} href={`/atividades/${task.id}`} className="flex items-start justify-between gap-3 rounded-xl border border-pink/10 px-3 py-2.5 hover:border-turquesa hover:bg-turquesa/5">
+                  <Link key={task.id} href={`/atividades/${task.id}`} className="flex items-start justify-between gap-3 rounded-xl border border-ink/10 px-3 py-2.5 hover:border-turquesa hover:bg-turquesa/5">
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-pink">{task.title}</p>
-                      <p className="text-[11px] text-pink/50">{task.storeName} · {dueLabel(task.dueDate, task.dueTime)}</p>
+                      <p className="truncate text-sm font-semibold text-ink">{task.title}</p>
+                      <p className="text-[11px] text-ink/70">{task.storeName} · {dueLabel(task.dueDate, task.dueTime)}</p>
                     </div>
                     <StatusBadge status={task.status} />
                   </Link>
                 ))}
               </div>
             ) : (
-              <p className="py-6 text-center text-sm text-pink/50">Nenhuma atividade atrasada. Boa operação!</p>
+              <p className="py-6 text-center text-sm text-ink/70">Nenhuma atividade atrasada. Boa operação!</p>
             )}
           </div>
         </Card>
@@ -342,16 +342,16 @@ export default async function DashboardPage({
             {enrichedPhotos.length ? (
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {enrichedPhotos.map((photo) => (
-                  <Link key={photo.id} href={`/atividades/${photo.taskId}`} className="group overflow-hidden rounded-xl border border-pink/10 bg-turquesa/5">
+                  <Link key={photo.id} href={`/atividades/${photo.taskId}`} className="group overflow-hidden rounded-xl border border-ink/10 bg-turquesa/5">
                     {photo.url ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={photo.url} alt={photo.taskTitle} loading="lazy" className="aspect-[4/3] w-full object-cover transition group-hover:scale-[1.03]" />
                     ) : (
-                      <div className="flex aspect-[4/3] items-center justify-center text-[10px] text-pink/40">Sem prévia</div>
+                      <div className="flex aspect-[4/3] items-center justify-center text-[10px] text-ink/70">Sem prévia</div>
                     )}
                     <div className="p-2">
-                      <p className="truncate text-[11px] font-semibold text-pink">{photo.taskTitle}</p>
-                      <p className="truncate text-[10px] text-pink/50">{photo.storeName}</p>
+                      <p className="truncate text-[11px] font-semibold text-ink">{photo.taskTitle}</p>
+                      <p className="truncate text-[10px] text-ink/70">{photo.storeName}</p>
                     </div>
                   </Link>
                 ))}
@@ -370,25 +370,25 @@ export default async function DashboardPage({
                 {data.categoryBreakdown.map((category) => (
                   <div key={category.categoryName}>
                     <div className="mb-1 flex items-center justify-between gap-2 text-xs">
-                      <span className="truncate font-semibold text-pink/75">{category.categoryName}</span>
-                      <span className="font-bold text-pink">{category.rate}%</span>
+                      <span className="truncate font-semibold text-ink/75">{category.categoryName}</span>
+                      <span className="font-bold text-ink">{category.rate}%</span>
                     </div>
                     <ProgressBar value={category.rate} />
-                    <p className="mt-1 text-[10px] text-pink/45">{category.completed} de {category.total} concluídas</p>
+                    <p className="mt-1 text-[10px] text-ink/70">{category.completed} de {category.total} concluídas</p>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="py-6 text-center text-sm text-pink/50">Sem dados no período.</p>
+              <p className="py-6 text-center text-sm text-ink/70">Sem dados no período.</p>
             )}
           </div>
         </Card>
       </div>
 
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-dashed border-pink/20 bg-turquesa/5 px-5 py-4">
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-dashed border-ink/20 bg-turquesa/5 px-5 py-4">
         <div className="flex items-center gap-3">
           <RoleBadge role={user.role as Role} />
-          <p className="text-xs text-pink/60">
+          <p className="text-xs text-ink/70">
             {user.role === "admin"
               ? "Você visualiza todas as lojas e pode gerenciar usuários, categorias e modelos."
               : user.role === "supervisor"

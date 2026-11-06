@@ -14,7 +14,7 @@ export function Logo({
   const widths = { sm: 132, md: 178, lg: 300 };
   const image = (
     <Image
-      src="/brand/logo-dd.png"
+      src="/brand/logo-dd.svg"
       alt="D&D Checklist Operacional"
       width={widths[size]}
       height={Math.round(widths[size] / 3)}
@@ -33,7 +33,7 @@ export function Logo({
 export function LogoMark({ size = 40, className }: { size?: number; className?: string }) {
   return (
     <Image
-      src="/brand/logo-dd-mark.png"
+      src="/brand/logo-dd-mark.svg"
       alt="D&D"
       width={size}
       height={size}

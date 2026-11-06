@@ -62,10 +62,10 @@ export default async function TemplatesPage({
         <div className="space-y-6">
           {[...grouped, ...(uncategorized.length ? [{ category: { id: "sem-categoria", name: "Sem categoria", description: "" }, templates: uncategorized }] : [])].map((group) => (
             <Card key={group.category.id}>
-              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-pink/10 bg-turquesa/5 px-5 py-3">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-ink/10 bg-turquesa/5 px-5 py-3">
                 <div>
-                  <h2 className="text-sm font-black uppercase tracking-wide text-pink">{group.category.name}</h2>
-                  <p className="text-[11px] text-pink/50">{group.templates.length} modelo(s)</p>
+                  <h2 className="text-sm font-semibold uppercase tracking-wide text-ink">{group.category.name}</h2>
+                  <p className="text-[11px] text-ink/70">{group.templates.length} modelo(s)</p>
                 </div>
               </div>
               <div className="table-wrap">
@@ -85,20 +85,20 @@ export default async function TemplatesPage({
                     {group.templates.map((template) => (
                       <tr key={template.id}>
                         <td>
-                          <p className="font-bold text-pink">{template.title}</p>
-                          <p className="max-w-[320px] text-[11px] text-pink/50">{template.description || "Sem descrição."}</p>
+                          <p className="font-bold text-ink">{template.title}</p>
+                          <p className="max-w-[320px] text-[11px] text-ink/70">{template.description || "Sem descrição."}</p>
                         </td>
                         <td>
-                          <span className="badge border border-turquesa/50 bg-turquesa/10 text-pink">
+                          <span className="badge border border-turquesa/50 bg-turquesa/10 text-ink">
                             <CalendarClock className="h-3.5 w-3.5" />
                             {RECURRENCE_LABELS[template.recurrence]}
                           </span>
                         </td>
-                        <td className="text-xs text-pink/65">
+                        <td className="text-xs text-ink/65">
                           {template.recurrence === "once" && template.onceDueDate ? template.onceDueDate : template.dueTime}
                         </td>
                         <td>
-                          <span className={cn("badge", template.photoRequirement === "required" ? "bg-pink text-white" : "border border-pink/15 bg-white text-pink/65")}>
+                          <span className={cn("badge", template.photoRequirement === "required" ? "bg-pink text-white" : "border border-ink/15 bg-surface text-ink/65")}>
                             <Camera className="h-3.5 w-3.5" />
                             {PHOTO_LABELS[template.photoRequirement]}
                           </span>
@@ -106,18 +106,18 @@ export default async function TemplatesPage({
                         <td>
                           <div className="flex max-w-[220px] flex-wrap gap-1">
                             {template.storeNames.slice(0, 3).map((name) => (
-                              <span key={name} className="badge bg-turquesa/15 text-pink">
+                              <span key={name} className="badge bg-turquesa/15 text-ink">
                                 <Store className="h-3 w-3" />
                                 {name}
                               </span>
                             ))}
                             {template.storeNames.length > 3 ? (
-                              <span className="badge border border-pink/15 text-pink/55">+{template.storeNames.length - 3}</span>
+                              <span className="badge border border-ink/15 text-ink/70">+{template.storeNames.length - 3}</span>
                             ) : null}
                           </div>
                         </td>
                         <td>
-                          <span className={cn("badge", template.active ? "bg-pink text-white" : "border border-pink/20 bg-white text-pink/55")}>
+                          <span className={cn("badge", template.active ? "bg-pink text-white" : "border border-ink/20 bg-surface text-ink/70")}>
                             {template.active ? "Ativo" : "Inativo"}
                           </span>
                         </td>
@@ -148,7 +148,7 @@ export default async function TemplatesPage({
         </Card>
       )}
 
-      <div className="mt-5 flex flex-wrap items-center gap-3 rounded-2xl border border-dashed border-pink/15 px-4 py-3 text-[11px] text-pink/50">
+      <div className="mt-5 flex flex-wrap items-center gap-3 rounded-2xl border border-dashed border-ink/15 px-4 py-3 text-[11px] text-ink/70">
         <Camera className="h-4 w-4" />
         A geração automática evita duplicidades por loja, modelo e período (diário, semanal, mensal ou pontual).
       </div>
@@ -159,8 +159,8 @@ export default async function TemplatesPage({
 function Summary({ label, value }: { label: string; value: number }) {
   return (
     <div className="card flex items-center justify-between gap-3 p-4">
-      <span className="text-xs font-semibold text-pink/60">{label}</span>
-      <span className="text-2xl font-black text-pink">{value}</span>
+      <span className="text-xs font-semibold text-ink/70">{label}</span>
+      <span className="text-2xl font-semibold text-ink">{value}</span>
     </div>
   );
 }

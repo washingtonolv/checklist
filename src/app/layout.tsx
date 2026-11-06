@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "Plataforma de gestão das rotinas operacionais das lojas D&D: checklists, evidências fotográficas e indicadores.",
   applicationName: APP_NAME,
   icons: {
-    icon: "/brand/logo-dd-mark.png"
+    icon: "/brand/logo-dd-mark.svg"
   }
 };
 
@@ -31,9 +31,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           position="top-right"
           toastOptions={{
             style: {
-              border: "1px solid rgba(137,23,69,0.16)",
-              color: "#891745",
-              borderRadius: "14px"
+              border: "1px solid rgb(var(--color-border))",
+              color: "rgb(var(--color-text))",
+              background: "rgb(var(--color-surface))",
+              fontFamily: "var(--font-body)",
+              borderRadius: "var(--radius-card)"
             }
           }}
         />
