@@ -69,17 +69,17 @@ export function AppShell({
   const sidebar = (
     <div className="flex h-full flex-col">
       <div className="flex items-center justify-between px-5 pb-4 pt-6">
-        <Logo size="sm" href="/painel" />
+        <div className="rounded-lg bg-white p-2"><Logo size="sm" href="/painel" /></div>
         <button
           type="button"
-          className="rounded-lg p-2 text-ink/70 hover:bg-pink/5 lg:hidden"
+          className="sidebar-close rounded-lg p-2 text-white lg:hidden"
           onClick={() => setOpen(false)}
           aria-label="Fechar menu"
         >
           <X className="h-5 w-5" />
         </button>
       </div>
-      <div className="mx-5 mb-5 border-t border-line" />
+      <div className="mx-5 mb-5 border-t border-white/25" />
       <nav className="flex-1 space-y-1 overflow-y-auto px-3" aria-label="Navegação principal">
         {nav.map((item) => {
           const Icon = ICONS[item.icon as keyof typeof ICONS];
@@ -89,38 +89,38 @@ export function AppShell({
               key={item.href}
               href={item.href}
               className={cn(
-                "group relative flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition",
+                "sidebar-nav-link group relative flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition",
                 active
-                  ? "bg-brand/8 text-brand"
-                  : "text-ink/65 hover:bg-pink/5 hover:text-ink"
+                  ? "sidebar-nav-active text-white"
+                  : "text-white"
               )}
               aria-current={active ? "page" : undefined}
             >
               {active ? (
-                <span className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-brand" />
+                <span className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-white" />
               ) : null}
-              <Icon className={cn("h-[18px] w-[18px]", active ? "text-brand" : "text-ink/70 group-hover:text-ink")} />
+              <Icon className="h-[18px] w-[18px] text-white" />
               {item.label}
             </Link>
           );
         })}
       </nav>
-      <div className="border-t border-line p-4">
-        <div className="mb-3 flex items-center gap-2.5 rounded-lg bg-canvas p-3">
+      <div className="border-t border-white/25 p-4">
+        <div className="mb-3 flex items-center gap-2.5 sidebar-profile rounded-lg bg-white/10 p-3">
           <Avatar name={user.name} size={36} />
           <div className="min-w-0">
-            <p className="truncate text-sm font-bold text-ink">{user.name}</p>
-            <p className="truncate text-[11px] text-ink/70">{ROLE_LABELS[user.role]}</p>
+            <p className="truncate text-sm font-bold text-white">{user.name}</p>
+            <p className="truncate text-[11px] text-white">{ROLE_LABELS[user.role]}</p>
           </div>
         </div>
         <form action={logoutAction}>
-          <button type="submit" className="btn-ghost w-full justify-start text-xs">
+          <button type="submit" className="btn sidebar-exit w-full justify-start border border-white/50 bg-transparent text-xs text-white">
             <LogOut className="h-4 w-4" />
             Sair da plataforma
           </button>
         </form>
         {demoMode ? (
-          <p className="mt-3 rounded-lg border border-dashed border-ink/20 px-2 py-1.5 text-center text-[10px] font-semibold uppercase tracking-wider text-ink/70">
+          <p className="mt-3 rounded-lg border border-dashed border-white/40 px-2 py-1.5 text-center text-[10px] font-semibold uppercase tracking-wider text-white">
             Modo local de demonstração
           </p>
         ) : null}
@@ -130,7 +130,7 @@ export function AppShell({
 
   return (
     <div className="min-h-[100dvh] lg:pl-[248px]">
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-[248px] border-r border-line bg-surface lg:block">
+      <aside className="app-sidebar fixed inset-y-0 left-0 z-40 hidden w-[248px] border-r border-line bg-surface lg:block">
         {sidebar}
       </aside>
 
@@ -142,7 +142,7 @@ export function AppShell({
             onClick={() => setOpen(false)}
             aria-label="Fechar menu"
           />
-          <aside className="absolute inset-y-0 left-0 w-[286px] max-w-[86vw] border-r border-line bg-surface shadow-2xl">
+          <aside className="app-sidebar absolute inset-y-0 left-0 w-[286px] max-w-[86vw] border-r border-line bg-surface shadow-2xl">
             {sidebar}
           </aside>
         </div>
