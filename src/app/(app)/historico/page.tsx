@@ -61,7 +61,7 @@ export default async function HistoryPage({
           href={tabHref("execucoes")}
           className={cn(
             "rounded-full border px-4 py-2 text-xs font-semibold",
-            tab === "execucoes" ? "border-pink bg-pink text-white" : "border-pink/15 bg-white text-pink/65 hover:border-turquesa"
+            tab === "execucoes" ? "border-ink bg-pink text-white" : "border-ink/15 bg-surface text-ink/65 hover:border-turquesa"
           )}
         >
           <Activity className="mr-1.5 inline h-3.5 w-3.5" />
@@ -72,7 +72,7 @@ export default async function HistoryPage({
             href={tabHref("auditoria")}
             className={cn(
               "rounded-full border px-4 py-2 text-xs font-semibold",
-              tab === "auditoria" ? "border-pink bg-pink text-white" : "border-pink/15 bg-white text-pink/65 hover:border-turquesa"
+              tab === "auditoria" ? "border-ink bg-pink text-white" : "border-ink/15 bg-surface text-ink/65 hover:border-turquesa"
             )}
           >
             <ShieldCheck className="mr-1.5 inline h-3.5 w-3.5" />
@@ -136,24 +136,24 @@ export default async function HistoryPage({
                 <tbody>
                   {history.map((execution) => (
                     <tr key={execution.id}>
-                      <td className="whitespace-nowrap text-xs text-pink/60">{formatDateTime(execution.createdAt)}</td>
+                      <td className="whitespace-nowrap text-xs text-ink/70">{formatDateTime(execution.createdAt)}</td>
                       <td>
-                        <span className="badge border border-turquesa/40 bg-turquesa/10 text-pink">
+                        <span className="badge border border-turquesa/40 bg-turquesa/10 text-ink">
                           {ACTION_LABELS[execution.action] ?? execution.action}
                         </span>
                       </td>
                       <td>
                         {execution.taskTitle ? (
-                          <Link href={`/atividades/${execution.taskId}`} className="text-xs font-semibold text-pink hover:underline">
+                          <Link href={`/atividades/${execution.taskId}`} className="text-xs font-semibold text-ink hover:underline">
                             {execution.taskTitle}
                           </Link>
                         ) : (
-                          <span className="text-xs text-pink/45">Atividade removida</span>
+                          <span className="text-xs text-ink/70">Atividade removida</span>
                         )}
                       </td>
-                      <td className="text-xs text-pink/60">{execution.storeName ?? "—"}</td>
-                      <td className="text-xs text-pink/60">{execution.userName}</td>
-                      <td className="max-w-[280px] text-xs text-pink/55">{execution.note || "—"}</td>
+                      <td className="text-xs text-ink/70">{execution.storeName ?? "—"}</td>
+                      <td className="text-xs text-ink/70">{execution.userName}</td>
+                      <td className="max-w-[280px] text-xs text-ink/70">{execution.note || "—"}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -189,11 +189,11 @@ export default async function HistoryPage({
                 <tbody>
                   {audit.map((entry) => (
                     <tr key={entry.id}>
-                      <td className="whitespace-nowrap text-xs text-pink/60">{formatDateTime(entry.createdAt)}</td>
-                      <td className="text-xs font-semibold text-pink/70">{entry.actorName}</td>
-                      <td><span className="badge bg-pink/10 text-pink">{entry.action}</span></td>
-                      <td className="text-xs text-pink/60">{entry.entityType}</td>
-                      <td className="max-w-[360px] break-words text-[11px] text-pink/50">{JSON.stringify(entry.details)}</td>
+                      <td className="whitespace-nowrap text-xs text-ink/70">{formatDateTime(entry.createdAt)}</td>
+                      <td className="text-xs font-semibold text-ink/70">{entry.actorName}</td>
+                      <td><span className="badge bg-pink/10 text-ink">{entry.action}</span></td>
+                      <td className="text-xs text-ink/70">{entry.entityType}</td>
+                      <td className="max-w-[360px] break-words text-[11px] text-ink/70">{JSON.stringify(entry.details)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -209,7 +209,7 @@ export default async function HistoryPage({
         </Card>
       )}
 
-      <div className="mt-5 flex flex-wrap items-center gap-3 rounded-2xl border border-dashed border-pink/15 px-4 py-3 text-[11px] text-pink/50">
+      <div className="mt-5 flex flex-wrap items-center gap-3 rounded-2xl border border-dashed border-ink/15 px-4 py-3 text-[11px] text-ink/70">
         <ShieldCheck className="h-4 w-4" />
         O histórico preserva o estado anterior e posterior de cada mudança de status. Registros não são sobrescritos.
       </div>

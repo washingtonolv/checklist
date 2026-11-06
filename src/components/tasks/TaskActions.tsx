@@ -115,20 +115,20 @@ export function TaskActions({
           ) : null}
         </>
       ) : (
-        <div className="rounded-xl border border-pink/15 bg-turquesa/5 p-3">
-          <p className="flex items-center gap-2 text-sm font-bold text-pink">
+        <div className="rounded-xl border border-ink/15 bg-turquesa/5 p-3">
+          <p className="flex items-center gap-2 text-sm font-bold text-ink">
             <CheckCircle2 className="h-4 w-4" />
             Atividade concluída
           </p>
-          <p className="mt-1 text-xs text-pink/60">
+          <p className="mt-1 text-xs text-ink/70">
             {approved ? "Execução aprovada pela supervisão." : "Aguardando revisão da supervisão."}
           </p>
         </div>
       )}
 
       {canReview && status !== "pending" ? (
-        <div className="space-y-2 border-t border-pink/10 pt-3">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-pink/45">Revisão da supervisão</p>
+        <div className="space-y-2 border-t border-ink/10 pt-3">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-ink/70">Revisão da supervisão</p>
           <div className="grid grid-cols-2 gap-2">
             {status === "completed" && !approved ? (
               <button type="button" className="btn-secondary btn-sm" onClick={() => setMode(mode === "approve" ? null : "approve")} disabled={pending}>
@@ -194,7 +194,7 @@ export function TaskActions({
       ) : null}
 
       {canReview && status === "pending" ? (
-        <p className="flex items-start gap-2 rounded-xl border border-dashed border-pink/20 p-3 text-xs text-pink/55">
+        <p className="flex items-start gap-2 rounded-xl border border-dashed border-ink/20 p-3 text-xs text-ink/70">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
           A revisão fica disponível após a execução da atividade pela loja.
         </p>

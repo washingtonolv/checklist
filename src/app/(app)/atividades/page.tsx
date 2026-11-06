@@ -73,7 +73,7 @@ export default async function TasksPage({
           <div className="xl:col-span-2">
             <label className="label" htmlFor="search">Buscar atividade</label>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-pink/35" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/70" />
               <input id="search" name="search" defaultValue={filters.search} className="input pl-9" placeholder="Nome da atividade..." />
             </div>
           </div>
@@ -105,7 +105,7 @@ export default async function TasksPage({
               Filtrar
             </button>
             <Link href="/atividades" className="btn-ghost btn-sm">Limpar</Link>
-            <span className="ml-auto text-xs text-pink/50">{tasks.length} atividade(s) no período</span>
+            <span className="ml-auto text-xs text-ink/70">{tasks.length} atividade(s) no período</span>
           </div>
         </form>
       </Card>
@@ -113,7 +113,7 @@ export default async function TasksPage({
       <div className="mb-5 flex gap-2 overflow-x-auto pb-1">
         <Link
           href={tabHref("")}
-          className={cn("shrink-0 rounded-full border px-3.5 py-2 text-xs font-semibold", !filters.status ? "border-pink bg-pink text-white" : "border-pink/15 bg-white text-pink/65 hover:border-turquesa")}
+          className={cn("shrink-0 rounded-full border px-3.5 py-2 text-xs font-semibold", !filters.status ? "border-ink bg-pink text-white" : "border-ink/15 bg-surface text-ink/65 hover:border-turquesa")}
         >
           Todas
         </Link>
@@ -121,7 +121,7 @@ export default async function TasksPage({
           <Link
             key={status}
             href={tabHref(status)}
-            className={cn("shrink-0 rounded-full border px-3.5 py-2 text-xs font-semibold", filters.status === status ? "border-pink bg-pink text-white" : "border-pink/15 bg-white text-pink/65 hover:border-turquesa")}
+            className={cn("shrink-0 rounded-full border px-3.5 py-2 text-xs font-semibold", filters.status === status ? "border-ink bg-pink text-white" : "border-ink/15 bg-surface text-ink/65 hover:border-turquesa")}
           >
             {STATUS_LABELS[status]}
           </Link>
@@ -138,23 +138,23 @@ export default async function TasksPage({
                 href={`/atividades/${task.id}`}
                 className={cn(
                   "card group flex flex-col p-5 transition hover:-translate-y-0.5 hover:border-turquesa hover:shadow-soft",
-                  overdue && task.status !== "completed" ? "border-pink/40" : ""
+                  overdue && task.status !== "completed" ? "border-ink/40" : ""
                 )}
               >
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                   <StatusBadge status={task.status} />
                   {overdue && task.status !== "completed" ? (
-                    <span className="badge border border-pink bg-pink/5 text-pink">
+                    <span className="badge border border-ink bg-pink/5 text-ink">
                       <AlertTriangle className="h-3.5 w-3.5" />
                       Atrasada
                     </span>
                   ) : null}
                 </div>
-                <h2 className="text-base font-bold leading-snug text-pink group-hover:underline group-hover:decoration-turquesa group-hover:decoration-2 group-hover:underline-offset-4">
+                <h2 className="text-base font-bold leading-snug text-ink group-hover:underline group-hover:decoration-turquesa group-hover:decoration-2 group-hover:underline-offset-4">
                   {task.title}
                 </h2>
-                <p className="mt-1 line-clamp-2 text-xs text-pink/55">{task.description || "Sem descrição."}</p>
-                <div className="mt-3 space-y-1.5 text-xs text-pink/60">
+                <p className="mt-1 line-clamp-2 text-xs text-ink/70">{task.description || "Sem descrição."}</p>
+                <div className="mt-3 space-y-1.5 text-xs text-ink/70">
                   <p className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-turquesa" />
                     {task.storeName} · {task.storeCode}
@@ -164,21 +164,21 @@ export default async function TasksPage({
                     {task.categoryName}
                   </p>
                   <p className="flex items-center gap-2">
-                    <CalendarClock className="h-3.5 w-3.5 text-pink/40" />
+                    <CalendarClock className="h-3.5 w-3.5 text-ink/70" />
                     {dueLabel(task.dueDate, task.dueTime)}
                   </p>
                 </div>
-                <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-pink/10 pt-3">
+                <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-ink/10 pt-3">
                   <PhotoBadge requirement={task.photoRequirement} count={task.photoCount} />
                   {task.status === "completed" ? (
-                    <span className="inline-flex items-center gap-1 text-[11px] text-pink/55">
+                    <span className="inline-flex items-center gap-1 text-[11px] text-ink/70">
                       <CheckCircle2 className="h-3.5 w-3.5" />
                       {task.completedByName ?? "Concluída"}
                     </span>
                   ) : null}
                 </div>
                 {task.status === "completed" && task.completedAt ? (
-                  <p className="mt-2 text-[10px] text-pink/40">{formatDateTime(task.completedAt)}</p>
+                  <p className="mt-2 text-[10px] text-ink/70">{formatDateTime(task.completedAt)}</p>
                 ) : null}
               </Link>
             );
@@ -195,7 +195,7 @@ export default async function TasksPage({
         </Card>
       )}
 
-      <div className="mt-5 flex flex-wrap items-center gap-3 rounded-2xl border border-dashed border-pink/15 px-4 py-3 text-[11px] text-pink/50">
+      <div className="mt-5 flex flex-wrap items-center gap-3 rounded-2xl border border-dashed border-ink/15 px-4 py-3 text-[11px] text-ink/70">
         <Camera className="h-4 w-4" />
         Atividades com foto obrigatória só podem ser concluídas após o envio de pelo menos uma evidência.
         <span className="hidden sm:inline">·</span>

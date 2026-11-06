@@ -39,9 +39,9 @@ export function LoginForm({
   return (
     <div>
       <div className="mb-7">
-        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-pink/45">Acesso restrito</p>
-        <h1 className="mt-2 text-3xl font-black tracking-tight text-pink">Bem-vinda de volta</h1>
-        <p className="mt-2 text-sm text-pink/60">
+        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-ink/70">Acesso restrito</p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-ink">Bem-vinda de volta</h1>
+        <p className="mt-2 text-sm text-ink/70">
           Entre com seu e-mail corporativo para acompanhar as atividades das lojas.
         </p>
       </div>
@@ -75,7 +75,7 @@ export function LoginForm({
             <label htmlFor="password" className="label">
               Senha
             </label>
-            <Link href="/recuperar-senha" className="mb-1.5 text-xs font-semibold text-pink/60 hover:text-pink">
+            <Link href="/recuperar-senha" className="mb-1.5 text-xs font-semibold text-ink/70 hover:text-ink">
               Esqueci minha senha
             </Link>
           </div>
@@ -94,7 +94,7 @@ export function LoginForm({
             <button
               type="button"
               onClick={() => setShowPassword((value) => !value)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-pink/45 hover:bg-pink/5 hover:text-pink"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-ink/70 hover:bg-pink/5 hover:text-ink"
               aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -105,9 +105,9 @@ export function LoginForm({
       </form>
 
       {demoCredentials.length ? (
-        <div className="mt-8 rounded-2xl border border-dashed border-pink/20 bg-turquesa/5 p-4">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-pink/60">Acessos de demonstração</p>
-          <p className="mt-1 text-xs text-pink/55">
+        <div className="mt-8 rounded-2xl border border-dashed border-ink/20 bg-turquesa/5 p-4">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-ink/70">Acessos de demonstração</p>
+          <p className="mt-1 text-xs text-ink/70">
             Dados locais de teste. Clique em um perfil para preencher o formulário.
           </p>
           <div className="mt-3 space-y-2">
@@ -119,17 +119,17 @@ export function LoginForm({
                   setEmail(credential.email);
                   setPassword(credential.password);
                 }}
-                className="flex w-full items-center justify-between gap-3 rounded-xl border border-pink/10 bg-white px-3 py-2 text-left transition hover:border-turquesa hover:bg-turquesa/5"
+                className="flex w-full items-center justify-between gap-3 rounded-xl border border-ink/10 bg-surface px-3 py-2 text-left transition hover:border-turquesa hover:bg-turquesa/5"
               >
                 <span>
-                  <span className="block text-xs font-bold text-pink">{credential.role}</span>
-                  <span className="block text-[11px] text-pink/55">{credential.email}</span>
+                  <span className="block text-xs font-bold text-ink">{credential.role}</span>
+                  <span className="block text-[11px] text-ink/70">{credential.email}</span>
                 </span>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-pink/40">Usar</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-ink/70">Usar</span>
               </button>
             ))}
           </div>
-          <p className="mt-3 text-[11px] text-pink/50">Senha padrão: {demoCredentials[0]?.password}</p>
+          <p className="mt-3 text-[11px] text-ink/70">Senha padrão: {demoCredentials[0]?.password}</p>
         </div>
       ) : null}
     </div>

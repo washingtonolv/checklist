@@ -21,9 +21,9 @@ export function ForgotPasswordForm() {
   const [state, action] = useFormState(requestPasswordResetAction, initialActionState);
   return (
     <div>
-      <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-pink/45">Recuperação de acesso</p>
-      <h1 className="mt-2 text-3xl font-black tracking-tight text-pink">Esqueceu a senha?</h1>
-      <p className="mt-2 text-sm text-pink/60">
+      <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-ink/70">Recuperação de acesso</p>
+      <h1 className="mt-2 text-3xl font-semibold tracking-tight text-ink">Esqueceu a senha?</h1>
+      <p className="mt-2 text-sm text-ink/70">
         Informe seu e-mail. Enviaremos as instruções para criar uma nova senha.
       </p>
 
@@ -50,7 +50,7 @@ export function ForgotPasswordForm() {
           <Submit />
         </form>
 
-        <p className="text-center text-sm text-pink/60">
+        <p className="text-center text-sm text-ink/70">
           <Link href="/login" className="link">
             Voltar para o login
           </Link>

@@ -63,7 +63,7 @@ export default async function StoreDetailPage({ params }: { params: { id: string
 
   return (
     <div>
-      <Link href="/lojas" className="mb-4 inline-flex items-center gap-1.5 text-xs font-semibold text-pink/55 hover:text-pink">
+      <Link href="/lojas" className="mb-4 inline-flex items-center gap-1.5 text-xs font-semibold text-ink/70 hover:text-ink">
         <ArrowLeft className="h-4 w-4" />
         Voltar para lojas
       </Link>
@@ -74,7 +74,7 @@ export default async function StoreDetailPage({ params }: { params: { id: string
         subtitle="Indicadores do mês, equipe responsável e histórico recente da unidade."
         actions={
           <div className="flex flex-wrap items-center gap-2">
-            <span className={cn("badge", store.active ? "bg-pink text-white" : "border border-pink/20 bg-white text-pink/55")}>
+            <span className={cn("badge", store.active ? "bg-pink text-white" : "border border-ink/20 bg-surface text-ink/70")}>
               {store.active ? "Loja ativa" : "Loja inativa"}
             </span>
             {canManage ? (
@@ -124,7 +124,7 @@ export default async function StoreDetailPage({ params }: { params: { id: string
               title="Execução no mês"
               description="Progresso das rotinas da unidade"
               icon={<CheckCircle2 className="h-4 w-4" />}
-              action={<span className="text-sm font-black text-pink">{rate}%</span>}
+              action={<span className="text-sm font-semibold text-ink">{rate}%</span>}
             />
             <div className="space-y-4 p-5">
               <ProgressBar value={rate} label="Atividades concluídas" />
@@ -160,13 +160,13 @@ export default async function StoreDetailPage({ params }: { params: { id: string
                     {recentTasks.map((task) => (
                       <tr key={task.id}>
                         <td>
-                          <Link href={`/atividades/${task.id}`} className="font-semibold text-pink hover:underline">
+                          <Link href={`/atividades/${task.id}`} className="font-semibold text-ink hover:underline">
                             {task.title}
                           </Link>
                         </td>
-                        <td className="text-xs text-pink/60">{task.categoryName}</td>
+                        <td className="text-xs text-ink/70">{task.categoryName}</td>
                         <td className="text-xs">
-                          <span className={cn(isOverdue(task) ? "font-bold text-pink" : "text-pink/60")}>
+                          <span className={cn(isOverdue(task) ? "font-bold text-ink" : "text-ink/70")}>
                             {dueLabel(task.dueDate, task.dueTime)}
                           </span>
                         </td>
@@ -192,12 +192,12 @@ export default async function StoreDetailPage({ params }: { params: { id: string
               {recentPhotos.length ? (
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                   {recentPhotos.map((photo) => (
-                    <Link key={photo.id} href={`/atividades/${photo.taskId}`} className="group overflow-hidden rounded-xl border border-pink/10 bg-turquesa/5">
+                    <Link key={photo.id} href={`/atividades/${photo.taskId}`} className="group overflow-hidden rounded-xl border border-ink/10 bg-turquesa/5">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={photo.url} alt="Evidência da loja" loading="lazy" className="aspect-[4/3] w-full object-cover transition group-hover:scale-[1.03]" />
                       <div className="p-2">
-                        <p className="truncate text-[11px] font-semibold text-pink">{photo.uploadedByName}</p>
-                        <p className="truncate text-[10px] text-pink/50">{formatDateTime(photo.createdAt)}</p>
+                        <p className="truncate text-[11px] font-semibold text-ink">{photo.uploadedByName}</p>
+                        <p className="truncate text-[10px] text-ink/70">{formatDateTime(photo.createdAt)}</p>
                       </div>
                     </Link>
                   ))}
@@ -226,7 +226,7 @@ export default async function StoreDetailPage({ params }: { params: { id: string
 
           <Card>
             <CardHeader title="Acesso" description="Quem visualiza esta unidade" icon={<Users className="h-4 w-4" />} />
-            <div className="space-y-3 p-5 text-xs text-pink/65">
+            <div className="space-y-3 p-5 text-xs text-ink/65">
               <p className="flex gap-2">
                 <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-turquesa" />
                 A gerente comercial visualiza todas as lojas da rede.
@@ -262,9 +262,9 @@ export default async function StoreDetailPage({ params }: { params: { id: string
 
 function StatusRow({ label, value }: { label: string; value: number }) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-lg border border-pink/10 px-3 py-2 text-xs">
-      <span className="text-pink/65">{label}</span>
-      <span className="font-black text-pink">{value}</span>
+    <div className="flex items-center justify-between gap-3 rounded-lg border border-ink/10 px-3 py-2 text-xs">
+      <span className="text-ink/65">{label}</span>
+      <span className="font-semibold text-ink">{value}</span>
     </div>
   );
 }
@@ -272,10 +272,10 @@ function StatusRow({ label, value }: { label: string; value: number }) {
 function InfoRow({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
     <div className="flex items-start gap-3">
-      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-turquesa/15 text-pink">{icon}</span>
+      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-turquesa/15 text-ink">{icon}</span>
       <div className="min-w-0">
-        <p className="text-[10px] font-bold uppercase tracking-wider text-pink/45">{label}</p>
-        <p className="mt-0.5 text-sm font-semibold text-pink/80">{value}</p>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-ink/70">{label}</p>
+        <p className="mt-0.5 text-sm font-semibold text-ink/80">{value}</p>
       </div>
     </div>
   );

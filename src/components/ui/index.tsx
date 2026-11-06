@@ -25,16 +25,16 @@ export function CardHeader({
   icon?: ReactNode;
 }) {
   return (
-    <div className="flex flex-wrap items-start justify-between gap-3 border-b border-pink/10 px-5 py-4">
+    <div className="flex flex-wrap items-start justify-between gap-3 border-b border-line px-5 py-4">
       <div className="flex items-start gap-3">
         {icon ? (
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-turquesa/15 text-pink">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-canvas text-ink">
             {icon}
           </span>
         ) : null}
         <div>
-          <h2 className="text-base font-bold text-pink">{title}</h2>
-          {description ? <p className="mt-0.5 text-xs text-pink/60">{description}</p> : null}
+          <h2 className="text-base font-bold text-ink">{title}</h2>
+          {description ? <p className="mt-0.5 text-xs text-ink/70">{description}</p> : null}
         </div>
       </div>
       {action}
@@ -57,10 +57,10 @@ export function PageHeader({
     <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
       <div>
         {eyebrow ? (
-          <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.2em] text-pink/45">{eyebrow}</p>
+          <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.2em] text-ink/70">{eyebrow}</p>
         ) : null}
-        <h1 className="text-2xl font-black tracking-tight text-pink sm:text-3xl">{title}</h1>
-        {subtitle ? <p className="mt-1 max-w-2xl text-sm text-pink/65">{subtitle}</p> : null}
+        <h1 className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl">{title}</h1>
+        {subtitle ? <p className="mt-1 max-w-2xl text-sm text-ink/65">{subtitle}</p> : null}
       </div>
       {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
     </div>
@@ -81,12 +81,12 @@ export function EmptyState({
   return (
     <div className="flex flex-col items-center justify-center px-6 py-14 text-center">
       {icon ? (
-        <span className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-turquesa/15 text-pink">
+        <span className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-turquesa/15 text-ink">
           {icon}
         </span>
       ) : null}
-      <h3 className="text-base font-bold text-pink">{title}</h3>
-      {description ? <p className="mt-1 max-w-md text-sm text-pink/60">{description}</p> : null}
+      <h3 className="text-base font-bold text-ink">{title}</h3>
+      {description ? <p className="mt-1 max-w-md text-sm text-ink/70">{description}</p> : null}
       {action ? <div className="mt-5">{action}</div> : null}
     </div>
   );
@@ -105,7 +105,7 @@ export function ProgressBar({
   return (
     <div className={cn("w-full", className)}>
       {label ? (
-        <div className="mb-1 flex items-center justify-between text-[11px] font-semibold text-pink/60">
+        <div className="mb-1 flex items-center justify-between text-[11px] font-semibold text-ink/70">
           <span>{label}</span>
           <span>{safe}%</span>
         </div>
@@ -119,7 +119,7 @@ export function ProgressBar({
         aria-label={label ?? "Progresso"}
       >
         <div
-          className="h-full rounded-full bg-gradient-to-r from-turquesa to-pink transition-all duration-500"
+          className="h-full rounded-full bg-success transition-[width] duration-200"
           style={{ width: `${safe}%` }}
         />
       </div>
@@ -141,17 +141,17 @@ export function StatCard({
   tone?: "turquesa" | "pink" | "outline";
 }) {
   const tones = {
-    turquesa: "bg-turquesa/12 text-pink border-turquesa/30",
-    pink: "bg-pink text-white border-pink",
-    outline: "bg-white text-pink border-pink/20"
+    turquesa: "bg-canvas text-ink border-line",
+    pink: "status-danger",
+    outline: "bg-surface text-ink border-line"
   };
   return (
-    <div className="card animate-fade-up p-5">
+    <div className="card p-5">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-wider text-pink/55">{label}</p>
-          <p className="mt-2 text-3xl font-black tracking-tight text-pink">{value}</p>
-          {hint ? <p className="mt-1 text-xs text-pink/55">{hint}</p> : null}
+          <p className="text-[11px] font-bold uppercase tracking-wider text-ink/70">{label}</p>
+          <p className="mt-2 text-3xl font-semibold tracking-tight text-ink">{value}</p>
+          {hint ? <p className="mt-1 text-xs text-ink/70">{hint}</p> : null}
         </div>
         <span className={cn("flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border", tones[tone])}>
           {icon}
@@ -170,7 +170,7 @@ export function Avatar({ name, size = 36 }: { name: string; size?: number }) {
     .join("");
   return (
     <span
-      className="inline-flex shrink-0 items-center justify-center rounded-full bg-turquesa/20 font-bold text-pink"
+      className="inline-flex shrink-0 items-center justify-center rounded-full bg-turquesa/20 font-bold text-ink"
       style={{ width: size, height: size, fontSize: size * 0.34 }}
       aria-hidden="true"
     >
@@ -187,9 +187,9 @@ export function Alert({
   children: ReactNode;
 }) {
   const classes = {
-    info: "border-turquesa/40 bg-turquesa/10 text-pink",
-    error: "border-pink/30 bg-pink/5 text-pink",
-    success: "border-pink/30 bg-white text-pink"
+    info: "status-info",
+    error: "status-danger",
+    success: "status-success"
   };
   return (
     <div className={cn("rounded-xl border px-4 py-3 text-sm", classes[tone])} role={tone === "error" ? "alert" : undefined}>

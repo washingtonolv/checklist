@@ -1,0 +1,35 @@
+/* TEMA D&D — altere cores e fontes aqui, sem editar as telas.
+   Cores em canais RGB, separados por espaços (ex.: #891745 = 137 23 69).
+   Isso mantém funcionando as transparências do Tailwind: bg-brand/10.
+   Referência de composição: Shopify Polaris, adaptada à identidade D&D. */
+:root {
+  /* Identidade */
+  --color-brand: 137 23 69;           /* vinho D&D — botões e seleção */
+  --color-accent: 18 217 239;        /* turquesa D&D — destaques suaves */
+  --color-on-brand: 255 255 255;
+  /* Superfícies e legibilidade */
+  --color-background: 241 242 244;
+  --color-surface: 255 255 255;
+  --color-surface-hover: 246 246 247;
+  --color-text: 32 34 35;
+  --color-text-muted: 97 106 117;
+  --color-border: 216 220 224;
+  /* Estados — sempre acompanhados de texto/ícone */
+  --color-success: 12 81 50;
+  --color-success-bg: 227 241 223;
+  --color-warning: 107 73 0;
+  --color-warning-bg: 255 244 206;
+  --color-info: 27 75 145;
+  --color-info-bg: 234 242 255;
+  --color-danger: 159 33 36;
+  --color-danger-bg: 255 238 238;
+  /* Fontes — substitua a família abaixo; os títulos podem ter outra fonte. */
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-heading: var(--font-body);
+  /* Forma e elevação */
+  --radius-control: 8px;
+  --radius-card: 12px;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04), 0 0 0 1px rgb(0 0 0 / 0.02);
+  --shadow-control: 0 1px 0 rgb(0 0 0 / 0.08);
+  --focus-ring: 0 0 0 3px rgb(var(--color-brand) / 0.22);
+}

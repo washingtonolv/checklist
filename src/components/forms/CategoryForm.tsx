@@ -42,17 +42,17 @@ export function CategoryForm({ category }: { category?: Category }) {
         </div>
         <div>
           <label className="label">Status</label>
-          <label className="flex h-[42px] cursor-pointer items-center gap-3 rounded-xl border border-pink/20 bg-white px-3.5">
-            <input type="checkbox" name="active" defaultChecked={category?.active ?? true} className="h-4 w-4 accent-[#891745]" />
-            <span className="flex items-center gap-2 text-sm font-semibold text-pink/75">
-              <FolderTree className="h-4 w-4 text-pink/45" />
+          <label className="flex h-[42px] cursor-pointer items-center gap-3 rounded-xl border border-ink/20 bg-surface px-3.5">
+            <input type="checkbox" name="active" defaultChecked={category?.active ?? true} className="h-4 w-4 accent-brand" />
+            <span className="flex items-center gap-2 text-sm font-semibold text-ink/75">
+              <FolderTree className="h-4 w-4 text-ink/70" />
               Categoria ativa
             </span>
           </label>
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-end gap-2 border-t border-pink/10 pt-4">
+      <div className="flex flex-wrap items-center justify-end gap-2 border-t border-ink/10 pt-4">
         <Link href="/categorias" className="btn-ghost">Cancelar</Link>
         <Submit editing={editing} />
       </div>

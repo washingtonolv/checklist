@@ -133,15 +133,15 @@ export default async function ReportsPage({
           <CardHeader title="Execução do período" description="Percentual consolidado" icon={<Percent className="h-4 w-4" />} />
           <div className="space-y-4 p-5">
             <div className="flex items-end justify-between gap-3">
-              <span className="text-4xl font-black text-pink">{rate}%</span>
-              <span className="text-xs text-pink/50">{completed} de {tasks.length} concluídas</span>
+              <span className="text-4xl font-semibold text-ink">{rate}%</span>
+              <span className="text-xs text-ink/70">{completed} de {tasks.length} concluídas</span>
             </div>
             <ProgressBar value={rate} />
             <div className="grid gap-2 sm:grid-cols-2">
               {STATUS_ORDER.map((status) => (
-                <div key={status} className="flex items-center justify-between gap-2 rounded-lg border border-pink/10 px-3 py-2 text-[11px]">
-                  <span className="text-pink/60">{STATUS_LABELS[status]}</span>
-                  <span className="font-black text-pink">{tasks.filter((task) => task.status === status).length}</span>
+                <div key={status} className="flex items-center justify-between gap-2 rounded-lg border border-ink/10 px-3 py-2 text-[11px]">
+                  <span className="text-ink/70">{STATUS_LABELS[status]}</span>
+                  <span className="font-semibold text-ink">{tasks.filter((task) => task.status === status).length}</span>
                 </div>
               ))}
             </div>
@@ -169,16 +169,16 @@ export default async function ReportsPage({
                   return (
                     <tr key={store.id}>
                       <td>
-                        <Link href={`/lojas/${store.id}`} className="font-semibold text-pink hover:underline">{store.name}</Link>
-                        <p className="text-[10px] text-pink/45">{store.code}</p>
+                        <Link href={`/lojas/${store.id}`} className="font-semibold text-ink hover:underline">{store.name}</Link>
+                        <p className="text-[10px] text-ink/70">{store.code}</p>
                       </td>
                       <td>{storeTasks.length}</td>
                       <td>{storeCompleted}</td>
-                      <td className={storeOverdue ? "font-bold text-pink" : ""}>{storeOverdue}</td>
+                      <td className={storeOverdue ? "font-bold text-ink" : ""}>{storeOverdue}</td>
                       <td>
                         <div className="flex items-center gap-2">
                           <ProgressBar value={percent(storeCompleted, storeTasks.length)} className="min-w-[80px]" />
-                          <span className="w-9 text-right text-xs font-bold text-pink">{percent(storeCompleted, storeTasks.length)}%</span>
+                          <span className="w-9 text-right text-xs font-bold text-ink">{percent(storeCompleted, storeTasks.length)}%</span>
                         </div>
                       </td>
                     </tr>
@@ -195,7 +195,7 @@ export default async function ReportsPage({
           title="Detalhamento das atividades"
           description={`${tasks.length} registro(s) · ${filterLabel}`}
           icon={<ClipboardList className="h-4 w-4" />}
-          action={<span className="badge border border-pink/15 bg-white text-pink/60">{periodLabel}</span>}
+          action={<span className="badge border border-ink/15 bg-surface text-ink/70">{periodLabel}</span>}
         />
         {tasks.length ? (
           <div className="table-wrap">
@@ -215,23 +215,23 @@ export default async function ReportsPage({
                 {tasks.map((task) => (
                   <tr key={task.id}>
                     <td>
-                      <p className="text-xs font-semibold text-pink">{task.storeName}</p>
-                      <p className="text-[10px] text-pink/45">{task.storeCode}</p>
+                      <p className="text-xs font-semibold text-ink">{task.storeName}</p>
+                      <p className="text-[10px] text-ink/70">{task.storeCode}</p>
                     </td>
                     <td>
-                      <Link href={`/atividades/${task.id}`} className="font-semibold text-pink hover:underline">{task.title}</Link>
-                      <p className="text-[10px] text-pink/45">{RECURRENCE_LABELS[task.recurrence]}</p>
+                      <Link href={`/atividades/${task.id}`} className="font-semibold text-ink hover:underline">{task.title}</Link>
+                      <p className="text-[10px] text-ink/70">{RECURRENCE_LABELS[task.recurrence]}</p>
                     </td>
-                    <td className="text-xs text-pink/60">{task.categoryName}</td>
-                    <td className="text-xs text-pink/65">
-                      <span className={isOverdue(task) ? "font-bold text-pink" : ""}>{dueLabel(task.dueDate, task.dueTime)}</span>
+                    <td className="text-xs text-ink/70">{task.categoryName}</td>
+                    <td className="text-xs text-ink/65">
+                      <span className={isOverdue(task) ? "font-bold text-ink" : ""}>{dueLabel(task.dueDate, task.dueTime)}</span>
                     </td>
                     <td><StatusBadge status={task.status} /></td>
-                    <td className="text-xs text-pink/60">
+                    <td className="text-xs text-ink/70">
                       {task.completedByName ?? "—"}
-                      {task.completedAt ? <p className="text-[10px] text-pink/40">{formatDateTime(task.completedAt)}</p> : null}
+                      {task.completedAt ? <p className="text-[10px] text-ink/70">{formatDateTime(task.completedAt)}</p> : null}
                     </td>
-                    <td className="text-xs font-bold text-pink">{task.photoCount}</td>
+                    <td className="text-xs font-bold text-ink">{task.photoCount}</td>
                   </tr>
                 ))}
               </tbody>
@@ -246,7 +246,7 @@ export default async function ReportsPage({
         )}
       </Card>
 
-      <p className="mt-4 text-[11px] text-pink/45">
+      <p className="mt-4 text-[11px] text-ink/70">
         Relatório gerado a partir das atividades registradas no sistema. A exportação em PDF e Excel respeita os filtros
         aplicados. Ações de execução disponíveis no histórico: {Object.values(ACTION_LABELS).slice(0, 4).join(", ")} e outras.
       </p>

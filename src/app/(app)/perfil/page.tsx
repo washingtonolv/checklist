@@ -25,19 +25,19 @@ export default async function ProfilePage() {
           <CardHeader title="Identificação" description="Dados da sua conta" icon={<UserRound className="h-4 w-4" />} />
           <div className="space-y-4 p-5">
             <div className="flex items-center gap-3">
-              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-turquesa/15 text-xl font-black text-pink">
+              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-turquesa/15 text-xl font-semibold text-ink">
                 {user.name.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]?.toUpperCase()).join("")}
               </span>
               <div>
-                <p className="text-lg font-black text-pink">{user.name}</p>
+                <p className="text-lg font-semibold text-ink">{user.name}</p>
                 <RoleBadge role={user.role} />
               </div>
             </div>
-            <div className="space-y-3 border-t border-pink/10 pt-4 text-sm">
-              <p className="flex items-center gap-2 text-pink/70"><Mail className="h-4 w-4 text-pink/40" />{user.email}</p>
-              <p className="flex items-center gap-2 text-pink/70"><ShieldCheck className="h-4 w-4 text-pink/40" />{ROLE_LABELS[user.role]} · {ROLE_DESCRIPTIONS[user.role]}</p>
+            <div className="space-y-3 border-t border-ink/10 pt-4 text-sm">
+              <p className="flex items-center gap-2 text-ink/70"><Mail className="h-4 w-4 text-ink/70" />{user.email}</p>
+              <p className="flex items-center gap-2 text-ink/70"><ShieldCheck className="h-4 w-4 text-ink/70" />{ROLE_LABELS[user.role]} · {ROLE_DESCRIPTIONS[user.role]}</p>
             </div>
-            <div className="rounded-xl border border-turquesa/40 bg-turquesa/10 p-3 text-xs text-pink/70">
+            <div className="rounded-xl border border-turquesa/40 bg-turquesa/10 p-3 text-xs text-ink/70">
               {user.role === "admin"
                 ? "Você tem acesso total à rede, incluindo usuários, categorias, modelos e auditoria."
                 : user.role === "supervisor"
@@ -45,7 +45,7 @@ export default async function ProfilePage() {
                   : "Você executa e acompanha as atividades exclusivamente da sua loja."}
             </div>
             {isLocalMode() ? (
-              <p className="rounded-xl border border-dashed border-pink/20 px-3 py-2 text-[11px] text-pink/50">
+              <p className="rounded-xl border border-dashed border-ink/20 px-3 py-2 text-[11px] text-ink/70">
                 Ambiente local de demonstração. Em produção, os dados são armazenados no Supabase.
               </p>
             ) : null}
@@ -57,16 +57,16 @@ export default async function ProfilePage() {
           <div className="space-y-2 p-5">
             {stores.length ? (
               stores.map((store) => (
-                <div key={store.id} className="flex items-center justify-between gap-3 rounded-xl border border-pink/10 px-3 py-2.5">
+                <div key={store.id} className="flex items-center justify-between gap-3 rounded-xl border border-ink/10 px-3 py-2.5">
                   <div>
-                    <p className="text-sm font-bold text-pink">{store.name}</p>
-                    <p className="text-[11px] text-pink/45">{store.code}</p>
+                    <p className="text-sm font-bold text-ink">{store.name}</p>
+                    <p className="text-[11px] text-ink/70">{store.code}</p>
                   </div>
-                  <span className="badge bg-turquesa/15 text-pink">{store.active ? "Ativa" : "Inativa"}</span>
+                  <span className="badge bg-turquesa/15 text-ink">{store.active ? "Ativa" : "Inativa"}</span>
                 </div>
               ))
             ) : (
-              <p className="text-sm text-pink/50">Nenhuma loja vinculada. Procure a gerente comercial.</p>
+              <p className="text-sm text-ink/70">Nenhuma loja vinculada. Procure a gerente comercial.</p>
             )}
           </div>
         </Card>

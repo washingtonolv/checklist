@@ -20,14 +20,14 @@ export default async function ResetPasswordPage({
   if (!valid) {
     return (
       <div>
-        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-pink/45">Segurança</p>
-        <h1 className="mt-2 text-3xl font-black tracking-tight text-pink">Link inválido ou expirado</h1>
+        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-ink/70">Segurança</p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-ink">Link inválido ou expirado</h1>
         <div className="mt-5">
           <Alert tone="error">
             Solicite um novo link de recuperação para redefinir sua senha.
           </Alert>
         </div>
-        <p className="mt-5 text-sm text-pink/60">
+        <p className="mt-5 text-sm text-ink/70">
           <Link href="/recuperar-senha" className="link">
             Solicitar novo link
           </Link>
