@@ -44,7 +44,7 @@
   --action-tint-80: #f5dae0;
   --action-tint-90: #faedf0;
   /* Superfícies e legibilidade */
-  --color-background: var(--gray-100);
+  --color-background: 250 237 240; /* #FAEDF0 — rosa suave Paper Hearts */
   --color-surface: var(--gray-0);
   --color-surface-hover: var(--gray-50);
   --color-text: var(--gray-900);
