@@ -1,12 +1,27 @@
 /* TEMA D&D — altere cores e fontes aqui, sem editar as telas.
-   Cores em canais RGB, separados por espaços (ex.: #891745 = 137 23 69).
+   Cores neutras em canais RGB, separados por espaços (ex.: #171717 = 23 23 23).
    Isso mantém funcionando as transparências do Tailwind: bg-brand/10.
    Referência de composição: Shopify Polaris, adaptada à identidade D&D. */
 :root {
-  /* Identidade */
-  --color-brand: 137 23 69;           /* vinho D&D — botões e seleção */
-  --color-accent: 18 217 239;        /* turquesa D&D — destaques suaves */
-  --color-on-brand: 255 255 255;
+  /* Escala neutra — RGB sem matiz, para textos e estrutura. */
+  --gray-0: 255 255 255;       /* #FFFFFF */
+  --gray-50: 250 250 250;      /* #FAFAFA */
+  --gray-100: 245 245 245;     /* #F5F5F5 */
+  --gray-200: 229 229 229;     /* #E5E5E5 */
+  --gray-300: 212 212 212;     /* #D4D4D4 */
+  --gray-400: 163 163 163;     /* #A3A3A3 */
+  --gray-500: 115 115 115;     /* #737373 */
+  --gray-600: 82 82 82;        /* #525252 */
+  --gray-700: 64 64 64;        /* #404040 */
+  --gray-800: 38 38 38;        /* #262626 */
+  --gray-900: 23 23 23;        /* #171717 */
+  --gray-950: 10 10 10;        /* #0A0A0A */
+
+  /* Aliases de compatibilidade: navegação, chips e superfícies são neutros.
+     Ações principais usam exclusivamente os tokens Paper Hearts abaixo. */
+  --color-brand: var(--gray-700);
+  --color-accent: var(--gray-500);
+  --color-on-brand: var(--gray-0);
 
   /* Paper Hearts — ações principais; independente da identidade e dos status. */
   --action-primary: #cd4664;
@@ -29,12 +44,13 @@
   --action-tint-80: #f5dae0;
   --action-tint-90: #faedf0;
   /* Superfícies e legibilidade */
-  --color-background: 241 242 244;
-  --color-surface: 255 255 255;
-  --color-surface-hover: 246 246 247;
-  --color-text: 32 34 35;
-  --color-text-muted: 97 106 117;
-  --color-border: 216 220 224;
+  --color-background: var(--gray-100);
+  --color-surface: var(--gray-0);
+  --color-surface-hover: var(--gray-50);
+  --color-text: var(--gray-900);
+  --color-text-muted: var(--gray-600);
+  --color-border: var(--gray-200);
+  --color-input-border: var(--gray-500);
   /* Estados — sempre acompanhados de texto/ícone */
   --color-success: 12 81 50;
   --color-success-bg: 227 241 223;
