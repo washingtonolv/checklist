@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { FormExperience } from "./FormExperience";
 import { useFormState, useFormStatus } from "react-dom";
 import { FolderTree, Save } from "@/components/ui/material-icons";
 import { saveCategoryAction } from "@/actions/categories";
@@ -11,7 +12,7 @@ import type { Category } from "@/lib/types";
 function Submit({ editing }: { editing: boolean }) {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" className="btn-primary" disabled={pending}>
+    <button type="submit" className="btn-primary" disabled={pending} aria-busy={pending}>
       <Save className="h-4 w-4" />
       {pending ? "Salvando..." : editing ? "Salvar alterações" : "Criar categoria"}
     </button>
@@ -23,7 +24,7 @@ export function CategoryForm({ category }: { category?: Category }) {
   const editing = Boolean(category);
 
   return (
-    <form action={action} className="space-y-4">
+    <FormExperience action={action} className="space-y-4">
       {category ? <input type="hidden" name="id" value={category.id} /> : null}
       {state?.error ? <Alert tone="error">{state.error}</Alert> : null}
 
@@ -52,11 +53,11 @@ export function CategoryForm({ category }: { category?: Category }) {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-end gap-2 border-t border-ink/10 pt-4">
+      <div className="form-actions flex flex-wrap items-center justify-end gap-2 border-t border-ink/10 pt-4">
         <Link href="/categorias" className="btn-ghost">Cancelar</Link>
         <Submit editing={editing} />
       </div>
-    </form>
+    </FormExperience>
   );
 }
 

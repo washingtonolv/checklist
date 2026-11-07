@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { FormExperience } from "./FormExperience";
 import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { Save, ShieldCheck } from "@/components/ui/material-icons";
@@ -13,7 +14,7 @@ import type { UserAccount } from "@/lib/types";
 function Submit({ editing }: { editing: boolean }) {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" className="btn-primary" disabled={pending}>
+    <button type="submit" className="btn-primary" disabled={pending} aria-busy={pending}>
       <Save className="h-4 w-4" />
       {pending ? "Salvando..." : editing ? "Salvar alterações" : "Cadastrar usuário"}
     </button>
@@ -30,12 +31,12 @@ export function UserForm({
   stores: { id: string; name: string }[];
 }) {
   const [state, action] = useFormState(saveUserAction, initialActionState);
-  const [role, setRole] = useState<"admin" | "supervisor" | "manager">(user?.role ?? "supervisor");
+  const [role, setRole] = useState<"admin" | "supervisor" | "manager">(user?.role ?? "manager");
   const editing = Boolean(user);
   const selectedStoreIds = user?.storeIds ?? [];
 
   return (
-    <form action={action} className="space-y-5">
+    <FormExperience action={action} className="space-y-5">
       {user ? <input type="hidden" name="id" value={user.id} /> : null}
       {state?.error ? <Alert tone="error">{state.error}</Alert> : null}
 
@@ -47,7 +48,7 @@ export function UserForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="name" className="label">Nome completo *</label>
-          <input id="name" name="name" required defaultValue={user?.name} className="input" placeholder="Nome do responsável" />
+          <input id="name" name="name" autoComplete="name" required defaultValue={user?.name} className="input" placeholder="Nome do responsável" />
         </div>
         <div>
           <label htmlFor="email" className="label">E-mail de acesso *</label>
@@ -91,7 +92,7 @@ export function UserForm({
         <p className="label">Lojas vinculadas {role === "manager" ? "*" : ""}</p>
         {role === "admin" ? <p className="hint">Acesso a todas as lojas. Somente o Administrador Geral pode remover usuários ou criar administradores.</p> : stores.length ? (
           role === "manager" ? (
-            <select name="storeIds" className="input" defaultValue={selectedStoreIds[0] ?? ""} required>
+            <select name="storeIds" aria-label="Loja do gerente" className="input" defaultValue={selectedStoreIds[0] ?? ""} required>
               <option value="">Selecione a loja do gerente</option>
               {stores.map((store) => (
                 <option key={store.id} value={store.id}>{store.name}</option>
@@ -131,11 +132,11 @@ export function UserForm({
         </span>
       </label>
 
-      <div className="flex flex-wrap items-center justify-end gap-2 border-t border-ink/10 pt-4">
+      <div className="form-actions flex flex-wrap items-center justify-end gap-2 border-t border-ink/10 pt-4">
         <Link href="/usuarios" className="btn-ghost">Cancelar</Link>
         <Submit editing={editing} />
       </div>
-    </form>
+    </FormExperience>
   );
 }
 

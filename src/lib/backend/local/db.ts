@@ -135,7 +135,7 @@ const globalDb = globalThis as unknown as {
 };
 
 export function localDataDir(): string {
-  return path.resolve(process.cwd(), process.env.LOCAL_DATA_DIR || ".local");
+  return path.resolve(process.cwd(), (process.env.VERCEL_ENV === "preview" ? "/tmp/dd-ux-preview" : process.env.LOCAL_DATA_DIR) || ".local");
 }
 
 export function uploadsDir(): string {

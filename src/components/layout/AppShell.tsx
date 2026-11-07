@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   ClipboardCheck,
   FileSpreadsheet,
@@ -59,6 +59,24 @@ export function AppShell({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const panelRef = useRef<HTMLElement>(null);
+  const menuRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    panelRef.current?.querySelector<HTMLElement>("a, button")?.focus();
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") setOpen(false);
+      if (event.key !== "Tab") return;
+      const targets = Array.from(panelRef.current?.querySelectorAll<HTMLElement>("a, button, summary") ?? []).filter(el => el.getClientRects().length);
+      const first = targets[0], last = targets[targets.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    }
+    document.addEventListener("keydown", onKey);
+    return () => { document.body.style.overflow = previous; document.removeEventListener("keydown", onKey); menuRef.current?.focus(); };
+  }, [open]);
 
   useEffect(() => {
     setOpen(false);
@@ -82,7 +100,8 @@ export function AppShell({
       </div>
       <div className="mx-5 mb-5 border-t border-white/25" />
       <nav className="flex-1 space-y-1 overflow-y-auto px-3" aria-label="Navegação principal">
-        {nav.map((item) => {
+        {[nav.slice(0, 3), nav.slice(3)].map((items, group) => {
+        const links = items.map((item) => {
           const Icon = ICONS[item.icon as keyof typeof ICONS];
           const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
@@ -104,6 +123,8 @@ export function AppShell({
               {item.label}
             </Link>
           );
+        });
+        return group === 0 ? <div key="routine" className="space-y-1">{links}</div> : items.length ? <details key="more" open={items.some(item => pathname.startsWith(item.href))} className="pt-2"><summary className="rounded-lg px-3.5 text-sm font-semibold">Mais opções</summary><div className="space-y-1 pt-1">{links}</div></details> : null;
         })}
       </nav>
       <div className="border-t border-white/25 p-4">
@@ -143,7 +164,7 @@ export function AppShell({
             onClick={() => setOpen(false)}
             aria-label="Fechar menu"
           />
-          <aside className="mobile-menu-panel app-sidebar absolute inset-y-0 left-0 w-[286px] max-w-[86vw] border-r border-line bg-surface shadow-2xl">
+          <aside ref={panelRef} role="dialog" aria-modal="true" aria-label="Menu de navegação" className="mobile-menu-panel app-sidebar absolute inset-y-0 left-0 w-[286px] max-w-[86vw] border-r border-line bg-surface shadow-2xl">
             {sidebar}
           </aside>
         </div>
@@ -156,6 +177,7 @@ export function AppShell({
               type="button"
               className="rounded-lg p-2 text-ink hover:bg-pink/5 lg:hidden"
               onClick={() => setOpen(true)}
+              ref={menuRef}
               aria-label="Abrir menu"
               aria-expanded={open}
             >
@@ -170,7 +192,7 @@ export function AppShell({
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
             <RoleBadge role={user.role} className="hidden sm:inline-flex" />
-            <Link href="/perfil" className="flex items-center gap-2 rounded-full border border-line py-1 pl-1 pr-3 hover:bg-turquesa/10">
+            <Link href="/perfil" aria-label="Abrir meu perfil" className="flex items-center gap-2 rounded-full border border-line py-1 pl-1 pr-3 hover:bg-turquesa/10">
               <Avatar name={user.name} size={30} />
               <span className="hidden max-w-[140px] truncate text-xs font-semibold text-ink sm:block">
                 {user.name}
@@ -186,6 +208,7 @@ export function AppShell({
       </header>
 
       <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-surface focus:p-3">Pular para o conteúdo</a>
+      {demoMode && <div className="border-b border-line bg-[#faedf0] px-4 py-3 text-sm text-ink" role="note"><strong>Versão de teste</strong> · Dados fictícios. Cadastros e fotos podem ser reiniciados; não envie informações reais.</div>}
       <main id="conteudo" tabIndex={-1} className="mx-auto w-full max-w-[1400px] px-4 py-6 sm:px-6 lg:px-8">{children}</main>
 
       <footer className="mx-auto flex w-full max-w-[1400px] flex-wrap items-center justify-between gap-2 px-4 pb-6 text-[11px] text-ink/70 sm:px-6 lg:px-8">

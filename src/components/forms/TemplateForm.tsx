@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { FormExperience } from "./FormExperience";
 import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { Camera, CalendarClock, Save } from "@/components/ui/material-icons";
@@ -13,7 +14,7 @@ import type { Category, Recurrence, Store, TaskTemplate } from "@/lib/types";
 function Submit({ editing }: { editing: boolean }) {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" className="btn-primary" disabled={pending}>
+    <button type="submit" className="btn-primary" disabled={pending} aria-busy={pending}>
       <Save className="h-4 w-4" />
       {pending ? "Salvando..." : editing ? "Salvar alterações" : "Criar modelo"}
     </button>
@@ -34,7 +35,7 @@ export function TemplateForm({
   const editing = Boolean(template);
 
   return (
-    <form action={action} className="space-y-5">
+    <FormExperience action={action} className="space-y-5">
       {template ? <input type="hidden" name="id" value={template.id} /> : null}
       {state?.error ? <Alert tone="error">{state.error}</Alert> : null}
 
@@ -111,8 +112,7 @@ export function TemplateForm({
           Regra de evidência
         </p>
         <p className="mt-1">
-          Quando a foto é obrigatória, a atividade não pode ser concluída sem pelo menos uma imagem anexada. A regra é
-          validada no servidor e no banco de dados.
+          Quando a foto é obrigatória, a atividade não pode ser concluída sem pelo menos uma imagem anexada. Anexe a evidência na atividade antes de confirmar a conclusão.
         </p>
       </div>
 
@@ -126,7 +126,8 @@ export function TemplateForm({
                   type="checkbox"
                   name="storeIds"
                   value={store.id}
-                  defaultChecked={template ? template.storeIds.includes(store.id) : store.active}
+                  defaultChecked={template ? template.storeIds.includes(store.id) : false}
+                  disabled={!store.active}
                   className="h-4 w-4 accent-brand"
                 />
                 <span className="text-sm text-ink/75">{store.name}</span>
@@ -148,11 +149,11 @@ export function TemplateForm({
         </span>
       </label>
 
-      <div className="flex flex-wrap items-center justify-end gap-2 border-t border-ink/10 pt-4">
+      <div className="form-actions flex flex-wrap items-center justify-end gap-2 border-t border-ink/10 pt-4">
         <Link href="/modelos" className="btn-ghost">Cancelar</Link>
         <Submit editing={editing} />
       </div>
-    </form>
+    </FormExperience>
   );
 }
 

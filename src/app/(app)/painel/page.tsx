@@ -95,28 +95,12 @@ export default async function DashboardPage({
         title={title}
         subtitle={subtitle}
         actions={
-          user.role === "admin" ? (
-            <>
-              <Link href="/lojas/nova" className="btn-ghost">
-                <Plus className="h-4 w-4" />
-                Nova loja
-              </Link>
-              <Link href="/modelos/novo" className="btn-primary">
-                <ListChecks className="h-4 w-4" />
-                Nova atividade
-              </Link>
-            </>
-          ) : (
-            <Link href="/atividades" className="btn-primary">
-              <ClipboardList className="h-4 w-4" />
-              Ver atividades
-            </Link>
-          )
+          <Link href="/atividades" className="btn-primary"><ClipboardList className="h-4 w-4" />Ver atividades</Link>
         }
       />
 
       <form className="card mb-6 p-4" method="get" action="/painel">
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">
+        <details open={Boolean(filters.storeId || filters.categoryId || filters.status || filters.supervisorId || filters.managerId)}><summary className="text-sm font-semibold">Filtrar indicadores · loja, período e equipe</summary><div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
           <div>
             <label className="label" htmlFor="storeId">Loja</label>
             <select id="storeId" name="storeId" defaultValue={filters.storeId} className="input">
@@ -177,9 +161,9 @@ export default async function DashboardPage({
         </div>
         <div className="mt-3 flex flex-wrap items-center justify-end gap-2">
           <Link href="/painel" className="btn-ghost btn-sm">Limpar filtros</Link>
-          <button type="submit" className="btn-primary btn-sm">Aplicar filtros</button>
+          <button type="submit" className="btn-secondary btn-sm">Aplicar filtros</button>
         </div>
-      </form>
+      </details></form>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <StatCard

@@ -62,7 +62,7 @@ export function PageHeader({
         <h1 className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl">{title}</h1>
         {subtitle ? <p className="mt-1 max-w-2xl text-sm text-ink/65">{subtitle}</p> : null}
       </div>
-      {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
+      {actions ? <div className="page-actions flex flex-wrap items-center gap-2">{actions}</div> : null}
     </div>
   );
 }
@@ -192,7 +192,7 @@ export function Alert({
     success: "status-success"
   };
   return (
-    <div className={cn("rounded-xl border px-4 py-3 text-sm", classes[tone])} role={tone === "error" ? "alert" : undefined}>
+    <div className={cn("rounded-xl border px-4 py-3 text-sm", classes[tone])} role={tone === "error" ? "alert" : "status"}>
       {children}
     </div>
   );

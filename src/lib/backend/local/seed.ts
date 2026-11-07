@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 import bcrypt from "bcryptjs";
 import sharp from "sharp";
@@ -17,7 +18,7 @@ import type {
   LocalTemplate,
   LocalUser
 } from "./db";
-import { newId, nowIso, uploadsDir } from "./db";
+import { nowIso, uploadsDir } from "./db";
 
 const DEMO_PASSWORD = "Dd@2026!";
 
@@ -59,12 +60,18 @@ export async function createSeedDb(dir: string): Promise<LocalDb> {
   fs.mkdirSync(dir, { recursive: true });
   fs.mkdirSync(path.join(dir, "uploads"), { recursive: true });
 
+  // Stable fixture identities across serverless preview instances; mutations still use random IDs.
+  let fixture = 0;
+  const fixtureId = () => {
+    const hex = createHash("sha256").update(`dd-preview-${fixture++}`).digest("hex");
+    return `${hex.slice(0,8)}-${hex.slice(8,12)}-4${hex.slice(13,16)}-8${hex.slice(17,20)}-${hex.slice(20,32)}`;
+  };
   const createdAt = nowIso();
   const passwordHash = bcrypt.hashSync(DEMO_PASSWORD, 10);
 
-  const storeIds = [newId(), newId(), newId()];
+  const storeIds = [fixtureId(), fixtureId(), fixtureId()];
   const admin: LocalUser = {
-    id: newId(),
+    id: fixtureId(),
     name: "Gerente Comercial D&D",
     email: "admin@dd.local",
     passwordHash,
@@ -73,7 +80,7 @@ export async function createSeedDb(dir: string): Promise<LocalDb> {
     createdAt
   };
   const supervisor1: LocalUser = {
-    id: newId(),
+    id: fixtureId(),
     name: "Supervisora Regional",
     email: "supervisor@dd.local",
     passwordHash,
@@ -82,7 +89,7 @@ export async function createSeedDb(dir: string): Promise<LocalDb> {
     createdAt
   };
   const supervisor2: LocalUser = {
-    id: newId(),
+    id: fixtureId(),
     name: "Supervisor de Operações",
     email: "supervisor2@dd.local",
     passwordHash,
@@ -91,7 +98,7 @@ export async function createSeedDb(dir: string): Promise<LocalDb> {
     createdAt
   };
   const manager1: LocalUser = {
-    id: newId(),
+    id: fixtureId(),
     name: "Gerente Loja Centro",
     email: "gerente@dd.local",
     passwordHash,
@@ -100,7 +107,7 @@ export async function createSeedDb(dir: string): Promise<LocalDb> {
     createdAt
   };
   const manager2: LocalUser = {
-    id: newId(),
+    id: fixtureId(),
     name: "Gerente Loja Shopping",
     email: "gerente2@dd.local",
     passwordHash,
@@ -109,7 +116,7 @@ export async function createSeedDb(dir: string): Promise<LocalDb> {
     createdAt
   };
   const manager3: LocalUser = {
-    id: newId(),
+    id: fixtureId(),
     name: "Gerente Loja Matriz",
     email: "gerente3@dd.local",
     passwordHash,
@@ -150,7 +157,7 @@ export async function createSeedDb(dir: string): Promise<LocalDb> {
   ];
 
   const categories: LocalCategory[] = DEFAULT_CATEGORIES.map((category) => ({
-    id: newId(),
+    id: fixtureId(),
     name: category.name,
     description: category.description,
     active: true,
@@ -162,7 +169,7 @@ export async function createSeedDb(dir: string): Promise<LocalDb> {
     const category = categories.find((item) => item.name === template.category);
     if (!category) throw new Error(`Categoria não encontrada no seed: ${template.category}`);
     return {
-      id: newId(),
+      id: fixtureId(),
       title: template.title,
       description: template.description,
       categoryId: category.id,
@@ -222,7 +229,7 @@ export async function createSeedDb(dir: string): Promise<LocalDb> {
         }
 
         const manager = users.find((user) => user.id === store.managerId);
-        const taskId = newId();
+        const taskId = fixtureId();
         const completedAt =
           status === "completed" || status === "correction_requested" || status === "rejected"
             ? isoAt(period.dueDate, 14 + (hash % 3), (hash * 7) % 60)
@@ -265,7 +272,7 @@ export async function createSeedDb(dir: string): Promise<LocalDb> {
         if (completedAt) {
           const executor = manager?.id ?? supervisor1.id;
           executions.push({
-            id: newId(),
+            id: fixtureId(),
             taskId,
             action: "started",
             note: "",
@@ -275,7 +282,7 @@ export async function createSeedDb(dir: string): Promise<LocalDb> {
             createdAt: isoAt(period.dueDate, 13, 0)
           });
           executions.push({
-            id: newId(),
+            id: fixtureId(),
             taskId,
             action: "completed",
             note: task.observation || "Atividade concluída.",
@@ -285,7 +292,7 @@ export async function createSeedDb(dir: string): Promise<LocalDb> {
             createdAt: completedAt
           });
           audit.push({
-            id: newId(),
+            id: fixtureId(),
             actorId: executor,
             action: "task.completed",
             entityType: "task",
@@ -295,7 +302,7 @@ export async function createSeedDb(dir: string): Promise<LocalDb> {
           });
           if (status === "correction_requested") {
             executions.push({
-              id: newId(),
+              id: fixtureId(),
               taskId,
               action: "correction_requested",
               note: "Ajustar a organização e reenviar a evidência fotográfica.",
@@ -307,7 +314,7 @@ export async function createSeedDb(dir: string): Promise<LocalDb> {
           }
           if (status === "rejected") {
             executions.push({
-              id: newId(),
+              id: fixtureId(),
               taskId,
               action: "rejected",
               note: "Execução reprovada: atividade não atende ao padrão da marca.",
@@ -319,7 +326,7 @@ export async function createSeedDb(dir: string): Promise<LocalDb> {
           }
           if (approvedAt) {
             executions.push({
-              id: newId(),
+              id: fixtureId(),
               taskId,
               action: "approved",
               note: "Execução aprovada pela supervisão.",
@@ -331,7 +338,7 @@ export async function createSeedDb(dir: string): Promise<LocalDb> {
           }
 
           if (template.photoRequirement !== "none" && (template.photoRequirement === "required" || hash % 2 === 0)) {
-            const photoId = newId();
+            const photoId = fixtureId();
             const relativePath = `${store.id}/${taskId}/${photoId}.jpg`;
             const absolute = path.join(uploadsDir(), relativePath);
             fs.mkdirSync(path.dirname(absolute), { recursive: true });
@@ -350,7 +357,7 @@ export async function createSeedDb(dir: string): Promise<LocalDb> {
               createdAt: completedAt
             });
             executions.push({
-              id: newId(),
+              id: fixtureId(),
               taskId,
               action: "photo_added",
               note: "Evidência fotográfica anexada.",
@@ -364,7 +371,7 @@ export async function createSeedDb(dir: string): Promise<LocalDb> {
 
         if (hash % 9 === 0) {
           observations.push({
-            id: newId(),
+            id: fixtureId(),
             taskId,
             userId: supervisor1.id,
             content: "Acompanhamento da supervisão: manter o padrão durante a semana.",

@@ -86,6 +86,7 @@ export function TaskActions({
 
   return (
     <div className="space-y-3">
+      <p className="text-sm font-semibold">{status === "completed" ? approved ? "3 de 3 · Revisão concluída" : "2 de 3 · Aguardando revisão" : "1 de 3 · Executar e anexar evidências"}</p>
       {status !== "completed" ? (
         <>
           {status === "pending" ? (
@@ -101,9 +102,9 @@ export function TaskActions({
           ) : null}
           <button
             type="button"
-            className="btn-primary w-full"
+            className={mode ? "btn-secondary w-full" : "btn-primary w-full"}
             onClick={() => setMode(mode === "complete" ? null : "complete")}
-            disabled={pending}
+            disabled={pending || needsPhoto}
           >
             <CheckCircle2 className="h-4 w-4" />
             Concluir atividade

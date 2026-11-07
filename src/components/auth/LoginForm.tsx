@@ -40,7 +40,7 @@ export function LoginForm({
     <div>
       <div className="mb-7">
         <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-ink/70">Acesso restrito</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-ink">Bem-vinda de volta</h1>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-ink">Boas-vindas de volta</h1>
         <p className="mt-2 text-sm text-ink/70">
           Entre com seu e-mail ou usuário para acompanhar as atividades das lojas.
         </p>
@@ -63,6 +63,8 @@ export function LoginForm({
             name="email"
             type="text"
             autoComplete="username"
+            autoCapitalize="none"
+            spellCheck={false}
             required
             value={email}
             onChange={(event) => setEmail(event.target.value)}

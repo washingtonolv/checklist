@@ -26,7 +26,7 @@ input[type="checkbox"], input[type="radio"] { accent-color: rgb(var(--color-bran
   .card { @apply rounded-xl border border-line bg-surface shadow-card; }
   .card-flat { @apply rounded-xl border border-line bg-surface; }
   .btn {
-    @apply inline-flex min-h-[40px] cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex min-h-[44px] cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
   }
   .btn-primary {
     @apply btn shadow-soft;
@@ -51,9 +51,9 @@ input[type="checkbox"], input[type="radio"] { accent-color: rgb(var(--color-bran
   .btn-secondary { @apply btn border border-line bg-surface text-ink hover:bg-canvas; }
   .btn-ghost { @apply btn border border-line bg-surface text-ink hover:bg-canvas; }
   .btn-danger { @apply btn border border-danger/30 bg-surface text-danger hover:bg-danger/10; }
-  .btn-sm { @apply min-h-[36px] px-3 py-1.5 text-xs; }
+  .btn-sm { @apply min-h-[44px] px-3 py-1.5 text-xs; }
   .input {
-    @apply w-full min-h-[42px] rounded-lg border border-line bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-ink/60 focus:border-brand focus:ring-2 focus:ring-brand/20;
+    @apply w-full min-h-[44px] rounded-lg border border-line bg-surface px-3 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-ink/60 focus:border-brand focus:ring-2 focus:ring-brand/20;
   }
   .input { border-color: rgb(var(--color-input-border)); }
   .label { @apply mb-1.5 block text-xs font-semibold text-ink; }
@@ -164,4 +164,21 @@ button[aria-busy="true"] { cursor: progress; }
 }
 @media print {
   .auth-content, #conteudo > :first-child { animation: none; }
+}
+
+/* Consistent touch targets and reachable form actions. */
+button, summary, .sidebar-nav-link, header a { min-height: 44px; min-width: 44px; }
+summary { cursor: pointer; display: flex; align-items: center; gap: 8px; }
+summary::before { content: "+"; font-size: 18px; }
+details[open] > summary::before { content: "−"; }
+label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 44px; }
+.input[aria-invalid="true"] { border-color: rgb(var(--color-danger)); }
+.form-actions { background: rgb(var(--color-surface)); }
+@media (max-width: 639px) {
+  .input { font-size: 16px; }
+  .page-actions { width: 100%; }
+  .page-actions > .btn-primary { width: 100%; order: -1; }
+  .form-actions { position: sticky; bottom: 0; z-index: 20; padding: 12px 0 max(12px, env(safe-area-inset-bottom)); }
+  .form-actions > .btn-primary { flex: 1; }
+  .auth-content a[href="/recuperar-senha"] { display: inline-flex; align-items: center; min-height: 44px; }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { FormExperience } from "./FormExperience";
 import { useFormState, useFormStatus } from "react-dom";
 import { Save } from "@/components/ui/material-icons";
 import { saveStoreAction } from "@/actions/stores";
@@ -11,7 +12,7 @@ import type { Store } from "@/lib/types";
 function Submit({ editing }: { editing: boolean }) {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" className="btn-primary" disabled={pending}>
+    <button type="submit" className="btn-primary" disabled={pending} aria-busy={pending}>
       <Save className="h-4 w-4" />
       {pending ? "Salvando..." : editing ? "Salvar alterações" : "Cadastrar loja"}
     </button>
@@ -31,7 +32,7 @@ export function StoreForm({
   const editing = Boolean(store);
 
   return (
-    <form action={action} className="space-y-5">
+    <FormExperience action={action} className="space-y-5">
       {store ? <input type="hidden" name="id" value={store.id} /> : null}
       {state?.error ? <Alert tone="error">{state.error}</Alert> : null}
 
@@ -90,11 +91,11 @@ export function StoreForm({
         <p className="hint">O supervisor visualiza todas as lojas marcadas acima.</p>
       </div>
 
-      <div className="flex flex-wrap items-center justify-end gap-2 border-t border-ink/10 pt-4">
+      <div className="form-actions flex flex-wrap items-center justify-end gap-2 border-t border-ink/10 pt-4">
         <Link href="/lojas" className="btn-ghost">Cancelar</Link>
         <Submit editing={editing} />
       </div>
-    </form>
+    </FormExperience>
   );
 }
 
