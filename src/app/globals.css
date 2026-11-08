@@ -252,3 +252,29 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
 .app-sidebar .sidebar-demo { border-color: rgb(5 145 140 / .25); }
 .app-sidebar :focus-visible { outline-color: var(--navigation-text); }
 .sidebar-logo a { background: var(--navigation-primary); }
+
+/* Inverted palette preview: petroleum surface, white text, rose icons. */
+.app-sidebar {
+  background: #05918c;
+  color: #ffffff;
+  border-color: rgb(255 255 255 / .18);
+}
+.app-sidebar .text-white, .app-sidebar .sidebar-nav-link, .app-sidebar .sidebar-group-title,
+.app-sidebar .sidebar-exit, .app-sidebar .sidebar-toggle, .app-sidebar .sidebar-nav-active { color: #ffffff; }
+.app-sidebar .sidebar-nav-link:hover, .app-sidebar .sidebar-toggle:hover,
+.app-sidebar .sidebar-profile:hover, .app-sidebar .sidebar-exit:hover { background: rgb(0 0 0 / .10); }
+.app-sidebar .sidebar-nav-active, .app-sidebar .sidebar-nav-active:hover { background: rgb(0 0 0 / .18); }
+.app-sidebar .sidebar-nav-link > svg, .app-sidebar .sidebar-toggle > svg,
+.app-sidebar .sidebar-exit > svg, .app-sidebar .sidebar-close > svg {
+  color: #cd4664;
+  background: #ffffff;
+  border-radius: 6px;
+  padding: 3px;
+  box-sizing: content-box;
+  flex-shrink: 0;
+}
+.app-sidebar .sidebar-group + .sidebar-group, .app-sidebar .sidebar-account,
+.app-sidebar .sidebar-demo { border-color: rgb(255 255 255 / .25); }
+.app-sidebar .sidebar-profile [aria-hidden="true"] { background: #ffffff; color: #06736f; }
+.app-sidebar :focus-visible { outline-color: #ffffff; }
+.sidebar-logo a { background: #ffffff; }
