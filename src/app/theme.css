@@ -24,9 +24,9 @@
   --color-on-brand: var(--gray-0);
 
   /* Menu sincronizado com os estados dos botões Paper Hearts. */
-  --sidebar-background: var(--action-primary);
-  --sidebar-hover: var(--action-shade-10);
-  --sidebar-selected: var(--action-shade-20);
+  --sidebar-background: #171717;
+  --sidebar-hover: #222222;
+  --sidebar-selected: #303030;
 
   /* Paper Hearts — ações principais; independente da identidade e dos status. */
   --action-primary: #cd4664;
