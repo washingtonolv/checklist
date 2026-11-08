@@ -191,7 +191,7 @@ export default async function DashboardPage({
           label="Pendentes"
           value={data.pending + data.inProgress + data.correction + data.rejected}
           hint={`${data.inProgress} em andamento · ${data.correction} correções`}
-          icon={<AnimatedCalendar className="h-8 w-8" />}
+          icon={<AnimatedCalendar className="h-5 w-5" />}
           tone="outline"
         />
         <StatCard
@@ -298,7 +298,7 @@ export default async function DashboardPage({
         </Card>
 
         <Card>
-          <CardHeader title="Atividades atrasadas" description="Prazo vencido" icon={<AnimatedCalendar className="h-7 w-7" />} action={<Link href="/atividades?status=pending" className="btn-ghost btn-sm">Ver todas</Link>} />
+          <CardHeader title="Atividades atrasadas" description="Prazo vencido" icon={<AnimatedCalendar className="h-4 w-4" />} action={<Link href="/atividades?status=pending" className="btn-ghost btn-sm">Ver todas</Link>} />
           <div className="p-5">
             {data.overdueTasks.length ? (
               <div className="space-y-3">
