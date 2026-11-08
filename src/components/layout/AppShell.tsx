@@ -38,6 +38,7 @@ const ICONS = {
 } as const;
 
 const TITLES: { prefix: string; title: string; description: string }[] = [
+  { prefix: "/rotina", title: "Minha rotina", description: "Uma tarefa de cada vez" },
   { prefix: "/painel", title: "Painel", description: "Visão geral da operação" },
   { prefix: "/atividades", title: "Atividades", description: "Checklists e evidências" },
   { prefix: "/lojas", title: "Lojas", description: "Unidades da rede" },

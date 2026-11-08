@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ManagerRoutine } from "@/components/layout/ManagerRoutine";
 import { AnimatedCalendar } from "@/components/ui/AnimatedCalendar";
 import {
   AlertTriangle,
@@ -30,6 +31,7 @@ export default async function DashboardPage({
   searchParams: Record<string, string | string[] | undefined>;
 }) {
   const user = await requireUser();
+  if (user.role === "manager") return <ManagerRoutine user={user} date={typeof searchParams.data === "string" ? searchParams.data : undefined} />;
   const backend = getBackend();
   const range = monthRange();
   const filters: DashboardFilters = {
