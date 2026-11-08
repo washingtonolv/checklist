@@ -278,3 +278,21 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
 .app-sidebar .sidebar-profile [aria-hidden="true"] { background: #ffffff; color: #06736f; }
 .app-sidebar :focus-visible { outline-color: #ffffff; }
 .sidebar-logo a { background: #ffffff; }
+
+/* Requested 20% surface opacity; labels and controls remain opaque. */
+.app-sidebar {
+  background: rgb(5 145 140 / .20);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  backdrop-filter: blur(20px) saturate(120%);
+}
+.app-sidebar .sidebar-nav-link > svg, .app-sidebar .sidebar-toggle > svg,
+.app-sidebar .sidebar-exit > svg, .app-sidebar .sidebar-close > svg {
+  color: #ffffff;
+  background: transparent;
+  padding: 0;
+  box-sizing: border-box;
+  border-radius: 0;
+}
+@media (prefers-reduced-transparency: reduce) {
+  .app-sidebar { background: #05918c; -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
