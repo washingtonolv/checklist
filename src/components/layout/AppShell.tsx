@@ -214,7 +214,7 @@ export function AppShell({
 
       <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-surface focus:p-3">Pular para o conteúdo</a>
       {demoMode && <div className="border-b border-line bg-[#faedf0] px-4 py-3 text-sm text-ink" role="note"><strong>Versão de teste</strong> · Dados fictícios. Cadastros e fotos podem ser reiniciados; não envie informações reais.</div>}
-      <main id="conteudo" tabIndex={-1} className="mx-auto w-full max-w-[1400px] px-4 py-6 sm:px-6 lg:px-8">{children}</main>
+      <main id="conteudo" tabIndex={-1} className="mx-auto w-full max-w-[1400px] px-4 py-6 sm:px-6 lg:px-8"><div key={pathname} className="route-flow">{children}</div></main>
 
       <footer className="mx-auto flex w-full max-w-[1400px] flex-wrap items-center justify-between gap-2 px-4 pb-6 text-[11px] text-ink/70 sm:px-6 lg:px-8">
         <span>© {new Date().getFullYear()} D&D · Checklist Operacional</span>
