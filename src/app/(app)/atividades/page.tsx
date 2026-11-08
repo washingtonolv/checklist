@@ -70,6 +70,7 @@ export default async function TasksPage({
 
       <Card className="mb-5 p-4">
         <form method="get" action="/atividades" className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">
+          <input type="hidden" name="status" value={filters.status} />
           <div className="xl:col-span-2">
             <label className="label" htmlFor="search">Buscar atividade</label>
             <div className="relative">
