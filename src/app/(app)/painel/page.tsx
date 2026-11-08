@@ -1,9 +1,9 @@
 import Link from "next/link";
+import { AnimatedCalendar } from "@/components/ui/AnimatedCalendar";
 import {
   AlertTriangle,
   ArrowUpRight,
   Building2,
-  CalendarClock,
   Camera,
   CheckCircle2,
   ClipboardList,
@@ -191,7 +191,7 @@ export default async function DashboardPage({
           label="Pendentes"
           value={data.pending + data.inProgress + data.correction + data.rejected}
           hint={`${data.inProgress} em andamento · ${data.correction} correções`}
-          icon={<CalendarClock className="h-5 w-5" />}
+          icon={<AnimatedCalendar className="h-8 w-8" />}
           tone="outline"
         />
         <StatCard
@@ -298,7 +298,7 @@ export default async function DashboardPage({
         </Card>
 
         <Card>
-          <CardHeader title="Atividades atrasadas" description="Prazo vencido" icon={<CalendarClock className="h-4 w-4" />} action={<Link href="/atividades?status=pending" className="btn-ghost btn-sm">Ver todas</Link>} />
+          <CardHeader title="Atividades atrasadas" description="Prazo vencido" icon={<AnimatedCalendar className="h-7 w-7" />} action={<Link href="/atividades?status=pending" className="btn-ghost btn-sm">Ver todas</Link>} />
           <div className="p-5">
             {data.overdueTasks.length ? (
               <div className="space-y-3">
@@ -369,6 +369,7 @@ export default async function DashboardPage({
         </Card>
       </div>
 
+      <p className="mt-6 text-xs text-ink/70"><a href="https://www.flaticon.com/br/icones-animados-gratis/calendario" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">Calendário: ícone animado criado por Magnific — Flaticon</a></p>
       <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-dashed border-ink/20 bg-turquesa/5 px-5 py-4">
         <div className="flex items-center gap-3">
           <RoleBadge role={user.role as Role} />
