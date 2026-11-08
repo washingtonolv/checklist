@@ -240,3 +240,15 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
 @media (prefers-reduced-transparency: reduce) {
   .app-sidebar { background: #ffffff; -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
+
+/* Teal + Paper Hearts palette evaluation. */
+.app-sidebar { color: var(--navigation-text); border-color: rgb(5 145 140 / .12); }
+.app-sidebar .text-white, .app-sidebar .sidebar-nav-link, .app-sidebar .sidebar-group-title,
+.app-sidebar .sidebar-exit, .app-sidebar .sidebar-toggle { color: var(--navigation-text); }
+.app-sidebar .sidebar-nav-link > svg, .app-sidebar .sidebar-toggle > svg, .app-sidebar .sidebar-exit > svg { color: var(--navigation-primary); }
+.app-sidebar .sidebar-nav-active { color: var(--navigation-selected); }
+.app-sidebar .sidebar-nav-active > svg { color: var(--navigation-selected); }
+.app-sidebar .sidebar-profile [aria-hidden="true"] { background: #e0f2f1; color: var(--navigation-selected); }
+.app-sidebar .sidebar-demo { border-color: rgb(5 145 140 / .25); }
+.app-sidebar :focus-visible { outline-color: var(--navigation-text); }
+.sidebar-logo a { background: var(--navigation-primary); }

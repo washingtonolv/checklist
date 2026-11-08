@@ -19,14 +19,18 @@
 
   /* Aliases de compatibilidade: navegação, chips e superfícies são neutros.
      Ações principais usam exclusivamente os tokens Paper Hearts abaixo. */
-  --color-brand: var(--gray-700);
-  --color-accent: var(--gray-500);
+  --color-brand: 205 70 100; /* #CD4664 — ações principais */
+  --color-accent: 5 145 140; /* #05918C — apoio institucional */
   --color-on-brand: var(--gray-0);
+
+  --navigation-primary: #05918c;
+  --navigation-text: #06736f; /* Tom de leitura com maior contraste no branco. */
+  --navigation-selected: #055b58;
 
   /* Menu sincronizado com os estados dos botões Paper Hearts. */
   --sidebar-background: #ffffff;
-  --sidebar-hover: var(--action-tint-90);
-  --sidebar-selected: var(--action-tint-80);
+  --sidebar-hover: #f0f9f8;
+  --sidebar-selected: #e0f2f1;
 
   /* Paper Hearts — ações principais; independente da identidade e dos status. */
   --action-primary: #cd4664;
