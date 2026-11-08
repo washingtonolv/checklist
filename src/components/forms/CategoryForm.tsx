@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { FormExperience } from "./FormExperience";
 import { useFormState, useFormStatus } from "react-dom";
-import { FolderTree, Save } from "@/components/ui/material-icons";
+import { FolderTree, Save } from "@/components/ui/illustrated-icons";
 import { saveCategoryAction } from "@/actions/categories";
 import { initialActionState } from "@/actions/state";
 import { Alert } from "@/components/ui";

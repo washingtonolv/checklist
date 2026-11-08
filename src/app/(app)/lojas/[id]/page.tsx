@@ -12,7 +12,7 @@ import {
   Pencil,
   UserRound,
   Users
-} from "@/components/ui/material-icons";
+} from "@/components/ui/illustrated-icons";
 import { requireUser } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
 import { dueLabel, formatDate, formatDateTime, isOverdue, monthRange } from "@/lib/dates";

@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, MessageSquarePlus } from "@/components/ui/material-icons";
+import { Loader2, MessageSquarePlus } from "@/components/ui/illustrated-icons";
 import { toast } from "sonner";
 import { addObservationAction } from "@/actions/tasks";
 

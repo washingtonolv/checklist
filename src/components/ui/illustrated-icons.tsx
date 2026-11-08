@@ -1,0 +1,75 @@
+/** Original vector illustrations inspired by the supplied calendar's visual style.
+ * Bold rounded outlines, coral, sky blue and warm ivory. Sidebar keeps Material Icons.
+ */
+import type { ReactNode, SVGProps } from "react";
+type Props = SVGProps<SVGSVGElement> & { size?: number | string; title?: string };
+const coral = "#ED7D85", sky = "#A8E4F4", ivory = "#F7F4F2", sand = "#DED5CF";
+function illustrated(name: string, art: ReactNode) {
+  return function IllustratedIcon({ size = 24, className, title, ...props }: Props) {
+    const labeled = Boolean(title || props["aria-label"] || props["aria-labelledby"]);
+    return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 32 32" fill="none" stroke="#111111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden={labeled ? undefined : true} role={labeled ? "img" : undefined} focusable="false" data-material-icon={name} className={`illustrated-icon shrink-0 ${className ?? ""}`} {...props}>{title ? <title>{title}</title> : null}<g className="icon-art">{art}</g></svg>;
+  };
+}
+const paper = <><rect x="6" y="4" width="21" height="25" rx="3" fill={ivory}/><path d="M11 11h11" stroke={coral}/><path d="M11 16h11M11 21h7"/></>;
+const check = <path d="m10 16 4 4 8-9"/>;
+const person = <><circle cx="16" cy="10" r="5" fill={sand}/><path d="M6 28v-3c0-6 20-6 20 0v3Z" fill={sky}/></>;
+export const CalendarClock = illustrated("event", <><rect x="3" y="5" width="26" height="24" rx="4" fill={ivory}/><path d="M3 12h26V9a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4Z" fill={coral}/><path d="M9 3v5M16 3v5M23 3v5"/><rect x="8" y="16" width="4" height="4" rx="1" fill={sky}/><rect x="16" y="16" width="4" height="4" rx="1" fill={sand}/><rect x="8" y="23" width="4" height="3" rx=".7" fill={sand}/><circle cx="24" cy="25" r="6" fill={coral}/><path d="m21 25 2 2 4-4"/></>);
+export const LayoutDashboard = illustrated("dashboard", <><rect x="3" y="3" width="11" height="14" rx="3" fill={coral}/><rect x="19" y="3" width="10" height="9" rx="3" fill={sky}/><rect x="3" y="22" width="11" height="7" rx="3" fill={sand}/><rect x="19" y="17" width="10" height="12" rx="3" fill={ivory}/></>);
+export const ClipboardList = illustrated("assignment", <><rect x="6" y="5" width="22" height="25" rx="3" fill={ivory}/><rect x="11" y="2" width="12" height="6" rx="2" fill={coral}/><path d="M16 14h7M16 20h7M16 26h5"/><path d="M11 14h.1M11 20h.1M11 26h.1" stroke={coral} strokeWidth="3"/></>);
+export const ClipboardCheck = illustrated("assignment_turned_in", <><rect x="5" y="5" width="23" height="25" rx="3" fill={ivory}/><rect x="10" y="2" width="13" height="6" rx="2" fill={coral}/><circle cx="17" cy="20" r="8" fill={sky}/>{check}</>);
+export const ListChecks = illustrated("checklist", <><rect x="3" y="3" width="26" height="26" rx="4" fill={ivory}/><path d="m7 10 2 2 4-4m-6 12 2 2 4-4" stroke={coral}/><path d="M17 10h7M17 20h7"/></>);
+export const Camera = illustrated("photo_camera", <><path d="M3 11a3 3 0 0 1 3-3h4l2-4h8l2 4h4a3 3 0 0 1 3 3v15H3Z" fill={coral}/><circle cx="16" cy="17" r="7" fill={ivory}/><circle cx="16" cy="17" r="3" fill={sky}/><path d="M25 12h.1"/></>);
+export const CameraOff = illustrated("no_photography", <><rect x="3" y="8" width="26" height="20" rx="3" fill={sand}/><circle cx="16" cy="18" r="6" fill={ivory}/><path d="M4 3 29 29" stroke={coral} strokeWidth="4"/></>);
+export const CheckCircle2 = illustrated("check_circle", <><circle cx="16" cy="16" r="13" fill={sky}/><path d="m8 16 6 6L24 10" strokeWidth="3"/></>);
+export const XCircle = illustrated("cancel", <><circle cx="16" cy="16" r="13" fill={coral}/><path d="m11 11 10 10m0-10L11 21" strokeWidth="3"/></>);
+export const CircleDashed = illustrated("radio_button_unchecked", <circle cx="16" cy="16" r="12" fill={ivory} strokeDasharray="3 5"/>);
+export const Clock3 = illustrated("schedule", <><circle cx="16" cy="16" r="13" fill={ivory}/><path d="M16 7v10l7 3" strokeWidth="3"/><path d="M16 3v2M3 16h2m22 0h2" stroke={coral}/></>);
+export const AlertTriangle = illustrated("warning_amber", <><path d="m14 4-12 23h28L18 4a2.3 2.3 0 0 0-4 0Z" fill={coral}/><path d="M16 12v7m0 4h.1" strokeWidth="3"/></>);
+export const Info = illustrated("info", <><circle cx="16" cy="16" r="13" fill={sky}/><path d="M16 14v9m-2 0h4m-2-15h.1" strokeWidth="3"/></>);
+export const Store = illustrated("storefront", <><rect x="5" y="11" width="23" height="18" rx="2" fill={ivory}/><path d="M5 3h22l3 10H2Z" fill={coral}/><path d="M11 3 9 13m12-10 2 10"/><rect x="10" y="19" width="7" height="10" fill={sky}/><path d="M21 19h3v4h-3Z" fill={sand}/></>);
+export const Building2 = illustrated("apartment", <><rect x="7" y="3" width="18" height="26" rx="2" fill={ivory}/><path d="M3 29h26"/><path d="M12 9h2m5 0h1m-8 6h2m5 0h1" stroke={coral} strokeWidth="3"/><path d="M13 29v-7h6v7" fill={sky}/></>);
+export const Users = illustrated("groups", <><circle cx="8" cy="11" r="4" fill={sand}/><circle cx="24" cy="11" r="4" fill={sand}/><path d="M2 27v-4q6-8 12 0v4Zm16 0v-4q6-8 12 0v4Z" fill={sky}/><circle cx="16" cy="8" r="5" fill={ivory}/><path d="M7 29v-6c0-8 18-8 18 0v6Z" fill={coral}/></>);
+export const UserRound = illustrated("person_outline", person);
+export const FolderTree = illustrated("account_tree", <><path d="M16 12v6M6 18h20M6 18v4m20-4v4"/><rect x="9" y="2" width="14" height="10" rx="2" fill={coral}/><rect x="2" y="22" width="10" height="8" rx="2" fill={sky}/><rect x="20" y="22" width="10" height="8" rx="2" fill={ivory}/></>);
+export const Layers = illustrated("layers", <><path d="m2 23 14 7 14-7-14-7Z" fill={sand}/><path d="m2 16 14 7 14-7-14-7Z" fill={sky}/><path d="m2 9 14 7 14-7-14-7Z" fill={coral}/></>);
+export const FileSpreadsheet = illustrated("table_chart", <><rect x="4" y="3" width="25" height="26" rx="3" fill={ivory}/><path d="M4 11h25V6a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3Z" fill={coral}/><path d="M12 11v18M4 19h25"/><path d="M18 15h6m-6 9h6" stroke={sky} strokeWidth="3"/></>);
+export const History = illustrated("history", <><path d="M6 9a12 12 0 1 1-1 15" fill={ivory}/><path d="M16 8v9l5 3"/><path d="M3 3v8h8" stroke={coral} strokeWidth="3"/></>);
+export const Activity = illustrated("timeline", <><rect x="3" y="3" width="26" height="26" rx="4" fill={ivory}/><path d="m5 21 7-8 6 5 9-11" stroke={coral} strokeWidth="3"/><circle cx="12" cy="13" r="2" fill={sky}/><circle cx="18" cy="18" r="2" fill={sky}/></>);
+export const Percent = illustrated("percent", <><circle cx="9" cy="9" r="5" fill={sky}/><circle cx="23" cy="23" r="5" fill={coral}/><path d="m7 26 18-20" strokeWidth="3"/></>);
+export const Mail = illustrated("mail_outline", <><rect x="2" y="6" width="28" height="21" rx="3" fill={ivory}/><path d="m3 8 13 11L29 8" fill={coral}/></>);
+export const MapPin = illustrated("location_on", <><path d="M16 30S5 19 5 12a11 11 0 0 1 22 0c0 7-11 18-11 18Z" fill={coral}/><circle cx="16" cy="12" r="5" fill={ivory}/></>);
+export const MessageSquare = illustrated("chat_bubble_outline", <><path d="M3 3h26v21H12l-9 6Z" fill={ivory}/><path d="M9 10h14M9 16h9" stroke={coral}/></>);
+export const MessageSquarePlus = illustrated("add_comment", <><path d="M3 3h26v21H12l-9 6Z" fill={sky}/><path d="M16 8v11m-5-5h10"/></>);
+export const ImagePlus = illustrated("add_photo_alternate", <><rect x="3" y="5" width="25" height="24" rx="3" fill={ivory}/><path d="m4 25 8-10 7 8 4-4 5 6" fill={sky}/><circle cx="21" cy="11" r="3" fill={coral}/><path d="M27 1v8m-4-4h8"/></>);
+export const ZoomIn = illustrated("zoom_in", <><circle cx="13" cy="13" r="10" fill={sky}/><path d="m21 21 8 8" strokeWidth="5" stroke={coral}/><path d="M13 8v10M8 13h10"/></>);
+export const Search = illustrated("search", <><path d="m21 21 8 8" strokeWidth="5" stroke={coral}/><circle cx="13" cy="13" r="10" fill={sky}/><path d="M8 12a5 5 0 0 1 5-5" stroke={ivory}/></>);
+export const Filter = illustrated("filter_alt", <path d="M3 4h26L19 16v11l-6 3V16Z" fill={sky}/>);
+export const Save = illustrated("save", <><path d="M4 3h21l4 5v21H3V4Z" fill={coral}/><path d="M9 3h13v9H9Z" fill={ivory}/><path d="M8 29V18h16v11" fill={sky}/><path d="M18 5v4"/></>);
+export const Pencil = illustrated("edit", <><path d="m3 29 2-9L23 2l7 7-18 18Z" fill={coral}/><path d="m5 20 7 7-9 2Z" fill={sand}/><path d="m20 5 7 7"/></>);
+export const Trash2 = illustrated("delete_outline", <><path d="m6 9 2 20h16l2-20" fill={ivory}/><path d="M3 8h26M11 4h10" stroke={coral} strokeWidth="4"/><path d="M12 14v9m8-9v9"/></>);
+export const Printer = illustrated("print", <><path d="M8 3h16v9H8Z" fill={ivory}/><rect x="3" y="10" width="27" height="16" rx="3" fill={coral}/><path d="M8 19h16v11H8Z" fill={ivory}/><path d="M12 23h8m-8 4h8"/><circle cx="25" cy="15" r="1" fill={sky}/></>);
+export const KeyRound = illustrated("key", <><circle cx="11" cy="11" r="8" fill={coral}/><circle cx="9" cy="9" r="2" fill={ivory}/><path d="m17 16 12 12-3 3-3-3-3 1-1-4-5-5" fill={sky}/></>);
+const shield = <path d="M16 2 3 7v8c0 8 13 15 13 15s13-7 13-15V7Z" fill={sky}/>;
+export const ShieldCheck = illustrated("verified_user", <>{shield}{check}</>);
+export const ShieldAlert = illustrated("gpp_maybe", <>{shield}<path d="M16 10v8m0 5h.1" stroke={coral} strokeWidth="3"/></>);
+export const ThumbsUp = illustrated("thumb_up", <><path d="M11 28V14l6-12c4 0 4 4 1 10h10l2 3-4 13Z" fill={ivory}/><rect x="2" y="14" width="8" height="15" rx="2" fill={coral}/></>);
+export const Play = illustrated("play_arrow", <><circle cx="16" cy="16" r="13" fill={sky}/><path d="m13 9 10 7-10 7Z" fill={coral}/></>);
+export const Plus = illustrated("add", <><rect x="3" y="3" width="26" height="26" rx="6" fill={coral}/><path d="M16 9v14M9 16h14" stroke={ivory} strokeWidth="3"/></>);
+export const X = illustrated("close", <><circle cx="16" cy="16" r="13" fill={ivory}/><path d="m10 10 12 12m0-12L10 22" stroke={coral} strokeWidth="3"/></>);
+export const Menu = illustrated("menu", <><rect x="3" y="3" width="26" height="26" rx="4" fill={ivory}/><path d="M9 10h14M9 16h14M9 22h14"/></>);
+export const ArrowLeft = illustrated("arrow_back", <><circle cx="16" cy="16" r="13" fill={ivory}/><path d="M24 16H8l7-7m-7 7 7 7" stroke={coral} strokeWidth="3"/></>);
+export const ArrowUpRight = illustrated("north_east", <><circle cx="16" cy="16" r="13" fill={sky}/><path d="M10 22 23 9H12m11 0v11"/></>);
+const down = <><rect x="5" y="23" width="23" height="7" rx="2" fill={coral}/><path d="M16 3v17m-6-6 6 6 6-6" strokeWidth="3"/></>;
+export const Download = illustrated("download", down);
+export const FileDown = illustrated("file_download", <>{paper}<path d="M17 12v11m-4-4 4 4 4-4" stroke={coral} strokeWidth="3"/></>);
+export const UploadCloud = illustrated("cloud_upload", <><path d="M9 25a7 7 0 0 1-2-14 10 10 0 0 1 19 1 6 6 0 0 1-1 13Z" fill={sky}/><path d="M16 28V14m-5 5 5-5 5 5" stroke={coral} strokeWidth="3"/></>);
+export const Send = illustrated("send", <><path d="m2 13 28-11-9 28-8-12Z" fill={sky}/><path d="m13 18 17-16"/><path d="m13 18-1 9 5-4" fill={coral}/></>);
+export const ScrollText = illustrated("receipt_long", <><path d="M6 2h22v26l-4-2-4 2-4-2-4 2-6-2Z" fill={ivory}/><path d="M11 8h12M11 14h12M11 20h7" stroke={coral}/></>);
+export const RefreshCw = illustrated("refresh", <><path d="M27 13A12 12 0 1 0 26 23" fill={sky}/><path d="M28 4v10H18" stroke={coral} strokeWidth="3"/></>);
+export const RotateCcw = illustrated("undo", <><path d="M5 12c5-10 23-8 23 5 0 9-10 14-17 9" fill={ivory}/><path d="M4 3v11h11" stroke={coral} strokeWidth="3"/></>);
+export const Loader2 = illustrated("autorenew", <><circle cx="16" cy="16" r="12" fill="none" stroke={sand}/><path d="M16 4a12 12 0 0 1 12 12" stroke={coral} strokeWidth="4"/></>);
+export const LoaderCircle = Loader2;
+export const LogIn = illustrated("login", <><path d="M18 3h11v26H18" fill={ivory}/><path d="M2 16h19m-7-7 7 7-7 7" stroke={coral} strokeWidth="3"/></>);
+export const LogOut = illustrated("logout", <><path d="M14 3H3v26h11" fill={ivory}/><path d="M11 16h19m-7-7 7 7-7 7" stroke={coral} strokeWidth="3"/></>);
+export const Eye = illustrated("visibility", <><path d="M2 16S7 6 16 6s14 10 14 10-5 10-14 10S2 16 2 16Z" fill={ivory}/><circle cx="16" cy="16" r="6" fill={sky}/><circle cx="16" cy="16" r="2" fill="#111"/></>);
+export const EyeOff = illustrated("visibility_off", <><path d="M2 16S7 6 16 6s14 10 14 10-5 10-14 10S2 16 2 16Z" fill={ivory}/><circle cx="16" cy="16" r="5" fill={sky}/><path d="m3 3 26 26" stroke={coral} strokeWidth="3"/></>);

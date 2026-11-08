@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Building2, CheckCircle2, MapPin, Plus, Store, UserRound, Users } from "@/components/ui/material-icons";
+import { Building2, CheckCircle2, MapPin, Plus, Store, UserRound, Users } from "@/components/ui/illustrated-icons";
 import { requireUser } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
 import { Card, EmptyState, PageHeader } from "@/components/ui";

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AlertTriangle, CalendarClock, CheckCircle2, ClipboardList, FileSpreadsheet, Filter, Percent } from "@/components/ui/material-icons";
+import { AlertTriangle, CalendarClock, CheckCircle2, ClipboardList, FileSpreadsheet, Filter, Percent } from "@/components/ui/illustrated-icons";
 import { requireUser } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
 import { ACTION_LABELS, RECURRENCE_LABELS, STATUS_LABELS, STATUS_ORDER } from "@/lib/constants";

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useFormState, useFormStatus } from "react-dom";
 import { useState } from "react";
-import { Eye, EyeOff, Loader2, LogIn } from "@/components/ui/material-icons";
+import { Eye, EyeOff, Loader2, LogIn } from "@/components/ui/illustrated-icons";
 import { loginAction } from "@/actions/auth";
 import { initialActionState } from "@/actions/state";
 import { Alert } from "@/components/ui";

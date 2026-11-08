@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AlertTriangle, CalendarClock, Camera, CheckCircle2, ClipboardList, Filter, Search } from "@/components/ui/material-icons";
+import { AlertTriangle, CalendarClock, Camera, CheckCircle2, ClipboardList, Filter, Search } from "@/components/ui/illustrated-icons";
 import { requireUser } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
 import { STATUS_LABELS, STATUS_ORDER } from "@/lib/constants";

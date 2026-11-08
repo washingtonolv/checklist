@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { FormExperience } from "./FormExperience";
 import { useFormState, useFormStatus } from "react-dom";
-import { Save } from "@/components/ui/material-icons";
+import { Save } from "@/components/ui/illustrated-icons";
 import { saveStoreAction } from "@/actions/stores";
 import { initialActionState } from "@/actions/state";
 import { Alert } from "@/components/ui";

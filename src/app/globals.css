@@ -372,3 +372,12 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
 @media print {
   [data-material-icon] .icon-art { animation: none !important; transform: none !important; }
 }
+
+/* Colored content illustrations need room for their rounded outlines. */
+.illustrated-icon { overflow: visible; }
+.illustrated-icon .icon-art { transform-origin: 16px 16px; }
+#conteudo .card span:has(> .illustrated-icon) { background: transparent; }
+#conteudo .card span > .illustrated-icon { width: 32px; height: 32px; }
+@media (min-width: 640px) {
+  #conteudo .card span > .illustrated-icon { width: 36px; height: 36px; }
+}

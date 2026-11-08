@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
-import { AlertTriangle, CheckCircle2, Info, Loader2, XCircle } from "@/components/ui/material-icons";
+import { AlertTriangle, CheckCircle2, Info, Loader2, XCircle } from "@/components/ui/illustrated-icons";
 import "./globals.css";
 import { APP_NAME } from "@/lib/constants";
 

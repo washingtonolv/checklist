@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Activity, Filter, History, ScrollText, ShieldCheck } from "@/components/ui/material-icons";
+import { Activity, Filter, History, ScrollText, ShieldCheck } from "@/components/ui/illustrated-icons";
 import { requireUser } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
 import { ACTION_LABELS } from "@/lib/constants";

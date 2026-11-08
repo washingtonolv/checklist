@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { isGeneralAdmin } from "@/lib/access";
-import { ArrowLeft } from "@/components/ui/material-icons";
+import { ArrowLeft } from "@/components/ui/illustrated-icons";
 import { requireAdmin } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
 import { Card, PageHeader } from "@/components/ui";

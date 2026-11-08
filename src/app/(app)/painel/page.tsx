@@ -11,7 +11,7 @@ import {
   ListChecks,
   Plus,
   Store
-} from "@/components/ui/material-icons";
+} from "@/components/ui/illustrated-icons";
 import { requireUser } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
 import { computeDashboard } from "@/lib/dashboard";
@@ -369,7 +369,7 @@ export default async function DashboardPage({
         </Card>
       </div>
 
-      <p className="mt-6 text-xs text-ink/70"><a href="https://www.flaticon.com/br/icones-animados-gratis/calendario" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">Calendário: ícone animado criado por Magnific — Flaticon</a></p>
+
       <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-dashed border-ink/20 bg-turquesa/5 px-5 py-4">
         <div className="flex items-center gap-3">
           <RoleBadge role={user.role as Role} />

@@ -1,4 +1,4 @@
-import { ArrowLeft } from "@/components/ui/material-icons";
+import { ArrowLeft } from "@/components/ui/illustrated-icons";
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";

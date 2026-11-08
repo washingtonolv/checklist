@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useFormState, useFormStatus } from "react-dom";
-import { Mail } from "@/components/ui/material-icons";
+import { Mail } from "@/components/ui/illustrated-icons";
 import { requestPasswordResetAction } from "@/actions/auth";
 import { initialActionState } from "@/actions/state";
 import { Alert } from "@/components/ui";

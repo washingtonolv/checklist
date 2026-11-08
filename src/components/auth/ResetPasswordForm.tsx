@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useFormState, useFormStatus } from "react-dom";
-import { KeyRound } from "@/components/ui/material-icons";
+import { KeyRound } from "@/components/ui/illustrated-icons";
 import { resetPasswordAction } from "@/actions/auth";
 import { initialActionState } from "@/actions/state";
 import { Alert } from "@/components/ui";

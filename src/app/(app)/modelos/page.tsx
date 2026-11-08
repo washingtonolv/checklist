@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CalendarClock, Camera, CheckCircle2, ListChecks, Pencil, Plus, Store } from "@/components/ui/material-icons";
+import { CalendarClock, Camera, CheckCircle2, ListChecks, Pencil, Plus, Store } from "@/components/ui/illustrated-icons";
 import { requireAdmin } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
 import { PHOTO_LABELS, RECURRENCE_LABELS } from "@/lib/constants";

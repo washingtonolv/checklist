@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft } from "@/components/ui/material-icons";
+import { ArrowLeft } from "@/components/ui/illustrated-icons";
 import { requireAdmin } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
 import { Alert, Card, PageHeader } from "@/components/ui";

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FormExperience } from "./FormExperience";
 import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { Camera, CalendarClock, Save } from "@/components/ui/material-icons";
+import { Camera, CalendarClock, Save } from "@/components/ui/illustrated-icons";
 import { saveTemplateAction } from "@/actions/templates";
 import { initialActionState } from "@/actions/state";
 import { Alert } from "@/components/ui";

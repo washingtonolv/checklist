@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, RefreshCw } from "@/components/ui/material-icons";
+import { Loader2, RefreshCw } from "@/components/ui/illustrated-icons";
 import { toast } from "sonner";
 import { generateTasksAction } from "@/actions/templates";
 

@@ -11,7 +11,7 @@ import {
   Send,
   ThumbsUp,
   XCircle
-} from "@/components/ui/material-icons";
+} from "@/components/ui/illustrated-icons";
 import { toast } from "sonner";
 import {
   approveTaskAction,

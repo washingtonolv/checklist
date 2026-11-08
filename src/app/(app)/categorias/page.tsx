@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CheckCircle2, FolderTree, Layers, ListChecks, Pencil } from "@/components/ui/material-icons";
+import { CheckCircle2, FolderTree, Layers, ListChecks, Pencil } from "@/components/ui/illustrated-icons";
 import { requireAdmin } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
 import { Card, CardHeader, EmptyState, PageHeader } from "@/components/ui";

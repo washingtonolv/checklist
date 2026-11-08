@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Camera, ImagePlus, Loader2, Trash2, UploadCloud } from "@/components/ui/material-icons";
+import { Camera, ImagePlus, Loader2, Trash2, UploadCloud } from "@/components/ui/illustrated-icons";
 import { toast } from "sonner";
 import { uploadPhotoAction } from "@/actions/tasks";
 import { compressImage, type CompressedImage } from "@/lib/image-client";

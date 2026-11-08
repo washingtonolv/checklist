@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FormExperience } from "./FormExperience";
 import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { Save, ShieldCheck } from "@/components/ui/material-icons";
+import { Save, ShieldCheck } from "@/components/ui/illustrated-icons";
 import { saveUserAction } from "@/actions/users";
 import { initialActionState } from "@/actions/state";
 import { Alert } from "@/components/ui";

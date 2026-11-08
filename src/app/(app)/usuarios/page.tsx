@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { isGeneralAdmin } from "@/lib/access";
 import { RemoveUserButton } from "@/components/forms/RemoveUserButton";
-import { CheckCircle2, Plus, ShieldCheck, Store, UserRound, Users } from "@/components/ui/material-icons";
+import { CheckCircle2, Plus, ShieldCheck, Store, UserRound, Users } from "@/components/ui/illustrated-icons";
 import { requireAdmin } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
 import { formatDate } from "@/lib/dates";

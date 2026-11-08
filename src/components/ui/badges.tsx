@@ -9,7 +9,7 @@ import {
   LoaderCircle,
   ShieldAlert,
   XCircle
-} from "@/components/ui/material-icons";
+} from "@/components/ui/illustrated-icons";
 import { PHOTO_LABELS, ROLE_LABELS, STATUS_LABELS } from "@/lib/constants";
 import type { PhotoRequirement, Role, TaskStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
