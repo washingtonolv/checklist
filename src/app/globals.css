@@ -296,3 +296,25 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
 @media (prefers-reduced-transparency: reduce) {
   .app-sidebar { background: #05918c; -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
+
+/* Neutral white sidebar with near-black labels and icons. */
+.app-sidebar {
+  background: #ffffff;
+  color: #171717;
+  border-color: #eeeeee;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.app-sidebar .text-white, .app-sidebar .sidebar-nav-link, .app-sidebar .sidebar-group-title,
+.app-sidebar .sidebar-exit, .app-sidebar .sidebar-toggle,
+.app-sidebar .sidebar-nav-active, .app-sidebar .sidebar-close { color: #171717; }
+.app-sidebar .sidebar-nav-link > svg, .app-sidebar .sidebar-toggle > svg,
+.app-sidebar .sidebar-exit > svg, .app-sidebar .sidebar-close > svg { color: #171717; }
+.app-sidebar .sidebar-nav-link:hover, .app-sidebar .sidebar-toggle:hover,
+.app-sidebar .sidebar-profile:hover, .app-sidebar .sidebar-exit:hover { background: #fafafa; }
+.app-sidebar .sidebar-nav-active, .app-sidebar .sidebar-nav-active:hover { background: #f5f5f5; }
+.app-sidebar .sidebar-group + .sidebar-group, .app-sidebar .sidebar-account,
+.app-sidebar .sidebar-demo { border-color: #eeeeee; }
+.app-sidebar .sidebar-profile [aria-hidden="true"] { background: #f5f5f5; color: #171717; }
+.app-sidebar :focus-visible { outline-color: #171717; }
+.sidebar-logo a { background: #171717; }
