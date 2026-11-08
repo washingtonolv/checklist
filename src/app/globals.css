@@ -195,3 +195,31 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
 @media (hover: hover) and (pointer: fine) {
   .app-sidebar .sidebar-nav-link:hover { transform: none; }
 }
+
+/* White expandable sidebar with action-colored navigation. */
+.app-sidebar { color: var(--action-primary); border-color: rgb(var(--color-border)); }
+.app-sidebar .text-white, .app-sidebar .sidebar-nav-link, .app-sidebar .sidebar-group-title, .app-sidebar .sidebar-exit, .app-sidebar .sidebar-toggle { color: var(--action-primary); }
+.app-sidebar .sidebar-nav-active { color: var(--action-shade-20); box-shadow: none; }
+.app-sidebar .sidebar-groups { margin: 0 12px 12px; padding: 0; border: 0; background: transparent; border-radius: 0; }
+.app-sidebar .sidebar-group + .sidebar-group { margin-top: 16px; padding-top: 12px; border-color: rgb(var(--color-border)); }
+.app-sidebar .sidebar-group-title { opacity: 1; font-size: 11px; }
+.app-sidebar .sidebar-account { border: 0; border-top: 1px solid rgb(var(--color-border)); border-radius: 0; background: transparent; padding: 12px 0 0; }
+.app-sidebar .sidebar-demo { border-color: var(--action-tint-70); }
+.app-sidebar .sidebar-profile [aria-hidden="true"] { background: var(--action-tint-90); color: var(--action-shade-20); }
+.app-sidebar .sidebar-toggle:hover { background: var(--sidebar-hover); }
+.app-sidebar :focus-visible { outline-color: var(--action-primary); }
+.sidebar-logo a { background: var(--action-primary); -webkit-mask: url('/brand/logo-dd-white.png') center / contain no-repeat; mask: url('/brand/logo-dd-white.png') center / contain no-repeat; }
+.sidebar-logo img { opacity: 0; }
+@media (min-width: 1024px) {
+  .desktop-sidebar { border-right: 1px solid rgb(var(--color-border)); }
+  .app-layout[data-menu-collapsed="true"] .desktop-sidebar { width: 88px; }
+  .app-layout[data-menu-collapsed="true"] .desktop-sidebar .sidebar-logo,
+  .app-layout[data-menu-collapsed="true"] .desktop-sidebar .sidebar-label,
+  .app-layout[data-menu-collapsed="true"] .desktop-sidebar .sidebar-group-title,
+  .app-layout[data-menu-collapsed="true"] .desktop-sidebar .sidebar-user-info,
+  .app-layout[data-menu-collapsed="true"] .desktop-sidebar .sidebar-demo { display: none; }
+  .app-layout[data-menu-collapsed="true"] .desktop-sidebar .sidebar-top { justify-content: center; padding-left: 12px; padding-right: 12px; }
+  .app-layout[data-menu-collapsed="true"] .desktop-sidebar .sidebar-nav-link,
+  .app-layout[data-menu-collapsed="true"] .desktop-sidebar .sidebar-exit,
+  .app-layout[data-menu-collapsed="true"] .desktop-sidebar .sidebar-profile { justify-content: center; padding-left: 0; padding-right: 0; }
+}

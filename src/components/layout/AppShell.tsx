@@ -60,6 +60,7 @@ export function AppShell({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const panelRef = useRef<HTMLElement>(null);
   const menuRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
@@ -88,8 +89,9 @@ export function AppShell({
 
   const sidebar = (
     <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between px-5 pb-4 pt-6">
-        <Logo size="sm" href="/painel" />
+      <div className="sidebar-top flex items-center justify-between gap-2 px-4 pb-4 pt-5">
+        <div className="sidebar-logo"><Logo size="sm" href="/painel" /></div>
+        <button type="button" className="sidebar-toggle hidden shrink-0 items-center justify-center rounded-xl lg:inline-flex" onClick={() => setCollapsed(value => !value)} aria-label={collapsed ? "Expandir menu lateral" : "Recolher menu lateral"} aria-expanded={!collapsed} title={collapsed ? "Expandir menu" : "Recolher menu"}><Menu className="h-5 w-5" /></button>
         <button
           type="button"
           className="sidebar-close rounded-lg p-2 text-white lg:hidden"
@@ -115,11 +117,11 @@ export function AppShell({
                   const Icon = ICONS[item.icon as keyof typeof ICONS];
                   const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
                   return (
-                    <Link key={item.href} href={item.href}
+                    <Link key={item.href} href={item.href} title={item.label} aria-label={item.label}
                       className={cn("sidebar-nav-link flex min-h-11 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium", active && "sidebar-nav-active")}
                       aria-current={active ? "page" : undefined}>
                       <Icon className="h-[18px] w-[18px] shrink-0" />
-                      <span>{item.label}</span>
+                      <span className="sidebar-label">{item.label}</span>
                     </Link>
                   );
                 })}
@@ -132,20 +134,20 @@ export function AppShell({
         <h2 className="sidebar-group-title">Minha conta</h2>
         <Link href="/perfil" aria-label="Abrir meu perfil" aria-current={pathname === "/perfil" ? "page" : undefined} className="mb-2 flex min-h-11 items-center gap-2.5 sidebar-profile rounded-xl p-2.5 focus-visible:outline-white">
           <Avatar name={user.name} size={36} />
-          <div className="min-w-0">
+          <div className="sidebar-user-info min-w-0">
             <p className="truncate text-sm font-bold text-white">{user.name}</p>
             <p className="truncate text-[11px] text-white">{isGeneralAdmin(user) ? "Administrador Geral" : ROLE_LABELS[user.role]}</p>
           </div>
         </Link>
-        <Link href="/perfil" className={cn("sidebar-nav-link mb-1 flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium", pathname === "/perfil" && "sidebar-nav-active")} aria-current={pathname === "/perfil" ? "page" : undefined}><UserRound className="h-[18px] w-[18px]" />Meu perfil</Link>
+        <Link href="/perfil" title="Meu perfil" aria-label="Meu perfil" className={cn("sidebar-nav-link mb-1 flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium", pathname === "/perfil" && "sidebar-nav-active")} aria-current={pathname === "/perfil" ? "page" : undefined}><UserRound className="h-[18px] w-[18px] shrink-0" /><span className="sidebar-label">Meu perfil</span></Link>
         <form action={logoutAction}>
-          <button type="submit" className="btn sidebar-exit w-full justify-start border-0 bg-transparent px-3 text-sm font-medium text-white">
+          <button type="submit" className="btn sidebar-exit w-full justify-start border-0 bg-transparent px-3 text-sm font-medium text-white" title="Sair da plataforma" aria-label="Sair da plataforma">
             <LogOut className="h-4 w-4" />
-            Sair da plataforma
+            <span className="sidebar-label">Sair da plataforma</span>
           </button>
         </form>
         {demoMode ? (
-          <p className="mt-3 rounded-lg border border-dashed border-white/40 px-2 py-1.5 text-center text-[10px] font-semibold uppercase tracking-wider text-white">
+          <p className="sidebar-demo mt-3 rounded-lg border border-dashed border-white/40 px-2 py-1.5 text-center text-[10px] font-semibold uppercase tracking-wider text-white">
             Modo local de demonstração
           </p>
         ) : null}
@@ -154,8 +156,8 @@ export function AppShell({
   );
 
   return (
-    <div className="min-h-[100dvh] lg:pl-[248px]">
-      <aside className="app-sidebar fixed inset-y-0 left-0 z-40 hidden w-[248px] border-r border-line bg-surface lg:block">
+    <div data-menu-collapsed={collapsed} className={cn("app-layout min-h-[100dvh]", collapsed ? "lg:pl-[88px]" : "lg:pl-[248px]")}>
+      <aside className="app-sidebar desktop-sidebar fixed inset-y-0 left-0 z-40 hidden w-[248px] border-r border-line bg-surface lg:block">
         {sidebar}
       </aside>
 
