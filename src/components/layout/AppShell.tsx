@@ -14,6 +14,7 @@ import {
   Menu,
   Store,
   Users,
+  UserRound,
   X
 } from "@/components/ui/material-icons";
 import type { Role, SessionUser } from "@/lib/types";
@@ -98,45 +99,47 @@ export function AppShell({
           <X className="h-5 w-5" />
         </button>
       </div>
-      <div className="mx-5 mb-5 border-t border-white/25" />
-      <nav className="flex-1 space-y-1 overflow-y-auto px-3" aria-label="Navegação principal">
-        {[nav.slice(0, 3), nav.slice(3)].map((items, group) => {
-        const links = items.map((item) => {
-          const Icon = ICONS[item.icon as keyof typeof ICONS];
-          const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+      <nav className="sidebar-groups flex-1 overflow-y-auto px-3 pb-4" aria-label="Navegação principal">
+        {[
+          { title: "Operação", paths: ["/painel", "/atividades", "/lojas"] },
+          { title: "Gestão", paths: ["/usuarios", "/categorias", "/modelos"] },
+          { title: "Acompanhamento", paths: ["/relatorios", "/historico"] }
+        ].map((group) => {
+          const items = nav.filter(item => group.paths.includes(item.href));
+          if (!items.length) return null;
           return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "sidebar-nav-link group relative flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition",
-                active
-                  ? "sidebar-nav-active text-white"
-                  : "text-white"
-              )}
-              aria-current={active ? "page" : undefined}
-            >
-              {active ? (
-                <span className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-white" />
-              ) : null}
-              <Icon className="h-[18px] w-[18px] text-white" />
-              {item.label}
-            </Link>
+            <section key={group.title} className="sidebar-group" aria-label={group.title}>
+              <h2 className="sidebar-group-title">{group.title}</h2>
+              <div className="space-y-1">
+                {items.map(item => {
+                  const Icon = ICONS[item.icon as keyof typeof ICONS];
+                  const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                  return (
+                    <Link key={item.href} href={item.href}
+                      className={cn("sidebar-nav-link flex min-h-11 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium", active && "sidebar-nav-active")}
+                      aria-current={active ? "page" : undefined}>
+                      <Icon className="h-[18px] w-[18px] shrink-0" />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </section>
           );
-        });
-        return group === 0 ? <div key="routine" className="space-y-1">{links}</div> : items.length ? <details key="more" open={items.some(item => pathname.startsWith(item.href))} className="pt-2"><summary className="rounded-lg px-3.5 text-sm font-semibold">Mais opções</summary><div className="space-y-1 pt-1">{links}</div></details> : null;
         })}
       </nav>
-      <div className="border-t border-white/25 p-4">
-        <div className="mb-3 flex items-center gap-2.5 sidebar-profile rounded-lg bg-white/10 p-3">
+      <div className="sidebar-account mx-3 mb-3 rounded-2xl border border-white/20 p-3">
+        <h2 className="sidebar-group-title">Minha conta</h2>
+        <Link href="/perfil" aria-label="Abrir meu perfil" aria-current={pathname === "/perfil" ? "page" : undefined} className="mb-2 flex min-h-11 items-center gap-2.5 sidebar-profile rounded-xl p-2.5 focus-visible:outline-white">
           <Avatar name={user.name} size={36} />
           <div className="min-w-0">
             <p className="truncate text-sm font-bold text-white">{user.name}</p>
             <p className="truncate text-[11px] text-white">{isGeneralAdmin(user) ? "Administrador Geral" : ROLE_LABELS[user.role]}</p>
           </div>
-        </div>
+        </Link>
+        <Link href="/perfil" className={cn("sidebar-nav-link mb-1 flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium", pathname === "/perfil" && "sidebar-nav-active")} aria-current={pathname === "/perfil" ? "page" : undefined}><UserRound className="h-[18px] w-[18px]" />Meu perfil</Link>
         <form action={logoutAction}>
-          <button type="submit" className="btn sidebar-exit w-full justify-start border border-white/50 bg-transparent text-xs text-white">
+          <button type="submit" className="btn sidebar-exit w-full justify-start border-0 bg-transparent px-3 text-sm font-medium text-white">
             <LogOut className="h-4 w-4" />
             Sair da plataforma
           </button>
