@@ -29,7 +29,7 @@ function materialIcon(name: string, children: ReactNode) {
         {...props}
       >
         {title ? <title>{title}</title> : null}
-        {children}
+        <g className="icon-art">{children}</g>
       </svg>
     );
   }

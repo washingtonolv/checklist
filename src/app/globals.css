@@ -318,3 +318,57 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
 .app-sidebar .sidebar-profile [aria-hidden="true"] { background: #f5f5f5; color: #171717; }
 .app-sidebar :focus-visible { outline-color: #171717; }
 .sidebar-logo a { background: #171717; }
+
+/* Icon motion is scoped to content and auth, never sidebar navigation. */
+:is(#conteudo, .auth-content, header) [data-material-icon] .icon-art {
+  transform-origin: 12px 12px;
+  transform-box: view-box;
+  --icon-motion: dd-icon-pop;
+}
+:is(#conteudo, .auth-content, header) [data-material-icon="event"] .icon-art { --icon-motion: dd-icon-calendar; }
+:is(#conteudo, .auth-content, header) [data-material-icon="photo_camera"] .icon-art { --icon-motion: dd-icon-camera; }
+:is(#conteudo, .auth-content, header) :is([data-material-icon="file_download"], [data-material-icon="download"], [data-material-icon="cloud_upload"], [data-material-icon="upload"]) .icon-art { --icon-motion: dd-icon-slide; }
+:is(#conteudo, .auth-content, header) :is([data-material-icon="warning_amber"], [data-material-icon="notifications"]) .icon-art { --icon-motion: dd-icon-calendar; }
+@media (prefers-reduced-motion: no-preference) {
+  #conteudo .card > div > span > [data-material-icon]:not(.animate-spin) .icon-art,
+  #conteudo .card > div > div > span > [data-material-icon]:not(.animate-spin) .icon-art {
+    animation: var(--icon-motion) 650ms ease-out 120ms 1 both;
+  }
+  :is(#conteudo, .auth-content, header) :is(a, button):focus-visible [data-material-icon]:not(.animate-spin) .icon-art {
+    animation: var(--icon-motion) 650ms ease-in-out 1;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    :is(#conteudo, .auth-content, header) :is(a, button):hover [data-material-icon]:not(.animate-spin) .icon-art,
+    #conteudo .card:hover [data-material-icon]:not(.animate-spin) .icon-art {
+      animation: var(--icon-motion) 650ms ease-in-out 1;
+    }
+  }
+}
+@keyframes dd-icon-calendar {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-9deg); }
+  50% { transform: rotate(7deg); }
+  75% { transform: rotate(-3deg); }
+}
+@keyframes dd-icon-camera {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  35% { transform: scale(.88); opacity: .55; }
+  65% { transform: scale(1.06); opacity: 1; }
+}
+@keyframes dd-icon-pop {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(.88); }
+  70% { transform: scale(1.07); }
+}
+@keyframes dd-icon-slide {
+  0%, 100% { transform: translateY(0); }
+  35% { transform: translateY(-2px); }
+  65% { transform: translateY(2px); }
+}
+.app-sidebar [data-material-icon], .app-sidebar [data-material-icon] .icon-art { animation: none !important; transform: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  [data-material-icon] .icon-art { animation: none !important; transform: none !important; }
+}
+@media print {
+  [data-material-icon] .icon-art { animation: none !important; transform: none !important; }
+}
