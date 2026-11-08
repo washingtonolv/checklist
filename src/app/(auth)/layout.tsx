@@ -1,26 +1,25 @@
-import Image from "next/image";
+import { Logo } from "@/components/brand/Logo";
+import { LoginIllustration } from "@/components/auth/LoginIllustration";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-[100dvh] lg:grid lg:grid-cols-[1.05fr_1fr]">
-      <section
-        className="flex items-center justify-center bg-[#07547d] px-4 py-6 sm:p-8 lg:sticky lg:top-0 lg:h-[100dvh] lg:p-6"
-        aria-label="Apresentação do Checklist Operacional D&D"
-      >
-        <Image
-          src="/brand/login-operacional.webp"
-          alt="D&D Cosméticos — a rotina das lojas em um só lugar: checklists diários, evidências fotográficas, correções e indicadores de desempenho."
-          width={1282}
-          height={1227}
-          priority
-          sizes="(min-width: 1024px) 52vw, (min-width: 640px) 640px, 100vw"
-          className="h-auto w-full max-w-[640px] lg:max-h-full lg:w-auto lg:max-w-full lg:object-contain"
-        />
-      </section>
-
-      <section className="flex flex-col justify-center bg-surface px-5 py-10 sm:px-10 lg:min-h-[100dvh] lg:px-16">
-        <div className="auth-content mx-auto w-full max-w-md">{children}</div>
-      </section>
-    </div>
+    <main className="auth-stage">
+      <div className="auth-panel">
+        <section className="auth-art-panel" aria-label="Apresentação do Checklist Operacional D&D">
+          <div className="auth-brand"><Logo size="sm" href="/login" /></div>
+          <div className="auth-artwork"><LoginIllustration /></div>
+          <div className="auth-art-copy">
+            <p className="mb-3 text-[10px] font-semibold uppercase tracking-[.2em] text-ink/60">Checklist Operacional D&D</p>
+            <h2 className="text-2xl font-semibold leading-tight tracking-tight text-ink sm:text-3xl">Tudo em ordem.<br />Sua equipe em sintonia.</h2>
+            <p className="mt-3 max-w-[290px] text-sm leading-relaxed text-ink/65">Rotinas, evidências e resultados das suas lojas em um só lugar.</p>
+          </div>
+        </section>
+        <section className="auth-form-panel" aria-label="Área de acesso">
+          <p className="auth-access-note">Acesso exclusivo para a equipe <strong>D&D</strong></p>
+          <div className="auth-content mx-auto w-full max-w-[360px]">{children}</div>
+          <p className="auth-bottom-note">D&D Cosméticos · Gestão operacional</p>
+        </section>
+      </div>
+    </main>
   );
 }

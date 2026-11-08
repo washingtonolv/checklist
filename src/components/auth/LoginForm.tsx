@@ -17,7 +17,7 @@ interface DemoCredential {
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" className="btn-primary w-full py-3" disabled={pending} aria-busy={pending}>
+    <button type="submit" className="btn-primary w-full rounded-full py-3" disabled={pending} aria-busy={pending}>
       {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : <LogIn className="h-4 w-4" />}
       {pending ? "Entrando..." : "Entrar na plataforma"}
     </button>
@@ -38,11 +38,11 @@ export function LoginForm({
 
   return (
     <div>
-      <div className="mb-7">
-        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-ink/70">Acesso restrito</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-ink">Boas-vindas de volta</h1>
+      <div className="mb-8">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/55">Bem-vindo à sua operação</p>
+        <h1 className="mt-3 text-4xl font-semibold tracking-[-.045em] text-ink sm:text-[42px]">Entrar</h1>
         <p className="mt-2 text-sm text-ink/70">
-          Entre com seu e-mail ou usuário para acompanhar as atividades das lojas.
+          Use seu e-mail ou usuário para continuar.
         </p>
       </div>
 
@@ -68,7 +68,7 @@ export function LoginForm({
             required
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            className="input"
+            className="input login-field"
             placeholder="E-mail ou usuário"
           />
         </div>
@@ -90,7 +90,7 @@ export function LoginForm({
               required
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              className="input pr-11"
+              className="input login-field pr-14"
               placeholder="••••••••"
             />
             <button
@@ -107,7 +107,8 @@ export function LoginForm({
       </form>
 
       {demoCredentials.length ? (
-        <div className="mt-8 rounded-2xl border border-dashed border-ink/20 bg-turquesa/5 p-4">
+        <details className="mt-6 rounded-xl border border-line bg-surface p-3">
+          <summary className="text-xs font-semibold text-ink/70">Testar com um perfil demonstrativo</summary><div className="pt-3">
           <p className="text-[11px] font-bold uppercase tracking-wider text-ink/70">Acessos de demonstração</p>
           <p className="mt-1 text-xs text-ink/70">
             Dados locais de teste. Clique em um perfil para preencher o formulário.
@@ -132,7 +133,7 @@ export function LoginForm({
             ))}
           </div>
           <p className="mt-3 text-[11px] text-ink/70">Senha padrão: {demoCredentials[0]?.password}</p>
-        </div>
+        </div></details>
       ) : null}
     </div>
   );
