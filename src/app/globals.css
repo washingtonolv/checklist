@@ -466,38 +466,29 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
   .skeleton::after { display: none; }
 }
 
-/* Compact activity filters; preserve accessible control heights and mobile sizing. */
-.activity-filters.card { border-radius: 24px; }
-.activity-filters .input { border-radius: 20px; padding-top: 8px; padding-bottom: 8px; }
-.activity-filters .label { margin-bottom: 4px; }
-
-/* Shared pill-shaped filter bars, with stationary hover states. */
-.pill-filters.card { border-radius: 24px; box-shadow: none; }
-.pill-filters .input { border-radius: 999px; padding-top: 6px; padding-bottom: 6px; min-height: 44px; background: rgb(var(--color-surface)); }
-.pill-filters .label { margin-bottom: 4px; }
-.pill-filters form, .pill-filters details > .grid { gap: 8px; }
-.pill-filters .input:hover:not(:focus) { border-color: rgb(var(--color-input-border)); }
-.pill-filters :is(.btn, .btn-primary, .btn-secondary, .btn-ghost) { transition: none; }
+/* Reference-style filter bars: inline labels and values in compact pills. */
+.pill-filters.card { border-radius: 16px; box-shadow: none; background: rgb(var(--color-background)); border-color: rgb(var(--color-border)); }
+.pill-filters form, .dashboard-filter-fields { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.pill-filters div:has(> .label) { display: flex; align-items: center; gap: 4px; width: auto; max-width: 100%; min-width: 0; min-height: 34px; padding-left: 12px; border: 1px solid rgb(var(--color-border)); border-radius: 999px; background: rgb(var(--color-surface)); }
+.pill-filters .label { flex-shrink: 0; margin: 0; font-size: 12px; font-weight: 500; white-space: nowrap; }
+.pill-filters .label::after { content: ":"; }
+.pill-filters .input { width: auto; min-width: 80px; max-width: 180px; min-height: 32px; height: 32px; border: 0; border-radius: 999px; background: transparent; padding: 4px 12px 4px 4px; font-size: 12px; line-height: 24px; box-shadow: none; transition: none; }
+.pill-filters input[type="date"] { width: 132px; }
+.pill-filters div:has(> .label) > .relative { min-width: 0; }
+.pill-filters .input.pl-9 { padding-left: 32px; width: 180px; }
+.pill-filters div:has(> .label):focus-within { outline: 2px solid rgb(var(--color-brand)); outline-offset: 2px; }
+.pill-filters .input:focus, .pill-filters .input:focus-visible { outline: none; box-shadow: none; }
+.pill-filters :is(.btn, .btn-primary, .btn-secondary, .btn-ghost) { min-height: 34px; height: 34px; padding: 4px 12px; font-size: 12px; line-height: 24px; transition: none; }
 .pill-filters :is(.btn, .btn-primary, .btn-secondary, .btn-ghost):hover { transform: none; box-shadow: none; }
 .pill-filters :is(.btn-secondary, .btn-ghost):hover { background: rgb(var(--color-surface)); }
 .pill-filters .btn-primary:hover:not(:disabled):not([aria-disabled="true"]) { background: var(--action-primary); }
-@media (max-width: 639px) { .pill-filters .input { min-height: 48px; } }
-
-/* Match the compact Executions tab on desktop. */
-@media (min-width: 640px) {
-  .pill-filters .input,
-  .pill-filters :is(.btn, .btn-primary, .btn-secondary, .btn-ghost) {
-    min-height: 34px;
-    height: 34px;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    font-size: 12px;
-    line-height: 20px;
-  }
-}
-
-/* Compact dashboard filters wrap instead of stretching across the panel. */
-@media (min-width: 640px) {
-  .dashboard-filter-fields { display: flex; flex-wrap: wrap; }
-  .dashboard-filter-fields > div { width: 160px; min-width: 0; }
+.pill-filters a[href="/painel"], .pill-filters a[href="/atividades"], .pill-filters a[href="/relatorios"], .pill-filters a[href="/historico"] { background: transparent; border-color: transparent; color: rgb(var(--color-text-muted)); padding-inline: 4px; }
+.pill-filters form > .flex { flex-wrap: wrap; }
+.pill-filters form > .flex > span { white-space: nowrap; }
+@media (max-width: 639px) {
+  .pill-filters div:has(> .label) { min-height: 48px; flex: 1 1 100%; }
+  .pill-filters .input { min-height: 46px; height: 46px; font-size: 16px; max-width: none; flex: 1; min-width: 0; }
+  .pill-filters div:has(> .label) > .relative { flex: 1; }
+  .pill-filters .input.pl-9 { width: 100%; }
+  .pill-filters :is(.btn, .btn-primary, .btn-secondary, .btn-ghost) { min-height: 48px; height: 48px; }
 }
