@@ -81,7 +81,7 @@ export default async function HistoryPage({
         ) : null}
       </div>
 
-      <Card className="mb-5 p-4">
+      <Card className="pill-filters mb-4 p-3">
         <form method="get" action="/historico" className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
           <input type="hidden" name="aba" value={tab} />
           <div>

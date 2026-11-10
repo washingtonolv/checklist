@@ -101,7 +101,7 @@ export default async function DashboardPage({
         }
       />
 
-      <form className="card mb-6 p-4" method="get" action="/painel">
+      <form className="card pill-filters mb-4 p-3" method="get" action="/painel">
         <details open={Boolean(filters.storeId || filters.categoryId || filters.status || filters.supervisorId || filters.managerId)}><summary className="text-sm font-semibold">Filtrar indicadores · loja, período e equipe</summary><div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
           <div>
             <label className="label" htmlFor="storeId">Loja</label>
