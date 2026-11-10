@@ -107,7 +107,7 @@ export default async function DashboardPage({
           <div>
             <label className="label" htmlFor="storeId">Loja</label>
             <select id="storeId" name="storeId" defaultValue={filters.storeId} className="input">
-              <option value="">Todas</option>
+              <option value="">Loja</option>
               {stores.map((store) => (
                 <option key={store.id} value={store.id}>{store.name}</option>
               ))}
@@ -118,7 +118,7 @@ export default async function DashboardPage({
               <div>
                 <label className="label" htmlFor="supervisorId">Supervisor</label>
                 <select id="supervisorId" name="supervisorId" defaultValue={filters.supervisorId} className="input">
-                  <option value="">Todos</option>
+                  <option value="">Supervisor</option>
                   {supervisors.map((person) => (
                     <option key={person.id} value={person.id}>{person.name}</option>
                   ))}
@@ -127,7 +127,7 @@ export default async function DashboardPage({
               <div>
                 <label className="label" htmlFor="managerId">Gerente</label>
                 <select id="managerId" name="managerId" defaultValue={filters.managerId} className="input">
-                  <option value="">Todos</option>
+                  <option value="">Gerente</option>
                   {managers.map((person) => (
                     <option key={person.id} value={person.id}>{person.name}</option>
                   ))}
@@ -138,7 +138,7 @@ export default async function DashboardPage({
           <div>
             <label className="label" htmlFor="categoryId">Categoria</label>
             <select id="categoryId" name="categoryId" defaultValue={filters.categoryId} className="input">
-              <option value="">Todas</option>
+              <option value="">Categoria</option>
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>{category.name}</option>
               ))}
@@ -147,7 +147,7 @@ export default async function DashboardPage({
           <div>
             <label className="label" htmlFor="status">Status</label>
             <select id="status" name="status" defaultValue={filters.status} className="input">
-              <option value="">Todos</option>
+              <option value="">Status</option>
               {STATUS_ORDER.map((status) => (
                 <option key={status} value={status}>{STATUS_LABELS[status]}</option>
               ))}
