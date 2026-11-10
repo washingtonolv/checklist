@@ -103,7 +103,7 @@ export default async function DashboardPage({
 
       <form className="card pill-filters mb-4 p-3" method="get" action="/painel">
         <p className="text-sm font-semibold">Filtrar indicadores · loja, período e equipe</p>
-        <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-4">
+        <div className="dashboard-filter-fields mt-3 grid gap-2">
           <div>
             <label className="label" htmlFor="storeId">Loja</label>
             <select id="storeId" name="storeId" defaultValue={filters.storeId} className="input">

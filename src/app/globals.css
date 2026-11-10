@@ -495,3 +495,9 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
     line-height: 20px;
   }
 }
+
+/* Compact dashboard filters wrap instead of stretching across the panel. */
+@media (min-width: 640px) {
+  .dashboard-filter-fields { display: flex; flex-wrap: wrap; }
+  .dashboard-filter-fields > div { width: 160px; min-width: 0; }
+}
