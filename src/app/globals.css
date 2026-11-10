@@ -376,7 +376,7 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
 /* Compact illustrations preserve each control's original sizing. */
 .illustrated-icon { overflow: visible; }
 .illustrated-icon .icon-art { transform-origin: 16px 16px; }
-#conteudo .card span:has(> .illustrated-icon) { background: transparent; }
+#conteudo .card span:not(.badge):has(> .illustrated-icon) { background: transparent; }
 #conteudo .card span > .illustrated-icon { max-width: 20px; max-height: 20px; }
 
 /* Framed, responsive sign-in layout. */
@@ -463,3 +463,8 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
   .route-flow, #conteudo > .route-flow, .route-flow .card, .auth-panel, .auth-artwork > svg { animation: none !important; transform: none !important; }
   .skeleton::after { display: none; }
 }
+
+/* Compact activity filters; preserve accessible control heights and mobile sizing. */
+.activity-filters.card { border-radius: 24px; }
+.activity-filters .input { border-radius: 20px; padding-top: 8px; padding-bottom: 8px; }
+.activity-filters .label { margin-bottom: 4px; }
