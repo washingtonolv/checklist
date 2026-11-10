@@ -26,7 +26,7 @@ input[type="checkbox"], input[type="radio"] { accent-color: rgb(var(--color-bran
   .card { @apply rounded-xl border border-line bg-surface shadow-card; }
   .card-flat { @apply rounded-xl border border-line bg-surface; }
   .btn {
-    @apply inline-flex min-h-[44px] cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex min-h-[44px] cursor-pointer items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
   }
   .btn-primary {
     @apply btn shadow-soft;
