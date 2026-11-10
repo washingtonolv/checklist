@@ -493,17 +493,17 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
   .pill-filters :is(.btn, .btn-primary, .btn-secondary, .btn-ghost) { min-height: 48px; height: 48px; }
 }
 
-/* Unfiltered dashboard pills show only their name; selected values size the pill. */
-.dashboard-filter-fields div:has(> select) { position: relative; padding-left: 0; }
-.dashboard-filter-fields div:has(> select) > .label {
+/* Unfiltered select pills show only their name; selected values size the pill. */
+.pill-filters div:has(> select) { position: relative; padding-left: 0; }
+.pill-filters div:has(> select) > .label {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap;
 }
-.dashboard-filter-fields select.input {
+.pill-filters select.input {
   field-sizing: content; width: auto; min-width: 0; max-width: 220px;
   padding-left: 12px; padding-right: 24px;
 }
 @media (max-width: 639px) {
-  .dashboard-filter-fields div:has(> select) { flex: 0 1 auto; }
-  .dashboard-filter-fields select.input { flex: none; max-width: 100%; }
+  .pill-filters div:has(> select) { flex: 0 1 auto; }
+  .pill-filters select.input { flex: none; max-width: 100%; }
 }

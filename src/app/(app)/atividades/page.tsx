@@ -81,14 +81,14 @@ export default async function TasksPage({
           <div>
             <label className="label" htmlFor="storeId">Loja</label>
             <select id="storeId" name="storeId" defaultValue={filters.storeId} className="input">
-              <option value="">Todas</option>
+              <option value="">Loja</option>
               {stores.map((store) => <option key={store.id} value={store.id}>{store.name}</option>)}
             </select>
           </div>
           <div>
             <label className="label" htmlFor="categoryId">Categoria</label>
             <select id="categoryId" name="categoryId" defaultValue={filters.categoryId} className="input">
-              <option value="">Todas</option>
+              <option value="">Categoria</option>
               {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
             </select>
           </div>

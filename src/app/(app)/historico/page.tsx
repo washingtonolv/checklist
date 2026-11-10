@@ -87,14 +87,14 @@ export default async function HistoryPage({
           <div>
             <label className="label" htmlFor="storeId">Loja</label>
             <select id="storeId" name="storeId" defaultValue={filters.storeId} className="input">
-              <option value="">Todas</option>
+              <option value="">Loja</option>
               {stores.map((store) => <option key={store.id} value={store.id}>{store.name}</option>)}
             </select>
           </div>
           <div>
             <label className="label" htmlFor="action">Ação</label>
             <select id="action" name="action" defaultValue={filters.action} className="input">
-              <option value="">Todas</option>
+              <option value="">Ação</option>
               {ACTIONS.map((action) => <option key={action} value={action}>{ACTION_LABELS[action]}</option>)}
             </select>
           </div>
