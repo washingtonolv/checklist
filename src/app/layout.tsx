@@ -32,8 +32,9 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={inter.variable}>
+    <html suppressHydrationWarning lang="pt-BR" className={inter.variable}>
       <body>
+        <script dangerouslySetInnerHTML={{__html: `(function(){try{var t=localStorage.getItem('dd-theme');document.documentElement.dataset.theme=t==='dark'||t!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}catch(e){}})()`}} />
         {children}
         <Toaster
           position="top-right"

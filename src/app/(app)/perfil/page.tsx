@@ -1,8 +1,9 @@
+import { ProfilePhoto } from "@/components/auth/ProfilePhoto";
 import { KeyRound, Mail, ShieldCheck, Store, UserRound } from "@/components/ui/illustrated-icons";
 import { requireUser } from "@/lib/auth-server";
 import { getBackend, isLocalMode } from "@/lib/backend";
 import { ROLE_DESCRIPTIONS, ROLE_LABELS } from "@/lib/constants";
-import { Card, CardHeader, PageHeader } from "@/components/ui";
+import { Avatar, Card, CardHeader, PageHeader } from "@/components/ui";
 import { RoleBadge } from "@/components/ui/badges";
 import { ProfilePasswordForm } from "@/components/auth/ProfilePasswordForm";
 
@@ -25,14 +26,13 @@ export default async function ProfilePage() {
           <CardHeader title="Identificação" description="Dados da sua conta" icon={<UserRound className="h-4 w-4" />} />
           <div className="space-y-4 p-5">
             <div className="flex items-center gap-3">
-              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-turquesa/15 text-xl font-semibold text-ink">
-                {user.name.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]?.toUpperCase()).join("")}
-              </span>
+              <Avatar userId={user.id} name={user.name} size={56} />
               <div>
                 <p className="text-lg font-semibold text-ink">{user.name}</p>
                 <RoleBadge role={user.role} />
               </div>
             </div>
+            <ProfilePhoto userId={user.id} name={user.name} />
             <div className="space-y-3 border-t border-ink/10 pt-4 text-sm">
               <p className="flex items-center gap-2 text-ink/70"><Mail className="h-4 w-4 text-ink/70" />{user.email}</p>
               <p className="flex items-center gap-2 text-ink/70"><ShieldCheck className="h-4 w-4 text-ink/70" />{ROLE_LABELS[user.role]} · {ROLE_DESCRIPTIONS[user.role]}</p>

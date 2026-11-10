@@ -84,3 +84,17 @@
   --shadow-control: 0 1px 0 rgb(0 0 0 / 0.08);
   --focus-ring: 0 0 0 3px rgb(var(--color-brand) / 0.22);
 }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --gray-0: 36 39 42; --gray-50: 43 47 51; --gray-100: 50 54 58;
+  --gray-600: 183 190 199; --gray-900: 242 244 246;
+  --color-background: 23 26 29; --color-surface: 36 39 42; --color-surface-hover: 43 47 51;
+  --color-text: 242 244 246; --color-text-muted: 183 190 199;
+  --color-border: 66 72 78; --color-input-border: 133 142 151;
+  --color-success: 143 209 167; --color-success-bg: 33 62 45;
+  --color-warning: 239 202 125; --color-warning-bg: 66 54 30;
+  --color-info: 155 192 245; --color-info-bg: 32 47 68;
+  --color-danger: 245 166 169; --color-danger-bg: 71 36 39;
+  --sidebar-background: #24272a; --sidebar-hover: #34474c; --sidebar-selected: #34474c;
+}
+:root[data-theme="light"] { color-scheme: light; }

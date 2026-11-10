@@ -3,6 +3,7 @@ import path from "node:path";
 import type { PhotoRequirement, Recurrence, Role, TaskStatus } from "../../types";
 
 export interface LocalUser {
+  avatar?: string | null;
   id: string;
   name: string;
   email: string;

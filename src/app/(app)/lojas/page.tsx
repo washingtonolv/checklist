@@ -11,10 +11,11 @@ export const dynamic = "force-dynamic";
 export default async function StoresPage({
   searchParams
 }: {
-  searchParams: { sucesso?: string };
+  searchParams: { sucesso?: string; visualizacao?: string };
 }) {
   const user = await requireUser();
   const stores = await getBackend().listStores(user);
+  const grid = searchParams.visualizacao === "grade";
   const isAdmin = user.role === "admin";
 
   return (
@@ -23,12 +24,12 @@ export default async function StoresPage({
         eyebrow="Rede D&D"
         title="Lojas"
         subtitle={isAdmin ? "Cadastre, edite e acompanhe as unidades da rede." : "Unidades vinculadas ao seu perfil."}
-        actions={isAdmin ? (
+        actions={<><div className="flex gap-1" aria-label="Exibição das lojas"><Link href="/lojas?visualizacao=lista" className="btn-secondary btn-sm" aria-current={!grid ? "page" : undefined}>Lista</Link><Link href="/lojas?visualizacao=grade" className="btn-secondary btn-sm" aria-current={grid ? "page" : undefined}>Grade</Link></div>{isAdmin ? (
           <Link href="/lojas/nova" className="btn-primary">
             <Plus className="h-4 w-4" />
             Nova loja
           </Link>
-        ) : null}
+        ) : null}</>}
       />
 
       {searchParams.sucesso ? (
@@ -40,7 +41,7 @@ export default async function StoresPage({
       ) : null}
 
       {stores.length ? (
-        isAdmin ? (
+        !grid ? (
           <Card>
             <div className="table-wrap">
               <table className="table">
@@ -86,7 +87,7 @@ export default async function StoresPage({
                       <td>
                         <div className="flex justify-end gap-2">
                           <Link href={`/lojas/${store.id}`} className="btn-ghost btn-sm">Ver</Link>
-                          <Link href={`/lojas/${store.id}/editar`} className="btn-secondary btn-sm">Editar</Link>
+                          {isAdmin && <Link href={`/lojas/${store.id}/editar`} className="btn-secondary btn-sm">Editar</Link>}
                         </div>
                       </td>
                     </tr>
@@ -98,8 +99,8 @@ export default async function StoresPage({
         ) : (
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {stores.map((store) => (
-              <Link key={store.id} href={`/lojas/${store.id}`} className="card group p-5 transition hover:-translate-y-0.5 hover:border-turquesa">
-                <div className="mb-4 flex items-start justify-between gap-3">
+              <Link key={store.id} href={`/lojas/${store.id}`} className="card group p-4 transition hover:border-turquesa">
+                <div className="mb-2 flex items-start justify-between gap-3">
                   <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-turquesa/15 text-ink">
                     <Building2 className="h-5 w-5" />
                   </span>
@@ -109,7 +110,7 @@ export default async function StoresPage({
                 </div>
                 <h2 className="text-lg font-bold text-ink group-hover:underline group-hover:decoration-turquesa group-hover:decoration-2 group-hover:underline-offset-4">{store.name}</h2>
                 <p className="mt-0.5 flex items-center gap-1.5 text-xs text-ink/70"><MapPin className="h-3.5 w-3.5" />{store.code}</p>
-                <div className="mt-4 space-y-2 text-xs text-ink/65">
+                <div className="mt-3 space-y-1 text-xs text-ink/65">
                   <p className="flex items-center gap-2"><UserRound className="h-3.5 w-3.5 text-ink/70" />{store.managerName ?? "Sem gerente vinculado"}</p>
                   <p className="flex items-center gap-2"><Users className="h-3.5 w-3.5 text-ink/70" />{store.supervisors.map((item) => item.name).join(", ") || "Sem supervisor"}</p>
                 </div>

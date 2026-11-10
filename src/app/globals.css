@@ -507,3 +507,25 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
   .pill-filters div:has(> select) { flex: 0 1 auto; }
   .pill-filters select.input { flex: none; max-width: 100%; }
 }
+/* Theme-aware surfaces override legacy sidebar and auth palette layers. */
+:root[data-theme="dark"] .app-sidebar { background: rgb(var(--color-surface)); color: rgb(var(--color-text)); border-color: rgb(var(--color-border)); }
+:root[data-theme="dark"] .app-sidebar :is(.sidebar-nav-link,.sidebar-group-title,.sidebar-exit,.sidebar-toggle,.sidebar-close,.sidebar-nav-active),
+:root[data-theme="dark"] .app-sidebar :is(.sidebar-nav-link,.sidebar-toggle,.sidebar-exit,.sidebar-close) > svg { color: rgb(var(--color-text)); }
+:root[data-theme="dark"] .app-sidebar .sidebar-nav-active { background: var(--sidebar-selected); }
+:root[data-theme="dark"] .app-sidebar :is(.sidebar-nav-link,.sidebar-toggle,.sidebar-profile,.sidebar-exit,.sidebar-close):hover { background: var(--sidebar-hover); }
+:root[data-theme="dark"] .app-sidebar :is(.sidebar-group,.sidebar-account,.sidebar-demo) { border-color: rgb(var(--color-border)); }
+:root[data-theme="dark"] .app-sidebar .sidebar-profile [aria-hidden="true"] { background: rgb(var(--color-surface-hover)); color: rgb(var(--color-text)); }
+:root[data-theme="dark"] .sidebar-logo a, :root[data-theme="dark"] .auth-brand a { background: rgb(var(--color-text)); }
+:root[data-theme="dark"] .table tbody tr:hover { background: rgb(var(--color-surface-hover)); }
+:root[data-theme="dark"] .auth-stage, :root[data-theme="dark"] .auth-art-panel { background: rgb(var(--color-background)); }
+:root[data-theme="dark"] .auth-panel, :root[data-theme="dark"] .auth-content .login-field { background: rgb(var(--color-surface)); }
+:root[data-theme="dark"] .auth-access-note strong { color: rgb(var(--color-text)); }
+:root[data-theme="dark"] .skeleton { background: rgb(var(--color-border)); }
+:root[data-theme="dark"] .app-sidebar :focus-visible { outline-color: rgb(var(--color-text)); }
+[aria-label="Exibição das lojas"] [aria-current="page"] { background: rgb(var(--color-accent) / .15); border-color: rgb(var(--color-input-border)); }
+
+:root[data-theme="dark"] .app-sidebar .text-white,
+:root[data-theme="dark"] .app-sidebar .sidebar-demo { color: rgb(var(--color-text)); }
+:root[data-theme="dark"] [role="note"] { background: rgb(var(--color-surface-hover)); color: rgb(var(--color-text)); }
+:root[data-theme="dark"] .manager-routine :is(.routine-hero, nav),
+:root[data-theme="dark"] .manager-routine .bg-white { background: rgb(var(--color-surface)); border-color: rgb(var(--color-border)); }

@@ -161,23 +161,7 @@ export function StatCard({
   );
 }
 
-export function Avatar({ name, size = 36 }: { name: string; size?: number }) {
-  const initials = name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join("");
-  return (
-    <span
-      className="inline-flex shrink-0 items-center justify-center rounded-full bg-turquesa/20 font-bold text-ink"
-      style={{ width: size, height: size, fontSize: size * 0.34 }}
-      aria-hidden="true"
-    >
-      {initials || "D&D"}
-    </span>
-  );
-}
+export { Avatar } from "./Avatar";
 
 export function Alert({
   tone = "info",

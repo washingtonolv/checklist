@@ -23,7 +23,7 @@ import { NAV_ITEMS, ROLE_LABELS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { logoutAction } from "@/actions/auth";
 import { Avatar } from "@/components/ui";
-import { RoleBadge } from "@/components/ui/badges";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { Logo } from "@/components/brand/Logo";
 
 const ICONS = {
@@ -135,7 +135,7 @@ export function AppShell({
       <div className="sidebar-account mx-3 mb-3 rounded-2xl border border-white/20 p-3">
         <h2 className="sidebar-group-title">Minha conta</h2>
         <Link href="/perfil" aria-label="Abrir meu perfil" aria-current={pathname === "/perfil" ? "page" : undefined} className="mb-2 flex min-h-11 items-center gap-2.5 sidebar-profile rounded-xl p-2.5 focus-visible:outline-white">
-          <Avatar name={user.name} size={36} />
+          <Avatar userId={user.id} name={user.name} size={36} />
           <div className="sidebar-user-info min-w-0">
             <p className="truncate text-sm font-bold text-white">{user.name}</p>
             <p className="truncate text-[11px] text-white">{isGeneralAdmin(user) ? "Administrador Geral" : ROLE_LABELS[user.role]}</p>
@@ -198,9 +198,9 @@ export function AppShell({
             </div>
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
-            <RoleBadge role={user.role} className="hidden sm:inline-flex" />
+            <ThemeToggle />
             <Link href="/perfil" aria-label="Abrir meu perfil" className="flex items-center gap-2 rounded-full border border-line py-1 pl-1 pr-3 hover:bg-turquesa/10">
-              <Avatar name={user.name} size={30} />
+              <Avatar userId={user.id} name={user.name} size={30} />
               <span className="hidden max-w-[140px] truncate text-xs font-semibold text-ink sm:block">
                 {user.name}
               </span>
