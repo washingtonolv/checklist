@@ -83,7 +83,7 @@ export default async function ReportsPage({
         }
       />
 
-      <Card className="mb-5 p-4 no-print">
+      <Card className="pill-filters mb-4 p-3 no-print">
         <form method="get" action="/relatorios" className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">
           <div>
             <label className="label" htmlFor="storeId">Loja</label>

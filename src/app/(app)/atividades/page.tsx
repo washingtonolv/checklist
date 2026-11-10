@@ -68,7 +68,7 @@ export default async function TasksPage({
         actions={user.role === "admin" ? <GenerateTasksButton /> : null}
       />
 
-      <Card className="activity-filters mb-4 p-3">
+      <Card className="pill-filters mb-4 p-3">
         <form method="get" action="/atividades" className="grid gap-2 md:grid-cols-2 xl:grid-cols-6">
           <input type="hidden" name="status" value={filters.status} />
           <div className="xl:col-span-2">

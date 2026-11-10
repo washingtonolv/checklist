@@ -470,3 +470,15 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
 .activity-filters.card { border-radius: 24px; }
 .activity-filters .input { border-radius: 20px; padding-top: 8px; padding-bottom: 8px; }
 .activity-filters .label { margin-bottom: 4px; }
+
+/* Shared pill-shaped filter bars, with stationary hover states. */
+.pill-filters.card { border-radius: 24px; box-shadow: none; }
+.pill-filters .input { border-radius: 999px; padding-top: 6px; padding-bottom: 6px; min-height: 44px; background: rgb(var(--color-surface)); }
+.pill-filters .label { margin-bottom: 4px; }
+.pill-filters form, .pill-filters details > .grid { gap: 8px; }
+.pill-filters .input:hover:not(:focus) { border-color: rgb(var(--color-input-border)); }
+.pill-filters :is(.btn, .btn-primary, .btn-secondary, .btn-ghost) { transition: none; }
+.pill-filters :is(.btn, .btn-primary, .btn-secondary, .btn-ghost):hover { transform: none; box-shadow: none; }
+.pill-filters :is(.btn-secondary, .btn-ghost):hover { background: rgb(var(--color-surface)); }
+.pill-filters .btn-primary:hover:not(:disabled):not([aria-disabled="true"]) { background: var(--action-primary); }
+@media (max-width: 639px) { .pill-filters .input { min-height: 48px; } }
