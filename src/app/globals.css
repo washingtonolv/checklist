@@ -482,3 +482,16 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
 .pill-filters :is(.btn-secondary, .btn-ghost):hover { background: rgb(var(--color-surface)); }
 .pill-filters .btn-primary:hover:not(:disabled):not([aria-disabled="true"]) { background: var(--action-primary); }
 @media (max-width: 639px) { .pill-filters .input { min-height: 48px; } }
+
+/* Match the compact Executions tab on desktop. */
+@media (min-width: 640px) {
+  .pill-filters .input,
+  .pill-filters :is(.btn, .btn-primary, .btn-secondary, .btn-ghost) {
+    min-height: 34px;
+    height: 34px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-size: 12px;
+    line-height: 20px;
+  }
+}

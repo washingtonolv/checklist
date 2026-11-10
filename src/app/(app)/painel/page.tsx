@@ -102,7 +102,8 @@ export default async function DashboardPage({
       />
 
       <form className="card pill-filters mb-4 p-3" method="get" action="/painel">
-        <details open={Boolean(filters.storeId || filters.categoryId || filters.status || filters.supervisorId || filters.managerId)}><summary className="text-sm font-semibold">Filtrar indicadores · loja, período e equipe</summary><div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        <p className="text-sm font-semibold">Filtrar indicadores · loja, período e equipe</p>
+        <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-4">
           <div>
             <label className="label" htmlFor="storeId">Loja</label>
             <select id="storeId" name="storeId" defaultValue={filters.storeId} className="input">
@@ -165,7 +166,7 @@ export default async function DashboardPage({
           <Link href="/painel" className="btn-ghost btn-sm">Limpar filtros</Link>
           <button type="submit" className="btn-secondary btn-sm">Aplicar filtros</button>
         </div>
-      </details></form>
+      </form>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <StatCard
