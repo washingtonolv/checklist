@@ -1,3 +1,4 @@
+import path from "node:path";
 import { afterEach, expect, it, vi } from "vitest";
 import { isSupabaseConfigured } from "../src/lib/supabase/config";
 import { localDataDir } from "../src/lib/backend/local/db";
@@ -8,7 +9,7 @@ it("isolates Vercel previews even with inherited production connection values", 
   vi.stubEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY", "test-public");
   vi.stubEnv("LOCAL_DATA_DIR", "/production/path");
   expect(isSupabaseConfigured()).toBe(false);
-  expect(localDataDir()).toBe("/tmp/dd-ux-preview");
+  expect(localDataDir()).toBe(path.resolve("/tmp/dd-ux-preview"));
 });
 it("keeps configured production on Supabase", () => {
   vi.stubEnv("VERCEL_ENV", "production");

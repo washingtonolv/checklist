@@ -5,7 +5,7 @@ import { CheckCircle2, Plus, ShieldCheck, Store, UserRound, Users } from "@/comp
 import { requireAdmin } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
 import { formatDate } from "@/lib/dates";
-import { Card, EmptyState, PageHeader } from "@/components/ui";
+import { Avatar, Card, EmptyState, PageHeader } from "@/components/ui";
 import { Alert } from "@/components/ui";
 import { RoleBadge } from "@/components/ui/badges";
 import { cn } from "@/lib/utils";
@@ -61,9 +61,7 @@ export default async function UsersPage({
                   <tr key={person.id}>
                     <td>
                       <div className="flex items-center gap-2">
-                        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-turquesa/15 text-ink">
-                          <UserRound className="h-4 w-4" />
-                        </span>
+                        <Avatar userId={person.id} name={person.name} size={32} />
                         <div>
                           <p className="font-bold text-ink">{person.name}</p>
                           <p className="text-[11px] text-ink/70">{person.email}</p>
