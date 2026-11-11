@@ -20,6 +20,7 @@ import { monthRange, dueLabel, formatDate } from "@/lib/dates";
 import { ROLE_LABELS, STATUS_LABELS, STATUS_ORDER } from "@/lib/constants";
 import type { DashboardFilters, Role, TaskStatus } from "@/lib/types";
 import { Card, CardHeader, EmptyState, PageHeader, ProgressBar, StatCard } from "@/components/ui";
+import { FilterPanel } from "@/components/ui/FilterPanel";
 import { RoleBadge, StatusBadge } from "@/components/ui/badges";
 import { cn } from "@/lib/utils";
 
@@ -101,72 +102,76 @@ export default async function DashboardPage({
         }
       />
 
-      <form className="card pill-filters mb-4 p-3" method="get" action="/painel">
-        <p className="text-sm font-semibold">Filtrar indicadores · loja, período e equipe</p>
-        <div className="dashboard-filter-fields mt-3 grid gap-2">
-          <div>
-            <label className="label" htmlFor="storeId">Loja</label>
-            <select id="storeId" name="storeId" defaultValue={filters.storeId} className="input">
-              <option value="">Loja</option>
-              {stores.map((store) => (
-                <option key={store.id} value={store.id}>{store.name}</option>
-              ))}
-            </select>
+      <FilterPanel
+        title="Filtrar indicadores"
+        activeCount={[filters.storeId, filters.supervisorId, filters.managerId, filters.categoryId, filters.status, filters.from !== range.from, filters.to !== range.to].filter(Boolean).length}
+      >
+        <form key={JSON.stringify(filters)} method="get" action="/painel">
+          <div className="filter-grid">
+            <div className="filter-field">
+              <label className="label" htmlFor="storeId">Loja</label>
+              <select id="storeId" name="storeId" defaultValue={filters.storeId} className="input">
+                <option value="">Loja</option>
+                {stores.map((store) => (
+                  <option key={store.id} value={store.id}>{store.name}</option>
+                ))}
+              </select>
+            </div>
+            {user.role === "admin" ? (
+              <>
+                <div className="filter-field">
+                  <label className="label" htmlFor="supervisorId">Supervisor</label>
+                  <select id="supervisorId" name="supervisorId" defaultValue={filters.supervisorId} className="input">
+                    <option value="">Supervisor</option>
+                    {supervisors.map((person) => (
+                      <option key={person.id} value={person.id}>{person.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="filter-field">
+                  <label className="label" htmlFor="managerId">Gerente</label>
+                  <select id="managerId" name="managerId" defaultValue={filters.managerId} className="input">
+                    <option value="">Gerente</option>
+                    {managers.map((person) => (
+                      <option key={person.id} value={person.id}>{person.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </>
+            ) : null}
+            <div className="filter-field">
+              <label className="label" htmlFor="categoryId">Categoria</label>
+              <select id="categoryId" name="categoryId" defaultValue={filters.categoryId} className="input">
+                <option value="">Categoria</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>{category.name}</option>
+                ))}
+              </select>
+            </div>
+            <div className="filter-field filter-wide">
+              <label className="label" htmlFor="status">Status</label>
+              <select id="status" name="status" defaultValue={filters.status} className="input">
+                <option value="">Status</option>
+                {STATUS_ORDER.map((status) => (
+                  <option key={status} value={status}>{STATUS_LABELS[status]}</option>
+                ))}
+              </select>
+            </div>
+            <div className="filter-field filter-date">
+              <label className="label" htmlFor="from">De</label>
+              <input id="from" name="from" type="date" defaultValue={filters.from} className="input" />
+            </div>
+            <div className="filter-field filter-date">
+              <label className="label" htmlFor="to">Até</label>
+              <input id="to" name="to" type="date" defaultValue={filters.to} className="input" />
+            </div>
           </div>
-          {user.role === "admin" ? (
-            <>
-              <div>
-                <label className="label" htmlFor="supervisorId">Supervisor</label>
-                <select id="supervisorId" name="supervisorId" defaultValue={filters.supervisorId} className="input">
-                  <option value="">Supervisor</option>
-                  {supervisors.map((person) => (
-                    <option key={person.id} value={person.id}>{person.name}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="label" htmlFor="managerId">Gerente</label>
-                <select id="managerId" name="managerId" defaultValue={filters.managerId} className="input">
-                  <option value="">Gerente</option>
-                  {managers.map((person) => (
-                    <option key={person.id} value={person.id}>{person.name}</option>
-                  ))}
-                </select>
-              </div>
-            </>
-          ) : null}
-          <div>
-            <label className="label" htmlFor="categoryId">Categoria</label>
-            <select id="categoryId" name="categoryId" defaultValue={filters.categoryId} className="input">
-              <option value="">Categoria</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>{category.name}</option>
-              ))}
-            </select>
+          <div className="filter-actions mt-3">
+            <Link href="/painel" className="btn-ghost btn-sm">Limpar filtros</Link>
+            <button type="submit" className="btn-primary btn-sm">Aplicar filtros</button>
           </div>
-          <div>
-            <label className="label" htmlFor="status">Status</label>
-            <select id="status" name="status" defaultValue={filters.status} className="input">
-              <option value="">Status</option>
-              {STATUS_ORDER.map((status) => (
-                <option key={status} value={status}>{STATUS_LABELS[status]}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="label" htmlFor="from">De</label>
-            <input id="from" name="from" type="date" defaultValue={filters.from} className="input" />
-          </div>
-          <div>
-            <label className="label" htmlFor="to">Até</label>
-            <input id="to" name="to" type="date" defaultValue={filters.to} className="input" />
-          </div>
-        </div>
-        <div className="mt-3 flex flex-wrap items-center justify-end gap-2">
-          <Link href="/painel" className="btn-ghost btn-sm">Limpar filtros</Link>
-          <button type="submit" className="btn-secondary btn-sm">Aplicar filtros</button>
-        </div>
-      </form>
+        </form>
+      </FilterPanel>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <StatCard
@@ -278,7 +283,7 @@ export default async function DashboardPage({
         </Card>
       </div>
 
-      <div className="mt-6 grid gap-5 xl:grid-cols-2">
+      <div className="mt-6 grid min-w-0 grid-cols-1 gap-5 xl:grid-cols-2">
         <Card>
           <CardHeader title="Lojas com mais pendências" description="Priorize o acompanhamento" icon={<AlertTriangle className="h-4 w-4" />} />
           <div className="p-5">
@@ -306,9 +311,9 @@ export default async function DashboardPage({
             {data.overdueTasks.length ? (
               <div className="space-y-3">
                 {data.overdueTasks.map((task) => (
-                  <Link key={task.id} href={`/atividades/${task.id}`} className="flex items-start justify-between gap-3 rounded-xl border border-ink/10 px-3 py-2.5 hover:border-turquesa hover:bg-turquesa/5">
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-ink">{task.title}</p>
+                  <Link key={task.id} href={`/atividades/${task.id}`} className="flex flex-col items-start justify-between gap-3 rounded-xl border border-ink/10 px-3 py-2.5 hover:border-turquesa hover:bg-turquesa/5 sm:flex-row">
+                    <div className="w-full min-w-0">
+                      <p className="break-words text-sm font-semibold text-ink">{task.title}</p>
                       <p className="text-[11px] text-ink/70">{task.storeName} · {dueLabel(task.dueDate, task.dueTime)}</p>
                     </div>
                     <StatusBadge status={task.status} />

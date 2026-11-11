@@ -6,6 +6,7 @@ import { STATUS_LABELS, STATUS_ORDER } from "@/lib/constants";
 import { dueLabel, formatDateTime, isOverdue, monthRange } from "@/lib/dates";
 import type { TaskFilters, TaskStatus } from "@/lib/types";
 import { Card, EmptyState, PageHeader } from "@/components/ui";
+import { FilterPanel } from "@/components/ui/FilterPanel";
 import { PhotoBadge, StatusBadge } from "@/components/ui/badges";
 import { GenerateTasksButton } from "@/components/tasks/GenerateTasksButton";
 import { cn } from "@/lib/utils";
@@ -68,53 +69,57 @@ export default async function TasksPage({
         actions={user.role === "admin" ? <GenerateTasksButton /> : null}
       />
 
-      <Card className="pill-filters mb-4 p-3">
-        <form method="get" action="/atividades" className="grid gap-2 md:grid-cols-2 xl:grid-cols-6">
+      <FilterPanel
+        title="Filtrar atividades"
+        activeCount={[filters.storeId, filters.categoryId, filters.search, filters.from !== range.from, filters.to !== range.to].filter(Boolean).length}
+      >
+        <form key={JSON.stringify(filters)} method="get" action="/atividades" className="filter-grid">
           <input type="hidden" name="status" value={filters.status} />
-          <div className="xl:col-span-2">
+          <div className="filter-field filter-wide">
             <label className="label" htmlFor="search">Buscar atividade</label>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/70" />
               <input id="search" name="search" defaultValue={filters.search} className="input pl-9" placeholder="Nome da atividade..." />
             </div>
           </div>
-          <div>
+          <div className="filter-field">
             <label className="label" htmlFor="storeId">Loja</label>
             <select id="storeId" name="storeId" defaultValue={filters.storeId} className="input">
               <option value="">Loja</option>
               {stores.map((store) => <option key={store.id} value={store.id}>{store.name}</option>)}
             </select>
           </div>
-          <div>
+          <div className="filter-field">
             <label className="label" htmlFor="categoryId">Categoria</label>
             <select id="categoryId" name="categoryId" defaultValue={filters.categoryId} className="input">
               <option value="">Categoria</option>
               {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
             </select>
           </div>
-          <div>
+          <div className="filter-field filter-date">
             <label className="label" htmlFor="from">De</label>
             <input id="from" name="from" type="date" defaultValue={filters.from} className="input" />
           </div>
-          <div>
+          <div className="filter-field filter-date">
             <label className="label" htmlFor="to">Até</label>
             <input id="to" name="to" type="date" defaultValue={filters.to} className="input" />
           </div>
-          <div className="flex items-end gap-2 xl:col-span-6">
+          <div className="filter-actions">
             <button type="submit" className="btn-primary btn-sm">
               <Filter className="h-4 w-4" />
               Filtrar
             </button>
             <Link href="/atividades" className="btn-ghost btn-sm">Limpar</Link>
-            <span className="ml-auto text-xs text-ink/70">{tasks.length} atividade(s) no período</span>
+            <span className="filter-count text-xs text-ink/70">{tasks.length} atividade(s) no período</span>
           </div>
         </form>
-      </Card>
+      </FilterPanel>
 
-      <div className="mb-5 flex gap-2 overflow-x-auto pb-1">
+      <nav aria-label="Filtrar atividades por status" className="mb-5 flex flex-wrap gap-2">
         <Link
           href={tabHref("")}
-          className={cn("shrink-0 rounded-full border px-3.5 py-2 text-xs font-semibold", !filters.status ? "border-ink bg-pink text-white" : "border-ink/15 bg-surface text-ink/65 hover:border-turquesa")}
+          aria-current={!filters.status ? "page" : undefined}
+          className={cn("inline-flex min-h-11 items-center justify-center rounded-full border px-3 py-2 text-xs font-semibold", !filters.status ? "border-ink bg-pink text-white" : "border-ink/15 bg-surface text-ink/65 hover:border-turquesa")}
         >
           Todas
         </Link>
@@ -122,12 +127,13 @@ export default async function TasksPage({
           <Link
             key={status}
             href={tabHref(status)}
-            className={cn("shrink-0 rounded-full border px-3.5 py-2 text-xs font-semibold", filters.status === status ? "border-ink bg-pink text-white" : "border-ink/15 bg-surface text-ink/65 hover:border-turquesa")}
+            aria-current={filters.status === status ? "page" : undefined}
+            className={cn("inline-flex min-h-11 items-center justify-center rounded-full border px-3 py-2 text-xs font-semibold", filters.status === status ? "border-ink bg-pink text-white" : "border-ink/15 bg-surface text-ink/65 hover:border-turquesa")}
           >
             {STATUS_LABELS[status]}
           </Link>
         ))}
-      </div>
+      </nav>
 
       {tasks.length ? (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -138,7 +144,7 @@ export default async function TasksPage({
                 key={task.id}
                 href={`/atividades/${task.id}`}
                 className={cn(
-                  "card group flex flex-col p-5 transition hover:-translate-y-0.5 hover:border-turquesa hover:shadow-soft",
+                  "card group flex min-w-0 flex-col break-words p-5 transition hover:-translate-y-0.5 hover:border-turquesa hover:shadow-soft",
                   overdue && task.status !== "completed" ? "border-ink/40" : ""
                 )}
               >
@@ -157,15 +163,15 @@ export default async function TasksPage({
                 <p className="mt-1 line-clamp-2 text-xs text-ink/70">{task.description || "Sem descrição."}</p>
                 <div className="mt-3 space-y-1.5 text-xs text-ink/70">
                   <p className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-turquesa" />
+                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-turquesa" />
                     {task.storeName} · {task.storeCode}
                   </p>
                   <p className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-pink/40" />
+                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-pink/40" />
                     {task.categoryName}
                   </p>
                   <p className="flex items-center gap-2">
-                    <CalendarClock className="h-3.5 w-3.5 text-ink/70" />
+                    <CalendarClock className="h-3.5 w-3.5 shrink-0 text-ink/70" />
                     {dueLabel(task.dueDate, task.dueTime)}
                   </p>
                 </div>
