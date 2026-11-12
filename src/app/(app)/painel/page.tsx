@@ -52,12 +52,12 @@ export default async function DashboardPage({
     }
   }
 
-  const [stores, categories, tasks] = await Promise.all([
+  const [stores, categories, tasks, people] = await Promise.all([
     backend.listStores(user),
     backend.listCategories(user),
-    backend.listTasks(user, filters)
+    backend.listTasks(user, filters),
+    user.role === "admin" ? backend.listUsers(user) : Promise.resolve([])
   ]);
-  const people = user.role === "admin" ? await backend.listUsers(user) : [];
   const photos = tasks.length
     ? await backend.listPhotosForTasks(
         user,

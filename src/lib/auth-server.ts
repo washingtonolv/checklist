@@ -1,10 +1,12 @@
 import { redirect } from "next/navigation";
+import { cache } from "react";
 import { getBackend } from "./backend";
 import type { Role, SessionUser } from "./types";
 
-export async function getSessionUser(): Promise<SessionUser | null> {
+// Deduplicate layout/page lookups only within the current server render.
+export const getSessionUser = cache(async (): Promise<SessionUser | null> => {
   return getBackend().auth.getSession();
-}
+});
 
 export async function requireUser(): Promise<SessionUser> {
   const user = await getSessionUser();

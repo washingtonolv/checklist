@@ -32,9 +32,11 @@ export default async function HistoryPage({
     limit: 500
   };
 
-  const stores = await backend.listStores(user);
-  const history = await backend.listHistory(user, filters);
-  const audit = user.role === "admin" && tab === "auditoria" ? await backend.listAudit(user, 300) : [];
+  const [stores, history, audit] = await Promise.all([
+    backend.listStores(user),
+    backend.listHistory(user, filters),
+    user.role === "admin" && tab === "auditoria" ? backend.listAudit(user, 300) : Promise.resolve([])
+  ]);
 
   const baseParams = new URLSearchParams();
   if (filters.storeId) baseParams.set("storeId", filters.storeId);

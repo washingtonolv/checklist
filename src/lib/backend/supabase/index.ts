@@ -195,20 +195,19 @@ export function createSupabaseBackend(): Backend {
           data: { user }
         } = await supabase.auth.getUser();
         if (!user) return null;
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("id,name,email,role,active")
-          .eq("id", user.id)
-          .maybeSingle();
+        const [profileResult, storesResult] = await Promise.all([
+          supabase.from("profiles").select("id,name,email,role,active").eq("id", user.id).maybeSingle(),
+          supabase.from("stores").select("id").eq("active", true)
+        ]);
+        const { data: profile } = profileResult;
         if (!profile || !profile.active) return null;
-        const { data: stores } = await supabase.from("stores").select("id").eq("active", true);
         return {
           id: profile.id,
           name: profile.name,
           email: profile.email,
           role: profile.role,
           active: profile.active,
-          storeIds: (stores ?? []).map((store: Row) => store.id)
+          storeIds: (storesResult.data ?? []).map((store: Row) => store.id)
         };
       },
       async signIn(email, password) {
