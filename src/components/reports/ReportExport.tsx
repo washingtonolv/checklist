@@ -1,9 +1,8 @@
 "use client";
 
 import { FileDown, FileSpreadsheet, Printer } from "@/components/ui/illustrated-icons";
-import * as XLSX from "xlsx";
-import { jsPDF } from "jspdf";
-import autoTable from "jspdf-autotable";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export interface ReportRow {
   store: string;
@@ -43,7 +42,19 @@ export function ReportExport({
   periodLabel: string;
   filterLabel: string;
 }) {
-  function exportExcel() {
+  const [exporting, setExporting] = useState<"excel" | "pdf" | null>(null);
+  async function runExport(format: "excel" | "pdf", generate: () => Promise<void>) {
+    setExporting(format);
+    try {
+      await generate();
+    } catch {
+      toast.error("Não foi possível gerar o arquivo. Tente novamente.");
+    } finally {
+      setExporting(null);
+    }
+  }
+  async function exportExcel() {
+    const XLSX = await import("xlsx");
     const workbook = XLSX.utils.book_new();
     const dataSheet = XLSX.utils.json_to_sheet(rows);
     dataSheet["!cols"] = [
@@ -82,7 +93,11 @@ export function ReportExport({
     XLSX.writeFile(workbook, `checklist-dd-relatorio-${stamp()}.xlsx`);
   }
 
-  function exportPdf() {
+  async function exportPdf() {
+    const [{ jsPDF }, { default: autoTable }] = await Promise.all([
+      import("jspdf"),
+      import("jspdf-autotable")
+    ]);
     const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "a4" });
     doc.setFillColor(137, 23, 69);
     doc.rect(0, 0, doc.internal.pageSize.getWidth(), 54, "F");
@@ -141,11 +156,11 @@ export function ReportExport({
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <button type="button" onClick={exportExcel} className="btn-secondary btn-sm" disabled={!rows.length}>
+      <button type="button" onClick={() => void runExport("excel", exportExcel)} className="btn-secondary btn-sm" disabled={!rows.length || exporting !== null} aria-busy={exporting === "excel"}>
         <FileSpreadsheet className="h-4 w-4" />
         Excel
       </button>
-      <button type="button" onClick={exportPdf} className="btn-primary btn-sm" disabled={!rows.length}>
+      <button type="button" onClick={() => void runExport("pdf", exportPdf)} className="btn-primary btn-sm" disabled={!rows.length || exporting !== null} aria-busy={exporting === "pdf"}>
         <FileDown className="h-4 w-4" />
         PDF
       </button>
