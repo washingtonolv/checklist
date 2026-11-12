@@ -1,4 +1,6 @@
 @import "./theme.css";
+@import "./tokens.css";
+@import "./manager-routine.css";
 
 @tailwind base;
 @tailwind components;
@@ -527,8 +529,6 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
 :root[data-theme="dark"] .app-sidebar .text-white,
 :root[data-theme="dark"] .app-sidebar .sidebar-demo { color: rgb(var(--color-text)); }
 :root[data-theme="dark"] [role="note"] { background: rgb(var(--color-surface-hover)); color: rgb(var(--color-text)); }
-:root[data-theme="dark"] .manager-routine :is(.routine-hero, nav),
-:root[data-theme="dark"] .manager-routine .bg-white { background: rgb(var(--color-surface)); border-color: rgb(var(--color-border)); }
 
 /* Mobile filters use explicit tracks rather than intrinsic select/date widths. */
 .responsive-filters { min-width: 0; }
