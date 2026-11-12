@@ -32,9 +32,9 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html suppressHydrationWarning lang="pt-BR" className={inter.variable}>
+    <html suppressHydrationWarning lang="pt-BR" className={inter.variable} data-theme="light">
       <body>
-        <script dangerouslySetInnerHTML={{__html: `(function(){try{var t=localStorage.getItem('dd-theme');document.documentElement.dataset.theme=t==='dark'||t!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}catch(e){}})()`}} />
+        <script dangerouslySetInnerHTML={{__html: `(function(){var t='light';try{if(localStorage.getItem('dd-theme')==='dark')t='dark'}catch(e){}document.documentElement.dataset.theme=t})()`}} />
         {children}
         <Toaster
           position="top-right"
