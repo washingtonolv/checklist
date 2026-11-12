@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LayoutGrid, List } from "lucide-react";
 import { Building2, CheckCircle2, MapPin, Plus, Store, UserRound, Users } from "@/components/ui/illustrated-icons";
 import { requireUser } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
@@ -21,10 +22,9 @@ export default async function StoresPage({
   return (
     <div>
       <PageHeader
-        eyebrow="Rede D&D"
         title="Lojas"
         subtitle={isAdmin ? "Cadastre, edite e acompanhe as unidades da rede." : "Unidades vinculadas ao seu perfil."}
-        actions={<><div className="flex gap-1" aria-label="Exibição das lojas"><Link href="/lojas?visualizacao=lista" className="btn-secondary btn-sm" aria-current={!grid ? "page" : undefined}>Lista</Link><Link href="/lojas?visualizacao=grade" className="btn-secondary btn-sm" aria-current={grid ? "page" : undefined}>Grade</Link></div>{isAdmin ? (
+        actions={<><div className="flex gap-1" aria-label="Exibição das lojas"><Link href="/lojas?visualizacao=lista" className="btn-secondary btn-sm" aria-label="Exibir lojas em lista" title="Lista" aria-current={!grid ? "page" : undefined}><List className="h-4 w-4" aria-hidden="true" /></Link><Link href="/lojas?visualizacao=grade" className="btn-secondary btn-sm" aria-label="Exibir lojas em grade" title="Grade" aria-current={grid ? "page" : undefined}><LayoutGrid className="h-4 w-4" aria-hidden="true" /></Link></div>{isAdmin ? (
           <Link href="/lojas/nova" className="btn-primary">
             <Plus className="h-4 w-4" />
             Nova loja

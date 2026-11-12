@@ -62,7 +62,6 @@ export default async function TasksPage({
   return (
     <div>
       <PageHeader
-        eyebrow="Checklists operacionais"
         title="Atividades"
         subtitle="Execute, acompanhe e revise as rotinas das lojas com evidências fotográficas."
         actions={user.role === "admin" ? <GenerateTasksButton /> : null}
