@@ -31,7 +31,9 @@ export function FormExperience({ children, ...props }: ComponentProps<"form">) {
       return id && errors[id] ? <Fragment>{element}<p id={`${id}-error`} className="mt-1 text-sm text-danger">{errors[id]}</p></Fragment> : element;
     });
   }
-  return <form {...props} ref={ref} onInput={event => { setTouched(true); update(); if ((event.target as HTMLElement).getAttribute("aria-invalid") === "true") validate(event.target); }} onBlur={event => validate(event.target)} onInvalid={event => validate(event.target)}>
+  // React's change event batches this update with controlled select handlers.
+  // Updating on native input can restore the old selection before change fires.
+  return <form {...props} ref={ref} onChange={event => { setTouched(true); update(); if ((event.target as HTMLElement).getAttribute("aria-invalid") === "true") validate(event.target); }} onBlur={event => validate(event.target)} onInvalid={event => validate(event.target)}>
     {progress.total > 2 && <div className="rounded-xl border border-line p-4">
       <ProgressBar value={progress.complete / progress.total * 100} label={`${progress.complete} de ${progress.total} campos obrigatórios preenchidos`} />
       <p className="hint">{progress.complete === progress.total ? "Tudo preenchido. Revise os dados e salve para concluir." : "Preencha os campos com *. As informações só serão salvas ao confirmar."}</p>

@@ -28,7 +28,6 @@ export default async function TemplatesPage({
   return (
     <div>
       <PageHeader
-        eyebrow="Rotinas e periodicidade"
         title="Modelos de tarefas"
         subtitle="Defina as atividades recorrentes, os prazos, as lojas participantes e a regra de evidência."
         actions={

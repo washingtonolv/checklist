@@ -17,7 +17,7 @@ import { requireUser } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
 import { computeDashboard } from "@/lib/dashboard";
 import { monthRange, dueLabel, formatDate } from "@/lib/dates";
-import { ROLE_LABELS, STATUS_LABELS, STATUS_ORDER } from "@/lib/constants";
+import { STATUS_LABELS, STATUS_ORDER } from "@/lib/constants";
 import type { DashboardFilters, Role, TaskStatus } from "@/lib/types";
 import { Card, CardHeader, EmptyState, PageHeader, ProgressBar, StatCard } from "@/components/ui";
 import { RoleBadge, StatusBadge } from "@/components/ui/badges";
@@ -93,7 +93,6 @@ export default async function DashboardPage({
   return (
     <div>
       <PageHeader
-        eyebrow={ROLE_LABELS[user.role]}
         title={title}
         subtitle={subtitle}
         actions={

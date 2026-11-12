@@ -23,7 +23,6 @@ export default async function UsersPage({
   return (
     <div>
       <PageHeader
-        eyebrow="Equipe e permissões"
         title="Usuários"
         subtitle="Gerencie supervisores e gerentes de loja, seus acessos e vínculos com as unidades."
         actions={

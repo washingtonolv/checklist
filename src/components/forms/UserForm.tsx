@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FormExperience } from "./FormExperience";
 import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { Save, ShieldCheck } from "@/components/ui/illustrated-icons";
+import { Eye, EyeOff, Save, ShieldCheck } from "@/components/ui/illustrated-icons";
 import { saveUserAction } from "@/actions/users";
 import { initialActionState } from "@/actions/state";
 import { Alert } from "@/components/ui";
@@ -32,6 +32,7 @@ export function UserForm({
 }) {
   const [state, action] = useFormState(saveUserAction, initialActionState);
   const [role, setRole] = useState<"admin" | "supervisor" | "manager">(user?.role ?? "manager");
+  const [showPassword, setShowPassword] = useState(false);
   const editing = Boolean(user);
   const selectedStoreIds = user?.storeIds ?? [];
 
@@ -74,17 +75,29 @@ export function UserForm({
         </div>
         <div>
           <label htmlFor="password" className="label">{editing ? "Nova senha (opcional)" : "Senha inicial *"}</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            required={!editing}
-            minLength={8}
-            className="input"
-            placeholder={editing ? "Deixe em branco para manter" : "No mínimo 8 caracteres"}
-            autoComplete="new-password"
-          />
-          <p className="hint">A senha nunca é exibida após o cadastro.</p>
+          <div className="relative">
+            <input
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              required={!editing}
+              minLength={8}
+              className="input pr-12"
+              placeholder={editing ? "Deixe em branco para manter" : "No mínimo 8 caracteres"}
+              autoComplete="new-password"
+            />
+            <button
+              type="button"
+              className="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-lg text-ink/70 hover:text-ink"
+              aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+              aria-pressed={showPassword}
+              aria-controls="password"
+              onClick={() => setShowPassword(value => !value)}
+            >
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
+          <p className="hint">O olho mostra apenas a senha digitada agora. A senha atual não pode ser consultada.</p>
         </div>
       </div>
 

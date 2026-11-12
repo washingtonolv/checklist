@@ -14,7 +14,6 @@ import {
   Menu,
   Store,
   Users,
-  UserRound,
   X
 } from "@/components/ui/material-icons";
 import type { Role, SessionUser } from "@/lib/types";
@@ -141,7 +140,6 @@ export function AppShell({
             <p className="truncate text-[11px] text-white">{isGeneralAdmin(user) ? "Administrador Geral" : ROLE_LABELS[user.role]}</p>
           </div>
         </Link>
-        <Link href="/perfil" title="Meu perfil" aria-label="Meu perfil" className={cn("sidebar-nav-link mb-1 flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium", pathname === "/perfil" && "sidebar-nav-active")} aria-current={pathname === "/perfil" ? "page" : undefined}><UserRound className="h-[18px] w-[18px] shrink-0" /><span className="sidebar-label">Meu perfil</span></Link>
         <form action={logoutAction}>
           <button type="submit" className="btn sidebar-exit w-full justify-start border-0 bg-transparent px-3 text-sm font-medium text-white" title="Sair da plataforma" aria-label="Sair da plataforma">
             <LogOut className="h-4 w-4" />
