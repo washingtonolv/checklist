@@ -29,7 +29,7 @@ Não apagar imagens legadas na Vercel. Uma eventual cópia para R2 precisa prese
 
 ## Retenção e agendamento
 
-O proxy bloqueia leitura após 90 dias e o lifecycle remove os bytes. O endpoint `POST /api/cron/photos` exige segredo e registra expiração/auditoria em lotes de até 200. Configurar o agendador opcional de `cloudflare/retention-worker.ts` com o endereço final e segredo próprio. A geração de tarefas já agendada na Vercel não deve ser duplicada enquanto ambos usam o mesmo banco.
+O proxy bloqueia leitura após 90 dias e o lifecycle remove os bytes. O endpoint `POST /api/cron/photos` exige segredo e registra expiração/auditoria em lotes de até 200. O agendador `checklist-photo-retention` foi publicado com `cloudflare/wrangler.retention.production.jsonc`, executando a cada 15 minutos e usando segredo próprio. A geração de tarefas já agendada na Vercel não foi duplicada enquanto ambos usam o mesmo banco.
 
 ## Plano gratuito e limites
 
@@ -45,4 +45,13 @@ Fontes: [Images pricing](https://developers.cloudflare.com/images/pricing/), [R2
 
 A auditoria de dependências ainda aponta avisos em bibliotecas existentes de exportação/validação e ferramentas de build. Sharp nativo não entra no Worker. Não executar correções forçadas ou afirmar que a árvore está livre de vulnerabilidades; manter revisão das dependências e registrar o resultado da publicação.
 
-Publicação e migração hospedada ainda precisam de confirmação de execução nos respectivos serviços. Este documento não é prova de deploy concluído.
+## Resultado em 13/11/2026
+
+- App publicado em [checklist-dd.checklist-operacional-dd.workers.dev](https://checklist-dd.checklist-operacional-dd.workers.dev/login), com HTTPS funcional. Build da branch no commit `268f14c381bb3c89d77546f53b91c4859ba4984b`; [CI aprovada](https://github.com/washingtonolv/checklist/actions/runs/43357726005).
+- Migração hospedada `r2_photos_coexistence` aplicada. Comparação antes/depois confirmou igualdade das seis políticas legadas, dos privilégios da tabela antiga e da contagem de fotos antigas (uma). O corpo da função de regras mudou exclusivamente na consulta de evidência prevista.
+- Verificações remotas: login e health 200; página protegida 307 para login; foto sem sessão 401 com `private, no-store`; expiração sem segredo 401 e com segredo 200/zero expiradas. Login da Vercel respondeu 200. Nenhuma tarefa/usuário/foto real foi criada, alterada ou excluída para esses testes.
+- `main` permaneceu em `9b6b6c7ea5de412076e2d7bcd0477bb32f358b23`; `vercel.json` permanece igual. Sem alteração de implantação/domínio da Vercel, sem pausar projetos e sem contratar Workers/Images pagos.
+- Login autenticado, upload real e autorização entre duas lojas ainda dependem da validação com usuário. A foto legada não foi copiada ao R2; segue preservada para a Vercel. O retorno de recuperação de senha da Cloudflare depende da autorização da URL adicional no Supabase, preservando o destino antigo.
+- Não foi configurado deploy automático Cloudflare. Alterações no GitHub nesta branch acionam CI; a publicação continua explícita/manual. Não sincronizar ou fazer merge automático em `main`.
+
+Os três testes do agendador passaram além dos 75 testes anteriores; TypeScript passou após essa alteração. O build, dry-run e smoke do artefato publicado passaram. Avisos de dependências seguem pendentes. O único aviso de segurança do Supabase após a migração foi a [proteção contra senhas vazadas desativada](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection), já existente; não foi alterada a configuração/plano Auth.

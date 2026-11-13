@@ -1,8 +1,8 @@
-interface RetentionEnv { PREVIEW_APP_URL: string; PHOTO_RETENTION_CRON_SECRET: string }
+interface RetentionEnv { APP_URL?: string; PREVIEW_APP_URL?: string; PHOTO_RETENTION_CRON_SECRET: string }
 export default {
   async scheduled(_event: unknown, env: RetentionEnv) {
-    const base = new URL(env.PREVIEW_APP_URL);
-    if (base.protocol !== "https:" || !env.PHOTO_RETENTION_CRON_SECRET) throw new Error("Configure isolated preview scheduler.");
+    const base = new URL(env.APP_URL ?? env.PREVIEW_APP_URL ?? "");
+    if (base.protocol !== "https:" || !env.PHOTO_RETENTION_CRON_SECRET) throw new Error("Configure authorized photo-retention scheduler.");
     const response = await fetch(new URL("/api/cron/photos", base), {
       method: "POST", headers: { authorization: `Bearer ${env.PHOTO_RETENTION_CRON_SECRET}` },
       redirect: "error", signal: AbortSignal.timeout(60000)
