@@ -67,7 +67,7 @@ export function PhotoGallery({
                 className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
               />
             ) : (
-              <span className="flex h-full items-center justify-center text-xs text-ink/70">Prévia indisponível</span>
+              <span className="flex h-full items-center justify-center text-xs text-ink/70">{photo.expired ? "Evidência expirada" : "Prévia indisponível"}</span>
             )}
             <span className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-pink/80 to-transparent px-2.5 pb-2 pt-6 text-[10px] font-semibold text-white">
               <span className="truncate">{photo.isOriginal ? "Original" : "Otimizada"}</span>
@@ -107,7 +107,7 @@ export function PhotoGallery({
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={selected.url} alt="Evidência ampliada" className="mx-auto max-h-[68vh] w-auto rounded-xl object-contain" />
               ) : (
-                <p className="p-10 text-center text-sm text-ink/70">Prévia indisponível.</p>
+                <p className="p-10 text-center text-sm text-ink/70">{selected.expired ? "Evidência expirada." : "Prévia indisponível."}</p>
               )}
             </div>
             <div className="flex flex-wrap items-center justify-end gap-2 px-4 py-3">

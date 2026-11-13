@@ -333,7 +333,7 @@ export default async function DashboardPage({
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={photo.url} alt={photo.taskTitle} loading="lazy" className="aspect-[4/3] w-full object-cover transition group-hover:scale-[1.03]" />
                     ) : (
-                      <div className="flex aspect-[4/3] items-center justify-center text-[10px] text-ink/70">Sem prévia</div>
+                      <div className="flex aspect-[4/3] items-center justify-center text-[10px] text-ink/70">{photo.expired ? "Evidência expirada" : "Sem prévia"}</div>
                     )}
                     <div className="p-2">
                       <p className="truncate text-[11px] font-semibold text-ink">{photo.taskTitle}</p>

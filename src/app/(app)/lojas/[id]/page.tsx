@@ -193,8 +193,12 @@ export default async function StoreDetailPage({ params }: { params: { id: string
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                   {recentPhotos.map((photo) => (
                     <Link key={photo.id} href={`/atividades/${photo.taskId}`} className="group overflow-hidden rounded-xl border border-ink/10 bg-turquesa/5">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={photo.url} alt="Evidência da loja" loading="lazy" className="aspect-[4/3] w-full object-cover transition group-hover:scale-[1.03]" />
+                      {photo.url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={photo.url} alt="Evidência da loja" loading="lazy" className="aspect-[4/3] w-full object-cover transition group-hover:scale-[1.03]" />
+                      ) : (
+                        <div className="flex aspect-[4/3] items-center justify-center text-xs text-ink/70">{photo.expired ? "Evidência expirada" : "Sem prévia"}</div>
+                      )}
                       <div className="p-2">
                         <p className="truncate text-[11px] font-semibold text-ink">{photo.uploadedByName}</p>
                         <p className="truncate text-[10px] text-ink/70">{formatDateTime(photo.createdAt)}</p>

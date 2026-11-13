@@ -19,7 +19,3 @@ export function supabaseAnonKey(): string {
   return value;
 }
 
-export function storageBucket(): string {
-  return process.env.SUPABASE_STORAGE_BUCKET || "evidencias";
-}
-

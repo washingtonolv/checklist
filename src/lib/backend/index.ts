@@ -7,6 +7,9 @@ let instance: Backend | null = null;
 
 export function getBackend(): Backend {
   if (!instance) {
+    if (process.env.PHOTO_ENV === "cloudflare-preview" && !isSupabaseConfigured()) {
+      throw new Error("Configure Supabase de teste; o ambiente R2 não permite backend local.");
+    }
     instance = isSupabaseConfigured() ? createSupabaseBackend() : createLocalBackend();
   }
   return instance;

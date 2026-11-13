@@ -110,11 +110,12 @@ export async function uploadPhotoAction(
   if (!(file instanceof File) || file.size === 0) {
     return { ok: false, error: "Selecione uma imagem para enviar." };
   }
+  if (file.size > 10 * 1024 * 1024) return { ok: false, error: "Limite de imagem: 10 MB." };
   const original = formData.get("original");
   try {
     const buffer = Buffer.from(await file.arrayBuffer());
     let originalInput: { buffer: Buffer; mimeType: string; sizeBytes: number } | undefined;
-    if (original instanceof File && original.size > 0) {
+    if (process.env.PHOTO_ENV !== "cloudflare-preview" && original instanceof File && original.size > 0) {
       originalInput = {
         buffer: Buffer.from(await original.arrayBuffer()),
         mimeType: original.type || "image/jpeg",

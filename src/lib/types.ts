@@ -116,6 +116,7 @@ export interface TaskTemplateInput {
 }
 
 export interface TaskPhoto {
+  expired?: boolean;
   id: string;
   taskId: string;
   storagePath: string;

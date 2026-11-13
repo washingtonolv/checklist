@@ -22,5 +22,11 @@ jobs:
           cache: npm
       - name: Install exact project dependencies
         run: npm ci
+      - name: Test application and isolated PostgreSQL policies
+        run: npm test
+      - name: Validate types
+        run: npm run typecheck
+      - name: Build Next.js without deployment
+        run: npm run build
       - name: Check vinext compatibility (no deployment)
         run: npx --yes vinext check

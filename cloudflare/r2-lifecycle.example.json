@@ -1,0 +1,8 @@
+{
+  "Rules": [{
+    "ID": "photo-retention-90-days",
+    "Status": "Enabled",
+    "Filter": { "Prefix": "lojas/" },
+    "Expiration": { "Days": 90 }
+  }]
+}

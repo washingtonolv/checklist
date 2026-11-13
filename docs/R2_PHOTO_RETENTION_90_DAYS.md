@@ -22,6 +22,8 @@
 10. Isolar ambientes de teste, especialmente Supabase, R2 e as credenciais; não permitir exclusões/testes na produção Vercel.
 
 ## Bloqueios encontrados no código (2026-11-12)
+**Atualização:** a implementação e os testes desta substituição estão em [R2_IMPLEMENTATION.md](./R2_IMPLEMENTATION.md). Os bloqueios abaixo descrevem o estado anterior. A execução integral em Workers e a configuração de recursos isolados continuam pendentes; não foi feito deploy.
+
 O arquivo `src/lib/backend/supabase/index.ts` ainda utiliza `supabase.storage.from(storageBucket())` para obter URLs assinadas, upload e exclusão. Portanto **não está integrado ao R2** e requer refatoração testada antes de publicar.
 A branch `cloudflare-workers-preview` não deve usar o backend local baseado em `node:fs`. O deploy Workers ainda não existe.
 

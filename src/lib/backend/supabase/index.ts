@@ -1,4 +1,4 @@
-import { assertAdmin, assertGeneralAdmin, isGeneralAdmin, GENERAL_ADMIN_ID, canReview } from "../../access";
+import { assertAdmin, assertGeneralAdmin, isGeneralAdmin, GENERAL_ADMIN_ID, canReview, assertStoreAccess } from "../../access";
 import { MAX_PHOTOS_PER_TASK } from "../../constants";
 import { todayKey } from "../../dates";
 import type {
@@ -24,11 +24,12 @@ import type {
 import type { Backend } from "../types";
 import { createSupabaseAdminClient } from "../../supabase/admin";
 import { createSupabaseServerClient } from "../../supabase/server";
-import { storageBucket } from "../../supabase/config";
+import { assertPhotoEnvironment, createPhotoObjectStore, photoExpired } from "../../photo-store";
+import { optimizePhoto } from "../../photo-image";
 
 type Row = Record<string, any>;
 
-const ALLOWED_MIME = ["image/webp", "image/jpeg", "image/png"];
+
 
 function fail(error: { message: string } | null, fallback: string): never {
   throw new Error(error?.message ? translateError(error.message, fallback) : fallback);
@@ -147,16 +148,14 @@ async function signedPhotos(
   rows: Row[]
 ): Promise<Row[]> {
   if (!rows.length) return [];
-  const paths = rows.map((row) => row.storage_path).filter(Boolean);
-  const { data } = await supabase.storage.from(storageBucket()).createSignedUrls(paths, 3600);
-  const byPath = new Map((data ?? []).map((item) => [item.path, item.signedUrl]));
-  return rows.map((row) => ({ ...row, signed_url: byPath.get(row.storage_path) ?? "" }));
+  return rows.map((row) => ({ ...row, signed_url: photoExpired(row.created_at) ? "" : `/api/photos/${row.id}` }));
 }
 
 function mapPhotoRow(row: Row): TaskPhoto {
   return {
     id: row.id,
     taskId: row.task_id,
+    expired: photoExpired(row.created_at),
     storagePath: row.storage_path,
     url: row.signed_url ?? "",
     mimeType: row.mime_type,
@@ -911,13 +910,7 @@ export function createSupabaseBackend(): Backend {
     },
 
     async uploadPhoto(actor, taskId, input) {
-      if (!ALLOWED_MIME.includes(input.mimeType)) {
-        throw new Error("Formato inválido. Envie imagens WebP, JPEG ou PNG.");
-      }
-      const maxMb = Number(process.env.NEXT_PUBLIC_MAX_PHOTO_MB ?? 10);
-      if (input.sizeBytes > maxMb * 1024 * 1024) {
-        throw new Error(`A imagem ultrapassa o limite de ${maxMb} MB.`);
-      }
+      assertPhotoEnvironment();
       const supabase = createSupabaseServerClient();
       const { data: task } = await supabase
         .from("task_instances")
@@ -925,6 +918,7 @@ export function createSupabaseBackend(): Backend {
         .eq("id", taskId)
         .maybeSingle();
       if (!task) throw new Error("Atividade não encontrada ou sem permissão.");
+      assertStoreAccess(actor, task.store_id);
       if (task.status === "completed" && !canReview(actor)) {
         throw new Error("Atividade concluída. Solicite a reabertura para anexar novas evidências.");
       }
@@ -933,61 +927,29 @@ export function createSupabaseBackend(): Backend {
         .select("id", { count: "exact", head: true })
         .eq("task_id", taskId)
         .eq("is_original", false);
+      if (count === null) throw new Error("Não foi possível conferir o limite de fotos.");
       if ((count ?? 0) >= MAX_PHOTOS_PER_TASK) {
         throw new Error(`Limite de ${MAX_PHOTOS_PER_TASK} fotos por atividade atingido.`);
       }
+      const optimized = await optimizePhoto(input);
       const id = crypto.randomUUID();
-      const extension = input.mimeType === "image/png" ? "png" : input.mimeType === "image/jpeg" ? "jpg" : "webp";
-      const storagePath = `${task.store_id}/${taskId}/${id}.${extension}`;
-      const bucket = supabase.storage.from(storageBucket());
-      const { error: uploadError } = await bucket.upload(storagePath, input.buffer, {
-        contentType: input.mimeType,
-        upsert: false,
-        cacheControl: "3600"
-      });
-      if (uploadError) fail(uploadError, "Não foi possível enviar a foto.");
-      let originalPath: string | null = null;
+      const createdAt = new Date().toISOString();
+      const storagePath = `lojas/${task.store_id}/${createdAt.slice(0,10).replaceAll("-", "/")}/${taskId}/${id}.webp`;
+      const store = createPhotoObjectStore();
+      await store.put(storagePath, optimized.buffer);
       try {
-        const { error: insertError } = await supabase.from("task_photos").insert({
-          id,
-          task_id: taskId,
-          storage_path: storagePath,
-          mime_type: input.mimeType,
-          size_bytes: input.sizeBytes,
-          width: input.width ?? null,
-          height: input.height ?? null,
-          is_original: false,
-          uploaded_by: actor.id
+        // Clients cannot invent metadata to satisfy required-photo checks.
+        // The session client above authorizes the task; only this server writes metadata.
+        const { error } = await createSupabaseAdminClient().from("task_photos").insert({
+          id, task_id: taskId, storage_path: storagePath,
+          mime_type: optimized.mimeType, size_bytes: optimized.sizeBytes,
+          width: optimized.width, height: optimized.height,
+          is_original: false, uploaded_by: actor.id, created_at: createdAt
         });
-        if (insertError) fail(insertError, "Não foi possível registrar a foto.");
-        if (input.original) {
-          const originalId = crypto.randomUUID();
-          const originalExt =
-            input.original.mimeType === "image/png" ? "png" : input.original.mimeType === "image/jpeg" ? "jpg" : "webp";
-          originalPath = `${task.store_id}/${taskId}/${originalId}-original.${originalExt}`;
-          const { error: originalUploadError } = await bucket.upload(originalPath, input.original.buffer, {
-            contentType: input.original.mimeType,
-            upsert: false,
-            cacheControl: "3600"
-          });
-          if (originalUploadError) {
-            originalPath = null;
-          } else {
-            await supabase.from("task_photos").insert({
-              id: originalId,
-              task_id: taskId,
-              storage_path: originalPath,
-              mime_type: input.original.mimeType,
-              size_bytes: input.original.sizeBytes,
-              width: input.width ?? null,
-              height: input.height ?? null,
-              is_original: true,
-              uploaded_by: actor.id
-            });
-          }
-        }
+        if (error) fail(error, "Não foi possível registrar a foto.");
       } catch (error) {
-        await bucket.remove([storagePath, ...(originalPath ? [originalPath] : [])]);
+        try { await store.delete(storagePath); }
+        catch { console.error("R2 orphan cleanup failed", { storagePath }); }
         throw error;
       }
       await supabase.from("task_executions").insert({
@@ -1000,41 +962,40 @@ export function createSupabaseBackend(): Backend {
       });
       await audit(supabase, "task.photo_added", "task", taskId, {
         title: task.title,
-        sizeBytes: input.sizeBytes,
-        mimeType: input.mimeType
+        sizeBytes: optimized.sizeBytes,
+        mimeType: optimized.mimeType
       });
-      const { data: signed } = await bucket.createSignedUrl(storagePath, 3600);
+
       return {
         id,
         taskId,
         storagePath,
-        url: signed?.signedUrl ?? "",
-        mimeType: input.mimeType,
-        sizeBytes: input.sizeBytes,
+        url: `/api/photos/${id}`,
+        mimeType: optimized.mimeType,
+        sizeBytes: optimized.sizeBytes,
         isOriginal: false,
         uploadedById: actor.id,
         uploadedByName: actor.name,
-        createdAt: new Date().toISOString()
+        createdAt
       } satisfies TaskPhoto;
     },
 
     async deletePhoto(actor, photoId) {
+      assertPhotoEnvironment();
       assertAdmin(actor);
       const supabase = createSupabaseServerClient();
       const { data: photo } = await supabase
         .from("task_photos")
-        .select("id,task_id,storage_path,task:task_instances!task_photos_task_id_fkey(title)")
+        .select("id,task_id,storage_path,task:task_instances!task_photos_task_id_fkey(title,store_id)")
         .eq("id", photoId)
         .maybeSingle();
       if (!photo) throw new Error("Foto não encontrada.");
       const task = Array.isArray(photo.task) ? photo.task[0] : photo.task;
-      await supabase.storage.from(storageBucket()).remove([photo.storage_path]);
-      const { error } = await supabase.from("task_photos").delete().eq("id", photoId);
+      if (!task) throw new Error("Atividade não encontrada.");
+      assertStoreAccess(actor, task.store_id);
+      await createPhotoObjectStore().delete(photo.storage_path);
+      const { error } = await supabase.rpc("delete_r2_photo", { p_id: photoId });
       if (error) fail(error, "Não foi possível remover a foto.");
-      await audit(supabase, "task.photo_removed", "task", photo.task_id, {
-        storagePath: photo.storage_path,
-        title: task?.title
-      });
     },
 
     async listPhotosForTasks(actor, taskIds) {

@@ -1,0 +1,9 @@
+{
+  "name": "checklist-photo-retention-preview",
+  "main": "retention-worker.ts",
+  "compatibility_date": "2026-11-12",
+  "workers_dev": false,
+  "triggers": { "crons": ["*/15 * * * *"] },
+  "vars": { "PREVIEW_APP_URL": "https://configure-isolated-preview.example" }
+  // Set PHOTO_RETENTION_CRON_SECRET as a Worker secret, never in this file.
+}
