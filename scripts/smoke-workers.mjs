@@ -6,7 +6,11 @@ const children = [];
 const logs = [];
 const env = { ...process.env, WRANGLER_SEND_METRICS: "false" };
 async function start(config, port) {
-  const child = spawn(process.execPath, ["node_modules/wrangler/bin/wrangler.js", "dev", "--local", "--config", config, "--ip", "127.0.0.1", "--port", String(port)], { env, stdio: ["ignore", "pipe", "pipe"], windowsHide: true });
+  // A production build embeds the public URL. Explicitly authorize that same
+  // destination for anonymous-route smoke checks; never supply service keys here.
+  const vars = config === "wrangler.jsonc" && process.env.NEXT_PUBLIC_SUPABASE_URL
+    ? ["--var", `PREVIEW_SUPABASE_URL:${process.env.NEXT_PUBLIC_SUPABASE_URL}`] : [];
+  const child = spawn(process.execPath, ["node_modules/wrangler/bin/wrangler.js", "dev", "--local", "--config", config, "--ip", "127.0.0.1", "--port", String(port), ...vars], { env, stdio: ["ignore", "pipe", "pipe"], windowsHide: true });
   children.push(child);
   let log = "";
   logs.push(() => log);

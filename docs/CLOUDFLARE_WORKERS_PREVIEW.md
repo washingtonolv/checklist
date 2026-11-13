@@ -1,5 +1,7 @@
 # Cloudflare Workers — app adaptado, sem publicação
 
+> Estado atualizado e configuração definitiva: [CLOUDFLARE_PUBLICATION.md](./CLOUDFLARE_PUBLICATION.md). Este documento registra a etapa histórica de teste; requisitos antigos de projeto separado e migração destrutiva foram substituídos pela coexistência aditiva.
+
 ## Estado da branch
 
 Somente `cloudflare-workers-preview` foi alterada. `main`, `vercel.json`, os dados e as credenciais de produção permanecem intactos. Nenhum Worker, bucket, segredo, projeto Supabase, domínio ou implantação foi criado remotamente.

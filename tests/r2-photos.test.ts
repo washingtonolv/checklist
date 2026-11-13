@@ -8,13 +8,13 @@ vi.mock("../src/lib/supabase/server", () => ({ createSupabaseServerClient: () =>
     const q: any = { select: () => q, eq: () => q, order: () => q, in: () => q,
       maybeSingle: async () => ({ data: s.missing ? null : table === "task_instances" ? s.task : { id: "photo", storage_path: "key", task_id: "task", task: s.task, created_at: s.createdAt } }),
       then: (resolve: any) => Promise.resolve({ count: s.count, error: s.deleteError }).then(resolve),
-      insert: async (data: any) => { s.insert(table, data); return { error: table === "task_photos" ? s.insertError : null }; },
+      insert: async (data: any) => { s.insert(table, data); return { error: table === "r2_task_photos" ? s.insertError : null }; },
       delete: () => q };
     return q;
   }
 }) }));
 vi.mock("../src/lib/photo-store", async (original) => ({ ...await original<any>(), assertPhotoEnvironment: vi.fn(), createPhotoObjectStore: () => ({ put: s.put, delete: s.remove, get: s.get }) }));
-vi.mock("../src/lib/supabase/admin", () => ({ createSupabaseAdminClient: () => ({ from: () => ({ insert: async (data: any) => { s.insert("task_photos", data); return { error: s.insertError }; } }) }) }));
+vi.mock("../src/lib/supabase/admin", () => ({ createSupabaseAdminClient: () => ({ from: () => ({ insert: async (data: any) => { s.insert("r2_task_photos", data); return { error: s.insertError }; } }) }) }));
 import { createSupabaseBackend } from "../src/lib/backend/supabase";
 import { readPhoto } from "../src/lib/photo-read";
 import { optimizePhoto } from "../src/lib/photo-image";
@@ -35,7 +35,7 @@ it("decodes bytes, records actual optimized metadata and never preserves origina
   expect(photo.mimeType).toBe("image/webp"); expect(photo.sizeBytes).toBeGreaterThan(1);
   expect(photo.storagePath).toMatch(/^lojas\/store\/\d{4}\/\d{2}\/\d{2}\/task\/.*\.webp$/);
   expect(photo.url).toBe(`/api/photos/${photo.id}`); expect(s.put).toHaveBeenCalledTimes(1);
-  expect(s.insert).toHaveBeenCalledWith("task_photos", expect.objectContaining({ width: 20, height: 12, is_original: false }));
+  expect(s.insert).toHaveBeenCalledWith("r2_task_photos", expect.objectContaining({ width: 20, height: 12, is_original: false }));
 });
 it("denies other stores, invisible tasks, completed tasks and exhausted/unknown counts before R2", async () => {
   await expect(backend.uploadPhoto({ ...actor, storeIds: [] }, "task", input)).rejects.toThrow("loja");

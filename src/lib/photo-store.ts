@@ -28,12 +28,12 @@ export function bindingPhotoStore(bucket: PhotoBucket): PhotoObjectStore {
 }
 
 export function assertPhotoEnvironment(): void {
-  if (process.env.PHOTO_ENV !== "cloudflare-preview" || process.env.VERCEL_ENV) {
-    throw new Error("Fotos R2 disponíveis somente no ambiente Cloudflare de teste isolado.");
+  if (!["cloudflare-preview", "cloudflare"].includes(process.env.PHOTO_ENV ?? "") || process.env.VERCEL_ENV) {
+    throw new Error("Fotos R2 disponíveis somente no ambiente Cloudflare autorizado.");
   }
-  const expected = process.env.PREVIEW_SUPABASE_URL;
+  const expected = process.env.PHOTO_ENV === "cloudflare" ? process.env.SUPABASE_ALLOWED_URL : process.env.PREVIEW_SUPABASE_URL;
   if (!expected || expected !== process.env.NEXT_PUBLIC_SUPABASE_URL) {
-    throw new Error("Configure e confira o projeto Supabase isolado de teste.");
+    throw new Error("Configure e confira o destino Supabase autorizado.");
   }
 }
 

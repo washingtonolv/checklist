@@ -1,5 +1,7 @@
 # Fotos privadas no R2 — branch de teste
 
+> Estado atualizado e configuração definitiva: [CLOUDFLARE_PUBLICATION.md](./CLOUDFLARE_PUBLICATION.md). Este documento registra a etapa histórica de teste; requisitos antigos de projeto separado e migração destrutiva foram substituídos pela coexistência aditiva.
+
 ## Estado e isolamento
 
 **Atualização de runtime:** o app desta branch agora possui build OpenNext/Workers, binding R2 direto e processamento pelo binding Images. Consulte [CLOUDFLARE_WORKERS_PREVIEW.md](./CLOUDFLARE_WORKERS_PREVIEW.md) para a configuração e validação atuais. Os resultados de 68 testes abaixo registram a etapa anterior da migração R2; a etapa Workers ampliou a suíte para 74 testes.

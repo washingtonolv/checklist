@@ -4,7 +4,7 @@ import path from "node:path";
 
 if (process.env.VERCEL_ENV) throw new Error("Workers builds must run outside Vercel.");
 const result = spawnSync(process.execPath, ["node_modules/@opennextjs/cloudflare/dist/cli/index.js", "build"], {
-  stdio: "inherit", env: { ...process.env, CLOUDFLARE_WORKERS: "true", PHOTO_ENV: "cloudflare-preview", WRANGLER_SEND_METRICS: "false", NEXT_TELEMETRY_DISABLED: "1" }
+  stdio: "inherit", env: { ...process.env, CLOUDFLARE_WORKERS: "true", PHOTO_ENV: process.env.PHOTO_ENV ?? "cloudflare-preview", WRANGLER_SEND_METRICS: "false", NEXT_TELEMETRY_DISABLED: "1" }
 });
 if (result.status !== 0) process.exit(result.status ?? 1);
 

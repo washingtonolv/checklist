@@ -19,7 +19,16 @@ it("lets photo APIs and cron enforce their own session/bearer checks instead of 
 it("blocks mismatched Supabase destinations and any Vercel runtime in the isolated environment", () => {
   vi.stubEnv("PHOTO_ENV", "cloudflare-preview"); vi.stubEnv("VERCEL_ENV", "");
   vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://isolated.example"); vi.stubEnv("PREVIEW_SUPABASE_URL", "https://other.example");
-  expect(supabaseUrl).toThrow("teste Cloudflare");
+  expect(supabaseUrl).toThrow("ambiente Cloudflare");
   vi.stubEnv("PREVIEW_SUPABASE_URL", "https://isolated.example"); expect(supabaseUrl()).toBe("https://isolated.example");
-  vi.stubEnv("VERCEL_ENV", "production"); expect(supabaseUrl).toThrow("teste Cloudflare");
+  vi.stubEnv("VERCEL_ENV", "production"); expect(supabaseUrl).toThrow("ambiente Cloudflare");
+});
+it("requires an explicit Supabase destination for the published Cloudflare app", () => {
+  vi.stubEnv("PHOTO_ENV", "cloudflare"); vi.stubEnv("VERCEL_ENV", "");
+  vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://authorized.example");
+  vi.stubEnv("SUPABASE_ALLOWED_URL", "https://other.example");
+  expect(supabaseUrl).toThrow("ambiente Cloudflare");
+  vi.stubEnv("SUPABASE_ALLOWED_URL", "https://authorized.example");
+  expect(supabaseUrl()).toBe("https://authorized.example");
+  vi.stubEnv("VERCEL_ENV", "production"); expect(supabaseUrl).toThrow("ambiente Cloudflare");
 });

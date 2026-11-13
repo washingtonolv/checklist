@@ -640,7 +640,7 @@ export function createSupabaseBackend(): Backend {
       let query = supabase
         .from("task_instances")
         .select(
-          "id,template_id,store_id,title,description,category_id,recurrence,period_key,due_date,due_time,status,photo_requirement,completed_at,completed_by,approved_at,approved_by,observation,created_at,store:stores!task_instances_store_id_fkey(id,name,code),category:categories!task_instances_category_id_fkey(id,name),completed:profiles!task_instances_completed_by_fkey(id,name),approved:profiles!task_instances_approved_by_fkey(id,name),photos:task_photos(count)"
+          "id,template_id,store_id,title,description,category_id,recurrence,period_key,due_date,due_time,status,photo_requirement,completed_at,completed_by,approved_at,approved_by,observation,created_at,store:stores!task_instances_store_id_fkey(id,name,code),category:categories!task_instances_category_id_fkey(id,name),completed:profiles!task_instances_completed_by_fkey(id,name),approved:profiles!task_instances_approved_by_fkey(id,name),photos:r2_task_photos(count)"
         )
         .order("due_date", { ascending: true })
         .order("due_time", { ascending: true })
@@ -662,7 +662,7 @@ export function createSupabaseBackend(): Backend {
       const { data, error } = await supabase
         .from("task_instances")
         .select(
-          "id,template_id,store_id,title,description,category_id,recurrence,period_key,due_date,due_time,status,photo_requirement,completed_at,completed_by,approved_at,approved_by,observation,created_at,store:stores!task_instances_store_id_fkey(id,name,code),category:categories!task_instances_category_id_fkey(id,name),completed:profiles!task_instances_completed_by_fkey(id,name),approved:profiles!task_instances_approved_by_fkey(id,name),photos:task_photos(count)"
+          "id,template_id,store_id,title,description,category_id,recurrence,period_key,due_date,due_time,status,photo_requirement,completed_at,completed_by,approved_at,approved_by,observation,created_at,store:stores!task_instances_store_id_fkey(id,name,code),category:categories!task_instances_category_id_fkey(id,name),completed:profiles!task_instances_completed_by_fkey(id,name),approved:profiles!task_instances_approved_by_fkey(id,name),photos:r2_task_photos(count)"
         )
         .eq("id", id)
         .maybeSingle();
@@ -670,8 +670,8 @@ export function createSupabaseBackend(): Backend {
       if (!data) return null;
       const [photosResult, executionsResult, observationsResult] = await Promise.all([
         supabase
-          .from("task_photos")
-          .select("id,task_id,storage_path,mime_type,size_bytes,is_original,uploaded_by,created_at,uploader:profiles!task_photos_uploaded_by_fkey(id,name)")
+          .from("r2_task_photos")
+          .select("id,task_id,storage_path,mime_type,size_bytes,is_original,uploaded_by,created_at,uploader:profiles!r2_task_photos_uploaded_by_fkey(id,name)")
           .eq("task_id", id)
           .order("created_at"),
         supabase
@@ -745,7 +745,7 @@ export function createSupabaseBackend(): Backend {
       if (!task) throw new Error("Atividade não encontrada ou sem permissão.");
       if (task.status === "completed") throw new Error("Esta atividade já está concluída.");
       const { count } = await supabase
-        .from("task_photos")
+        .from("r2_task_photos")
         .select("id", { count: "exact", head: true })
         .eq("task_id", id)
         .eq("is_original", false);
@@ -923,7 +923,7 @@ export function createSupabaseBackend(): Backend {
         throw new Error("Atividade concluída. Solicite a reabertura para anexar novas evidências.");
       }
       const { count } = await supabase
-        .from("task_photos")
+        .from("r2_task_photos")
         .select("id", { count: "exact", head: true })
         .eq("task_id", taskId)
         .eq("is_original", false);
@@ -940,7 +940,7 @@ export function createSupabaseBackend(): Backend {
       try {
         // Clients cannot invent metadata to satisfy required-photo checks.
         // The session client above authorizes the task; only this server writes metadata.
-        const { error } = await createSupabaseAdminClient().from("task_photos").insert({
+        const { error } = await createSupabaseAdminClient().from("r2_task_photos").insert({
           id, task_id: taskId, storage_path: storagePath,
           mime_type: optimized.mimeType, size_bytes: optimized.sizeBytes,
           width: optimized.width, height: optimized.height,
@@ -985,8 +985,8 @@ export function createSupabaseBackend(): Backend {
       assertAdmin(actor);
       const supabase = await createSupabaseServerClient();
       const { data: photo } = await supabase
-        .from("task_photos")
-        .select("id,task_id,storage_path,task:task_instances!task_photos_task_id_fkey(title,store_id)")
+        .from("r2_task_photos")
+        .select("id,task_id,storage_path,task:task_instances!r2_task_photos_task_id_fkey(title,store_id)")
         .eq("id", photoId)
         .maybeSingle();
       if (!photo) throw new Error("Foto não encontrada.");
@@ -1002,8 +1002,8 @@ export function createSupabaseBackend(): Backend {
       if (!taskIds.length) return [];
       const supabase = await createSupabaseServerClient();
       const { data, error } = await supabase
-        .from("task_photos")
-        .select("id,task_id,storage_path,mime_type,size_bytes,is_original,uploaded_by,created_at,uploader:profiles!task_photos_uploaded_by_fkey(id,name)")
+        .from("r2_task_photos")
+        .select("id,task_id,storage_path,mime_type,size_bytes,is_original,uploaded_by,created_at,uploader:profiles!r2_task_photos_uploaded_by_fkey(id,name)")
         .in("task_id", taskIds)
         .order("created_at", { ascending: false });
       if (error) fail(error, "Não foi possível carregar as fotos.");

@@ -6,8 +6,8 @@ import { createPhotoObjectStore, photoExpired } from "./photo-store";
 export async function readPhoto(actor: SessionUser, id: string): Promise<Response> {
   const headers = { "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff" };
   const db = await createSupabaseServerClient();
-  const { data: photo, error } = await db.from("task_photos")
-    .select("storage_path,created_at,task:task_instances!task_photos_task_id_fkey(store_id)").eq("id", id).maybeSingle();
+  const { data: photo, error } = await db.from("r2_task_photos")
+    .select("storage_path,created_at,task:task_instances!r2_task_photos_task_id_fkey(store_id)").eq("id", id).maybeSingle();
   if (error) throw new Error("Falha ao consultar evidência.");
   if (!photo) return new Response(null, { status: 404, headers });
   const task = Array.isArray(photo.task) ? photo.task[0] : photo.task;

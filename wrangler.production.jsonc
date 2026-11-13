@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "checklist-dd",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-11-12",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
+  "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "checklist-dd" }],
+  "r2_buckets": [{ "binding": "PHOTOS_BUCKET", "bucket_name": "checklist-photos", "remote": false }],
+  "images": { "binding": "IMAGES" },
+  "vars": { "CLOUDFLARE_WORKERS": "true", "PHOTO_ENV": "cloudflare" },
+  "observability": { "enabled": true }
+}

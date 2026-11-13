@@ -1,5 +1,7 @@
 # Política definitiva de evidências — Cloudflare R2 (90 dias)
 
+> Estado atualizado e configuração definitiva: [CLOUDFLARE_PUBLICATION.md](./CLOUDFLARE_PUBLICATION.md). Este documento registra a etapa histórica de teste; requisitos antigos de projeto separado e migração destrutiva foram substituídos pela coexistência aditiva.
+
 **Decisão:** não usar Supabase Storage para fotografias. Supabase somente banco PostgreSQL, autenticação e metadados. Não adicionar fallback de fotos ao Supabase Storage.
 
 ## Capacidade
