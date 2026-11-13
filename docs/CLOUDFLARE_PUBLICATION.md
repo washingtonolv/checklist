@@ -52,6 +52,21 @@ A auditoria de dependências ainda aponta avisos em bibliotecas existentes de ex
 - Verificações remotas: login e health 200; página protegida 307 para login; foto sem sessão 401 com `private, no-store`; expiração sem segredo 401 e com segredo 200/zero expiradas. Login da Vercel respondeu 200. Nenhuma tarefa/usuário/foto real foi criada, alterada ou excluída para esses testes.
 - `main` permaneceu em `9b6b6c7ea5de412076e2d7bcd0477bb32f358b23`; `vercel.json` permanece igual. Sem alteração de implantação/domínio da Vercel, sem pausar projetos e sem contratar Workers/Images pagos.
 - Login autenticado, upload real e autorização entre duas lojas ainda dependem da validação com usuário. A foto legada não foi copiada ao R2; segue preservada para a Vercel. O retorno de recuperação de senha da Cloudflare depende da autorização da URL adicional no Supabase, preservando o destino antigo.
-- Não foi configurado deploy automático Cloudflare. Alterações no GitHub nesta branch acionam CI; a publicação continua explícita/manual. Não sincronizar ou fazer merge automático em `main`.
+- A publicação inicial foi manual. A automação posterior está descrita abaixo. Não sincronizar ou fazer merge automático em `main`.
 
 Os três testes do agendador passaram além dos 75 testes anteriores; TypeScript passou após essa alteração. O build, dry-run e smoke do artefato publicado passaram. Avisos de dependências seguem pendentes. O único aviso de segurança do Supabase após a migração foi a [proteção contra senhas vazadas desativada](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection), já existente; não foi alterada a configuração/plano Auth.
+
+## Atualizações automáticas
+
+O workflow `.github/workflows/cloudflare-compatibility.yml` executa testes, tipos, build, dry-run e smoke. Depois de aprovado, o job `deploy` recompila com a configuração pública correta, publica o app e o agendador e verifica as rotas públicas/protegidas. Somente pushes para `cloudflare-workers-preview` podem publicar; execução manual em outra branch não publica. Não existem comandos de Vercel, migrações de banco ou sincronização de branches nesse workflow.
+
+Configuração necessária em GitHub → Settings → Secrets and variables → Actions:
+
+- Secret `CLOUDFLARE_API_TOKEN`: token específico da conta com Workers Scripts Edit e Account Settings Read. Não usar chave global nem token OAuth de usuário do terminal. A chave preparada tem validade de um ano e precisa ser renovada antes de expirar.
+- Variável `CLOUDFLARE_ACCOUNT_ID`: conta que hospeda os dois Workers.
+- Variável `NEXT_PUBLIC_SUPABASE_ANON_KEY`: chave pública compatível com o cliente do app. A chave administrativa Supabase e os segredos dos crons ficam somente na Cloudflare; não são necessários no GitHub.
+- Variável `CLOUDFLARE_AUTODEPLOY=true`: habilitar somente após cadastrar e verificar a chave de publicação. Sem essa opção, os testes executam e o deploy é omitido.
+
+O token só é entregue às etapas de validação da configuração e publicação. Dependências e builds não recebem esse segredo. Actions de checkout/setup-node são fixadas por SHA; Wrangler usa a versão fixada no lockfile. Publicações são serializadas para evitar concorrência. Segredos já cadastrados nos Workers são preservados.
+
+A automação fica pendente até cadastrar o token e aprovar uma primeira execução real pelo GitHub Actions. Essa configuração não implica contratar plano pago. Alterações de banco continuam exigindo revisão própria; não executar migrações de produção automaticamente em cada push.
