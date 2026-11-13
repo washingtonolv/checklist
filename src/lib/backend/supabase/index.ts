@@ -25,7 +25,7 @@ import type { Backend } from "../types";
 import { createSupabaseAdminClient } from "../../supabase/admin";
 import { createSupabaseServerClient } from "../../supabase/server";
 import { assertPhotoEnvironment, createPhotoObjectStore, photoExpired } from "../../photo-store";
-import { optimizePhoto } from "../../photo-image";
+import { optimizePhoto } from "@/lib/photo-image";
 
 type Row = Record<string, any>;
 
@@ -129,7 +129,7 @@ function mapTaskRow(row: Row): Task {
 }
 
 async function audit(
-  supabase: ReturnType<typeof createSupabaseServerClient>,
+  supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>,
   action: string,
   entityType: string,
   entityId: string,
@@ -144,7 +144,7 @@ async function audit(
 }
 
 async function signedPhotos(
-  supabase: ReturnType<typeof createSupabaseServerClient>,
+  supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>,
   rows: Row[]
 ): Promise<Row[]> {
   if (!rows.length) return [];
@@ -189,7 +189,7 @@ export function createSupabaseBackend(): Backend {
     isDemo: false,
     auth: {
       async getSession() {
-        const supabase = createSupabaseServerClient();
+        const supabase = await createSupabaseServerClient();
         const {
           data: { user }
         } = await supabase.auth.getUser();
@@ -220,7 +220,7 @@ export function createSupabaseBackend(): Backend {
         } else {
           email = identifier;
         }
-        const supabase = createSupabaseServerClient();
+        const supabase = await createSupabaseServerClient();
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) fail(error, "Não foi possível entrar.");
         const session = await this.getSession();
@@ -231,11 +231,11 @@ export function createSupabaseBackend(): Backend {
         return session;
       },
       async signOut() {
-        const supabase = createSupabaseServerClient();
+        const supabase = await createSupabaseServerClient();
         await supabase.auth.signOut();
       },
       async requestPasswordReset(email) {
-        const supabase = createSupabaseServerClient();
+        const supabase = await createSupabaseServerClient();
         const base = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: `${base}/auth/callback?next=/redefinir-senha`
@@ -247,14 +247,14 @@ export function createSupabaseBackend(): Backend {
         throw new Error("No Supabase, a redefinição é feita pelo link enviado ao e-mail.");
       },
       async updatePassword(newPassword) {
-        const supabase = createSupabaseServerClient();
+        const supabase = await createSupabaseServerClient();
         const { error } = await supabase.auth.updateUser({ password: newPassword });
         if (error) fail(error, "Não foi possível atualizar a senha.");
       }
     },
 
     async listStores(actor) {
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data, error } = await supabase
         .from("stores")
         .select(
@@ -268,7 +268,7 @@ export function createSupabaseBackend(): Backend {
     },
 
     async getStore(actor, id) {
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data, error } = await supabase
         .from("stores")
         .select(
@@ -283,7 +283,7 @@ export function createSupabaseBackend(): Backend {
 
     async createStore(actor, input) {
       assertAdmin(actor);
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data, error } = await supabase
         .from("stores")
         .insert({
@@ -312,7 +312,7 @@ export function createSupabaseBackend(): Backend {
 
     async updateStore(actor, id, input) {
       assertAdmin(actor);
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { error } = await supabase
         .from("stores")
         .update({
@@ -338,7 +338,7 @@ export function createSupabaseBackend(): Backend {
 
     async listUsers(actor) {
       assertAdmin(actor);
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const [profilesResult, storesResult, linksResult] = await Promise.all([
         supabase.from("profiles").select("id,name,email,username,role,active,created_at").neq("id", GENERAL_ADMIN_ID).order("name"),
         supabase.from("stores").select("id,name,manager_id"),
@@ -414,7 +414,7 @@ export function createSupabaseBackend(): Backend {
         await admin.auth.admin.deleteUser(userId);
         throw error;
       }
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       await audit(supabase, "user.created", "user", userId, { name: input.name, role: input.role });
       const user = await this.getUser(actor, userId);
       if (!user) throw new Error("Usuário criado, mas não foi possível recarregá-lo.");
@@ -465,7 +465,7 @@ export function createSupabaseBackend(): Backend {
         );
         if (linkError) fail(linkError, "Não foi possível vincular o supervisor às lojas.");
       }
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       await audit(supabase, "user.updated", "user", id, {
         name: input.name,
         role: input.role,
@@ -477,7 +477,7 @@ export function createSupabaseBackend(): Backend {
     },
 
     async listCategories(actor) {
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const [categoriesResult, templatesResult] = await Promise.all([
         supabase.from("categories").select("id,name,description,active,sort_order").order("sort_order"),
         supabase.from("task_templates").select("id,category_id")
@@ -494,7 +494,7 @@ export function createSupabaseBackend(): Backend {
 
     async createCategory(actor, input) {
       assertAdmin(actor);
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data, error } = await supabase
         .from("categories")
         .insert({
@@ -512,7 +512,7 @@ export function createSupabaseBackend(): Backend {
 
     async updateCategory(actor, id, input) {
       assertAdmin(actor);
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data, error } = await supabase
         .from("categories")
         .update({
@@ -530,7 +530,7 @@ export function createSupabaseBackend(): Backend {
     },
 
     async listTemplates(actor) {
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data, error } = await supabase
         .from("task_templates")
         .select(
@@ -548,7 +548,7 @@ export function createSupabaseBackend(): Backend {
     },
 
     async getTemplate(actor, id) {
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data, error } = await supabase
         .from("task_templates")
         .select(
@@ -566,7 +566,7 @@ export function createSupabaseBackend(): Backend {
 
     async createTemplate(actor, input) {
       assertAdmin(actor);
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data, error } = await supabase
         .from("task_templates")
         .insert({
@@ -595,7 +595,7 @@ export function createSupabaseBackend(): Backend {
 
     async updateTemplate(actor, id, input) {
       assertAdmin(actor);
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { error } = await supabase
         .from("task_templates")
         .update({
@@ -622,7 +622,7 @@ export function createSupabaseBackend(): Backend {
     },
 
     async listTasks(actor, filters = {}) {
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       let storeIdsFilter: string[] | null = null;
       if (filters.supervisorId) {
         const { data } = await supabase
@@ -658,7 +658,7 @@ export function createSupabaseBackend(): Backend {
     },
 
     async getTask(actor, id) {
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data, error } = await supabase
         .from("task_instances")
         .select(
@@ -703,14 +703,14 @@ export function createSupabaseBackend(): Backend {
 
     async ensureGenerated(actor) {
       assertAdmin(actor);
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data, error } = await supabase.rpc("generate_task_instances", { p_today: todayKey() });
       if (error) fail(error, "Não foi possível gerar as tarefas.");
       return Number(data ?? 0);
     },
 
     async startTask(actor, id) {
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data: task } = await supabase
         .from("task_instances")
         .select("id,status,title")
@@ -736,7 +736,7 @@ export function createSupabaseBackend(): Backend {
     },
 
     async completeTask(actor, id, observation) {
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data: task } = await supabase
         .from("task_instances")
         .select("id,status,title,photo_requirement")
@@ -778,7 +778,7 @@ export function createSupabaseBackend(): Backend {
 
     async requestCorrection(actor, id, note) {
       if (!canReview(actor)) throw new Error("Somente supervisores e a gerente comercial podem solicitar correção.");
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data: task } = await supabase.from("task_instances").select("id,status,title").eq("id", id).maybeSingle();
       if (!task) throw new Error("Atividade não encontrada ou sem permissão.");
       if (task.status === "pending") throw new Error("A atividade ainda não foi executada.");
@@ -806,7 +806,7 @@ export function createSupabaseBackend(): Backend {
 
     async rejectTask(actor, id, note) {
       if (!canReview(actor)) throw new Error("Somente supervisores e a gerente comercial podem reprovar tarefas.");
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data: task } = await supabase.from("task_instances").select("id,status,title").eq("id", id).maybeSingle();
       if (!task) throw new Error("Atividade não encontrada ou sem permissão.");
       if (task.status === "pending") throw new Error("A atividade ainda não foi executada.");
@@ -834,7 +834,7 @@ export function createSupabaseBackend(): Backend {
 
     async approveTask(actor, id, note) {
       if (!canReview(actor)) throw new Error("Somente supervisores e a gerente comercial podem aprovar execuções.");
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data: task } = await supabase.from("task_instances").select("id,status,title").eq("id", id).maybeSingle();
       if (!task) throw new Error("Atividade não encontrada ou sem permissão.");
       if (task.status !== "completed") throw new Error("Somente atividades concluídas podem ser aprovadas.");
@@ -856,7 +856,7 @@ export function createSupabaseBackend(): Backend {
 
     async reopenTask(actor, id, note) {
       if (!canReview(actor)) throw new Error("Somente supervisores e a gerente comercial podem reabrir tarefas.");
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data: task } = await supabase.from("task_instances").select("id,status,title").eq("id", id).maybeSingle();
       if (!task) throw new Error("Atividade não encontrada ou sem permissão.");
       const { error } = await supabase
@@ -883,7 +883,7 @@ export function createSupabaseBackend(): Backend {
     },
 
     async addObservation(actor, id, content) {
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data, error } = await supabase
         .from("task_observations")
         .insert({ task_id: id, user_id: actor.id, content })
@@ -911,7 +911,7 @@ export function createSupabaseBackend(): Backend {
 
     async uploadPhoto(actor, taskId, input) {
       assertPhotoEnvironment();
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data: task } = await supabase
         .from("task_instances")
         .select("id,store_id,status,title,photo_requirement")
@@ -983,7 +983,7 @@ export function createSupabaseBackend(): Backend {
     async deletePhoto(actor, photoId) {
       assertPhotoEnvironment();
       assertAdmin(actor);
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data: photo } = await supabase
         .from("task_photos")
         .select("id,task_id,storage_path,task:task_instances!task_photos_task_id_fkey(title,store_id)")
@@ -1000,7 +1000,7 @@ export function createSupabaseBackend(): Backend {
 
     async listPhotosForTasks(actor, taskIds) {
       if (!taskIds.length) return [];
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data, error } = await supabase
         .from("task_photos")
         .select("id,task_id,storage_path,mime_type,size_bytes,is_original,uploaded_by,created_at,uploader:profiles!task_photos_uploaded_by_fkey(id,name)")
@@ -1012,7 +1012,7 @@ export function createSupabaseBackend(): Backend {
     },
 
     async listHistory(actor, filters = {}) {
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       let query = supabase
         .from("task_executions")
         .select(
@@ -1032,7 +1032,7 @@ export function createSupabaseBackend(): Backend {
 
     async listAudit(actor, limit = 200) {
       assertAdmin(actor);
-      const supabase = createSupabaseServerClient();
+      const supabase = await createSupabaseServerClient();
       const { data, error } = await supabase
         .from("audit_logs")
         .select("id,actor_id,action,entity_type,entity_id,details,created_at,actor:profiles!audit_logs_actor_id_fkey(id,name)")

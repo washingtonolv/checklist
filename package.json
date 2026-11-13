@@ -12,9 +12,14 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "seed:supabase": "node scripts/seed-supabase.mjs",
-    "logo": "node scripts/generate-logo.mjs"
+    "logo": "node scripts/generate-logo.mjs",
+    "workers:build": "node scripts/build-workers.mjs",
+    "workers:preview": "wrangler dev --local --ip 127.0.0.1",
+    "workers:check": "wrangler deploy --dry-run --outdir .open-next/dry-run",
+    "workers:smoke": "node scripts/smoke-workers.mjs"
   },
   "dependencies": {
+    "@opennextjs/cloudflare": "1.20.17",
     "@supabase/ssr": "0.5.2",
     "@supabase/supabase-js": "2.45.4",
     "aws4fetch": "1.0.20",
@@ -24,9 +29,9 @@
     "jspdf": "2.5.2",
     "jspdf-autotable": "3.8.4",
     "lucide-react": "0.454.0",
-    "next": "^14.2.35",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "next": "15.5.29",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
     "sharp": "0.33.5",
     "sonner": "1.7.0",
     "tailwind-merge": "2.5.4",
@@ -37,14 +42,15 @@
     "@electric-sql/pglite": "0.3.14",
     "@types/bcryptjs": "2.4.6",
     "@types/node": "22.9.0",
-    "@types/react": "18.3.12",
-    "@types/react-dom": "18.3.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
     "autoprefixer": "10.4.20",
     "eslint": "8.57.1",
-    "eslint-config-next": "^14.2.35",
+    "eslint-config-next": "15.5.29",
     "postcss": "8.4.47",
     "tailwindcss": "3.4.14",
     "typescript": "5.6.3",
-    "vitest": "2.1.4"
+    "vitest": "2.1.4",
+    "wrangler": "4.161.0"
   }
 }

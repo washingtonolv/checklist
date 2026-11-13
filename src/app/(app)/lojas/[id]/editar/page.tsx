@@ -8,7 +8,8 @@ import { StoreForm } from "@/components/forms/StoreForm";
 
 export const dynamic = "force-dynamic";
 
-export default async function EditStorePage({ params }: { params: { id: string } }) {
+export default async function EditStorePage({ params: rawParams }: { params: Promise<{ id: string }> }) {
+  const params = await rawParams;
   const user = await requireAdmin();
   const backend = getBackend();
   const store = await backend.getStore(user, params.id);

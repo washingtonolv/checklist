@@ -1,4 +1,5 @@
 import { AwsClient } from "aws4fetch";
+import { requireWorkerBindings } from "./cloudflare";
 
 export const RETENTION_MS = 90 * 24 * 60 * 60 * 1000;
 export function photoExpired(createdAt: string, now = Date.now()): boolean {
@@ -38,6 +39,9 @@ export function assertPhotoEnvironment(): void {
 
 export function createPhotoObjectStore(): PhotoObjectStore {
   assertPhotoEnvironment();
+  if (process.env.CLOUDFLARE_WORKERS === "true") {
+    return bindingPhotoStore(requireWorkerBindings().PHOTOS_BUCKET!);
+  }
   const { R2_ACCOUNT_ID: account, R2_BUCKET: bucket, R2_ACCESS_KEY_ID: accessKeyId, R2_SECRET_ACCESS_KEY: secretAccessKey } = process.env;
   if (!account || !/^[a-f0-9]{32}$/.test(account) || !bucket || !/^[a-z0-9-]+$/.test(bucket) || !accessKeyId || !secretAccessKey) {
     throw new Error("Configure o bucket R2 privado de teste e suas credenciais de servidor.");

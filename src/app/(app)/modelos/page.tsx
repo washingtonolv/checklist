@@ -10,10 +10,11 @@ import { cn } from "@/lib/utils";
 export const dynamic = "force-dynamic";
 
 export default async function TemplatesPage({
-  searchParams
+  searchParams: rawParams
 }: {
-  searchParams: { sucesso?: string };
+  searchParams: Promise<{ sucesso?: string }>;
 }) {
+  const searchParams = await rawParams;
   const user = await requireAdmin();
   const backend = getBackend();
   const [templates, categories] = await Promise.all([backend.listTemplates(user), backend.listCategories(user)]);

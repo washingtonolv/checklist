@@ -8,10 +8,11 @@ import { Alert } from "@/components/ui";
 export const metadata: Metadata = { title: "Redefinir senha" };
 
 export default async function ResetPasswordPage({
-  searchParams
+  searchParams: rawParams
 }: {
-  searchParams: { token?: string };
+  searchParams: Promise<{ token?: string }>;
 }) {
+  const searchParams = await rawParams;
   const local = isLocalMode();
   const token = searchParams.token ?? "";
   const session = local ? null : await getSessionUser();

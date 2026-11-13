@@ -34,7 +34,7 @@ export async function localSignIn(email: string, password: string): Promise<Sess
     name: user.name,
     role: user.role
   });
-  cookies().set(LOCAL_SESSION_COOKIE, token, {
+  (await cookies()).set(LOCAL_SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
@@ -62,7 +62,7 @@ async function localSessionUser(userId: string): Promise<SessionUser> {
 }
 
 export async function getLocalSession(): Promise<SessionUser | null> {
-  const token = cookies().get(LOCAL_SESSION_COOKIE)?.value;
+  const token = (await cookies()).get(LOCAL_SESSION_COOKIE)?.value;
   if (!token) return null;
   const payload = await verifyLocalSessionToken(token);
   if (!payload) return null;
@@ -74,7 +74,7 @@ export async function getLocalSession(): Promise<SessionUser | null> {
 }
 
 export async function localSignOut(): Promise<void> {
-  cookies().delete(LOCAL_SESSION_COOKIE);
+  (await cookies()).delete(LOCAL_SESSION_COOKIE);
 }
 
 export async function localRequestPasswordReset(email: string): Promise<{ resetUrl?: string }> {

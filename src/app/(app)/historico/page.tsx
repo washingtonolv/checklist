@@ -13,10 +13,11 @@ export const dynamic = "force-dynamic";
 const ACTIONS = Object.keys(ACTION_LABELS) as ExecutionAction[];
 
 export default async function HistoryPage({
-  searchParams
+  searchParams: rawParams
 }: {
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  const searchParams = await rawParams;
   const user = await requireUser();
   const backend = getBackend();
   const range = monthRange();

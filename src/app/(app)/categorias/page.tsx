@@ -10,10 +10,11 @@ import { cn } from "@/lib/utils";
 export const dynamic = "force-dynamic";
 
 export default async function CategoriesPage({
-  searchParams
+  searchParams: rawParams
 }: {
-  searchParams: { sucesso?: string };
+  searchParams: Promise<{ sucesso?: string }>;
 }) {
+  const searchParams = await rawParams;
   const user = await requireAdmin();
   const categories = await getBackend().listCategories(user);
 

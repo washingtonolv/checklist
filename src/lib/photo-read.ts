@@ -5,7 +5,7 @@ import { createPhotoObjectStore, photoExpired } from "./photo-store";
 
 export async function readPhoto(actor: SessionUser, id: string): Promise<Response> {
   const headers = { "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff" };
-  const db = createSupabaseServerClient();
+  const db = await createSupabaseServerClient();
   const { data: photo, error } = await db.from("task_photos")
     .select("storage_path,created_at,task:task_instances!task_photos_task_id_fkey(store_id)").eq("id", id).maybeSingle();
   if (error) throw new Error("Falha ao consultar evidência.");

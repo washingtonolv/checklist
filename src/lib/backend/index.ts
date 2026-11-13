@@ -1,23 +1,14 @@
 import { isSupabaseConfigured } from "../supabase/config";
+import { assertPhotoEnvironment } from "../photo-store";
 import type { Backend } from "./types";
-import { createLocalBackend } from "./local";
 import { createSupabaseBackend } from "./supabase";
 
-let instance: Backend | null = null;
-
+// Stateless backend; never a filesystem/demo fallback in the Workers branch.
+const backend = createSupabaseBackend();
 export function getBackend(): Backend {
-  if (!instance) {
-    if (process.env.PHOTO_ENV === "cloudflare-preview" && !isSupabaseConfigured()) {
-      throw new Error("Configure Supabase de teste; o ambiente R2 não permite backend local.");
-    }
-    instance = isSupabaseConfigured() ? createSupabaseBackend() : createLocalBackend();
-  }
-  return instance;
+  assertPhotoEnvironment();
+  if (!isSupabaseConfigured()) throw new Error("Configure Supabase de teste; backend local indisponível.");
+  return backend;
 }
-
-export function isLocalMode(): boolean {
-  return !isSupabaseConfigured();
-}
-
+export function isLocalMode(): boolean { return false; }
 export type { Backend };
-

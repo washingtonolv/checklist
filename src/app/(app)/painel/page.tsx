@@ -26,10 +26,11 @@ import { cn } from "@/lib/utils";
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage({
-  searchParams
+  searchParams: rawParams
 }: {
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  const searchParams = await rawParams;
   const user = await requireUser();
   if (user.role === "manager") return <ManagerRoutine user={user} date={typeof searchParams.data === "string" ? searchParams.data : undefined} />;
   const backend = getBackend();

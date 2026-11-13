@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getBackend, isLocalMode } from "@/lib/backend";
+import { assertPhotoEnvironment } from "@/lib/photo-store";
 import { todayKey } from "@/lib/dates";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 function authorized(request: Request): boolean {
   const secret = process.env.CRON_SECRET;
-  if (!secret) return process.env.NODE_ENV !== "production";
+  if (!secret) return false;
   const header = request.headers.get("authorization");
   return header === `Bearer ${secret}`;
 }
@@ -18,18 +18,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    if (isLocalMode()) {
-      const created = await getBackend().ensureGenerated({
-        id: "system",
-        name: "Sistema",
-        email: "system@local",
-        role: "admin",
-        active: true,
-        storeIds: []
-      });
-      return NextResponse.json({ ok: true, mode: "local", created, date: todayKey() });
-    }
-
+    assertPhotoEnvironment();
     const admin = createSupabaseAdminClient();
     const { data, error } = await admin.rpc("generate_task_instances", { p_today: todayKey() });
     if (error) throw new Error(error.message);

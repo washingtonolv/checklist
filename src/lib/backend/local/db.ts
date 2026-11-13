@@ -170,7 +170,16 @@ export async function saveDb(db: LocalDb): Promise<void> {
   const file = path.join(dir, "data.json");
   const temp = `${file}.${process.pid}.tmp`;
   fs.writeFileSync(temp, JSON.stringify(db, null, 2), "utf8");
-  fs.renameSync(temp, file);
+  for (let attempt = 0; ; attempt++) {
+    try { fs.renameSync(temp, file); return; }
+    catch (error) {
+      const code = (error as NodeJS.ErrnoException).code;
+      // Windows scanners can briefly lock a newly written file. Keep the atomic
+      // replacement and retry the transient lock instead of deleting live data.
+      if (process.platform !== "win32" || !["EPERM", "EBUSY", "EACCES"].includes(code ?? "") || attempt >= 4) throw error;
+      await new Promise(resolve => setTimeout(resolve, 10 * 2 ** attempt));
+    }
+  }
 }
 
 export function mutateDb<T>(fn: (db: LocalDb) => T | Promise<T>): Promise<T> {

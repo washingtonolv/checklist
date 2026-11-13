@@ -9,7 +9,8 @@ import type { TaskTemplate } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
-export default async function EditTemplatePage({ params }: { params: { id: string } }) {
+export default async function EditTemplatePage({ params: rawParams }: { params: Promise<{ id: string }> }) {
+  const params = await rawParams;
   const user = await requireAdmin();
   const backend = getBackend();
   let template: TaskTemplate | null = null;

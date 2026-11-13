@@ -11,3 +11,8 @@ export async function optimizePhoto(input: UploadPhotoInput) {
   if (data.length > 1024 * 1024) throw new Error("Imagem otimizada excede 1 MB.");
   return { buffer: data, sizeBytes: data.length, mimeType: "image/webp", width: info.width, height: info.height };
 }
+
+// Node-only implementation; Workers builds alias this module to photo-image.worker.ts.
+export async function optimizeAvatar(bytes: Buffer) {
+  return sharp(bytes, { limitInputPixels: 24000000, animated: false, failOn: "warning" }).rotate().resize(96, 96, { fit: "cover" }).webp({ quality: 55 }).toBuffer();
+}

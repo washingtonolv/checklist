@@ -9,7 +9,8 @@ import { UserForm } from "@/components/forms/UserForm";
 
 export const dynamic = "force-dynamic";
 
-export default async function EditUserPage({ params }: { params: { id: string } }) {
+export default async function EditUserPage({ params: rawParams }: { params: Promise<{ id: string }> }) {
+  const params = await rawParams;
   const user = await requireAdmin();
   const backend = getBackend();
   const [account, stores] = await Promise.all([

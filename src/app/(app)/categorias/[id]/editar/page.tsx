@@ -8,7 +8,8 @@ import { CategoryForm } from "@/components/forms/CategoryForm";
 
 export const dynamic = "force-dynamic";
 
-export default async function EditCategoryPage({ params }: { params: { id: string } }) {
+export default async function EditCategoryPage({ params: rawParams }: { params: Promise<{ id: string }> }) {
+  const params = await rawParams;
   const user = await requireAdmin();
   const categories = await getBackend().listCategories(user);
   const category = categories.find((item) => item.id === params.id);

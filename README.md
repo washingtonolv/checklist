@@ -1,5 +1,7 @@
 # Checklist Operacional D&D
 
+> **Branch Cloudflare isolada:** app adaptado para Workers com Next.js 15 / React 19 / OpenNext, sem deploy. [Configuração, testes e pendências](./docs/CLOUDFLARE_WORKERS_PREVIEW.md). A produção Vercel na `main` permanece independente.
+
 Plataforma para gestão e acompanhamento das rotinas operacionais das lojas D&D, com perfis de gerente comercial, supervisor e gerente de loja.
 
 **[Acessar o protótipo visual no GitHub Pages](https://washingtonolv.github.io/checklist/)**
@@ -14,7 +16,7 @@ Plataforma para gestão e acompanhamento das rotinas operacionais das lojas D&D,
 - **Categorias e modelos:** organização das rotinas, prazos e exigência de fotos.
 - **Relatórios e histórico:** acompanhamento de atividades, exportações e trilha de auditoria.
 
-O projeto completo é uma aplicação **Next.js 14 / React / TypeScript** com uma camada de backend que pode utilizar dados locais de demonstração ou Supabase. O protótipo visual é uma implementação HTML separada, criada para validar telas e fluxos antes da integração com o backend.
+O projeto completo é uma aplicação **Next.js 15 / React 19 / TypeScript** com Supabase para autenticação/banco/metadados e R2 privado para evidências no Workers. O protótipo visual é uma implementação HTML separada, criada para validar telas e fluxos antes da integração com o backend.
 
 ## Estrutura do repositório
 
@@ -26,7 +28,7 @@ O projeto completo é uma aplicação **Next.js 14 / React / TypeScript** com um
 | `src/lib/backend/` | Implementações de backend local e Supabase |
 | `src/lib/constants.ts` | Perfis, categorias, status e modelos iniciais |
 | `supabase/migrations/` | Estrutura e dados iniciais para um futuro ambiente Supabase |
-| `tests/` | Testes do backend local |
+| `tests/` | Testes de sessão, permissões, SQL, R2, Images e regressões legadas |
 | `docs/index.html` | **Protótipo público do GitHub Pages**, sem banco de dados |
 | [`CODIGO_FONTE_CONSOLIDADO.md`](./CODIGO_FONTE_CONSOLIDADO.md) | Snapshot Markdown dos 90 arquivos de texto do projeto |
 
@@ -41,7 +43,7 @@ npm run dev
 
 Acesse `http://localhost:3000`.
 
-Quando as variáveis do Supabase não estão configuradas, o projeto usa o **backend local de desenvolvimento** em `.local/`, com dados fictícios gerados automaticamente. Esse modo local é diferente da demonstração estática do GitHub Pages e não deve ser tratado como hospedagem pronta para produção.
+Nesta branch, o app exige Supabase de teste configurado e recusa fallback local. Os módulos legados de demonstração permanecem apenas para testes de regressão e não entram no artefato Workers. Para simular o runtime, usar `npm run workers:build` e `npm run workers:preview`.
 
 Com Supabase configurado, o sistema passa a usar o backend correspondente. **Não publique chaves secretas, senhas ou arquivos `.env` no repositório.** Consulte `.env.example` apenas como referência de configuração e revise as políticas de acesso antes de um uso real.
 

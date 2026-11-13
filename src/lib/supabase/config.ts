@@ -10,6 +10,9 @@ export function isSupabaseConfigured(): boolean {
 export function supabaseUrl(): string {
   const value = process.env.NEXT_PUBLIC_SUPABASE_URL;
   if (!value) throw new Error("NEXT_PUBLIC_SUPABASE_URL não configurada.");
+  if (process.env.PHOTO_ENV === "cloudflare-preview" && (process.env.VERCEL_ENV || process.env.PREVIEW_SUPABASE_URL !== value)) {
+    throw new Error("O projeto Supabase deve ser explicitamente autorizado para o teste Cloudflare.");
+  }
   return value;
 }
 

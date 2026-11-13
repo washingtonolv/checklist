@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 
 const state = vi.hoisted(() => ({
-  react: require("next/dist/compiled/react"),
+  react: require("next/dist/compiled/react/react.react-server"),
   getSession: vi.fn()
 }));
 vi.mock("react", () => ({ cache: state.react.cache }));
@@ -12,7 +12,7 @@ import { getSessionUser, requireAdmin, requireUser } from "../src/lib/auth-serve
 // Use Next's real React cache with a fresh server-render cache scope each time.
 function startRender() {
   const values = new Map();
-  state.react.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentCache.current = {
+  state.react.__SERVER_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE.A = {
     getCacheForType(factory: () => unknown) {
       if (!values.has(factory)) values.set(factory, factory());
       return values.get(factory);
@@ -20,7 +20,7 @@ function startRender() {
   };
 }
 beforeEach(() => { state.getSession.mockReset(); startRender(); });
-afterEach(() => { state.react.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentCache.current = null; });
+afterEach(() => { state.react.__SERVER_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE.A = null; });
 const manager = { id: "manager-a", name: "Manager", email: "manager@example.test", role: "manager", active: true, storeIds: ["store-a"] };
 
 it("shares one verified session lookup between layout and page within a render", async () => {

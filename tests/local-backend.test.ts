@@ -442,12 +442,10 @@ describe("local backend: administração de usuários e auditoria", () => {
 });
 
 describe("seleção de backend", () => {
-  it("usa o backend local quando o Supabase não está configurado", () => {
+  it("recusa fallback local quando o Supabase não está configurado", () => {
     delete process.env.NEXT_PUBLIC_SUPABASE_URL;
     delete process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    const selected = getBackend();
-    expect(selected.mode).toBe("local");
-    expect(selected.isDemo).toBe(true);
+    expect(() => getBackend()).toThrow();
   });
 });
 

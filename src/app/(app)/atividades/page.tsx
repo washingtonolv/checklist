@@ -17,10 +17,11 @@ function statusFrom(value: string | undefined): TaskStatus | "" {
 }
 
 export default async function TasksPage({
-  searchParams
+  searchParams: rawParams
 }: {
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  const searchParams = await rawParams;
   const user = await requireUser();
   const backend = getBackend();
   const range = monthRange();

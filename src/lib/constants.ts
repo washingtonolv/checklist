@@ -128,10 +128,3 @@ export const DEFAULT_TEMPLATES: {
   { category: "Rotinas Administrativas", title: "Verificação de comunicados", description: "Ler e confirmar os comunicados da gestão.", recurrence: "daily", photoRequirement: "none", dueTime: "18:00" },
   { category: "Rotinas Administrativas", title: "Cumprimento de atividades solicitadas pela gestão", description: "Executar as solicitações encaminhadas pela gerência comercial.", recurrence: "once", photoRequirement: "optional", dueTime: "18:00" }
 ];
-
-export const DEMO_CREDENTIALS = [
-  { role: "Gerente Comercial (admin)", email: "admin@dd.local", password: "Dd@2026!" },
-  { role: "Supervisora", email: "supervisor@dd.local", password: "Dd@2026!" },
-  { role: "Gerente de Loja", email: "gerente@dd.local", password: "Dd@2026!" }
-];
-

@@ -1,71 +1,75 @@
-# Cloudflare Workers — segunda implantação (sem alterar a Vercel)
+# Cloudflare Workers — app adaptado, sem publicação
 
-## Estado
-Este ramo é uma preparação **não publicada** para migrar o Checklist Operacional D&D para Cloudflare Workers. A branch `main` e a produção Vercel não devem ser alteradas ou usadas como destino de deploy.
+## Estado da branch
 
-O projeto utiliza Next.js 14 / React 18, Server Actions, middleware Supabase, um backend de fallback no filesystem e o Cron da Vercel. Portanto, **não** podemos simplesmente publicar os arquivos estáticos.
+Somente `cloudflare-workers-preview` foi alterada. `main`, `vercel.json`, os dados e as credenciais de produção permanecem intactos. Nenhum Worker, bucket, segredo, projeto Supabase, domínio ou implantação foi criado remotamente.
 
-A Cloudflare recomenda **vinext** para novos projetos Next.js em Workers. O adaptador OpenNext atual deixou de suportar Next.js 14; é obrigatório executar o diagnóstico `vinext check` antes de inicializar o novo runtime.
+A branch gera um artefato executável de Workers com **Next.js 15.5.29, React 19.3.1, OpenNext 1.20.17 e Wrangler 4.161.0**, todos fixados no lockfile. A versão atual do OpenNext exige Next >=15.5.29 <16 ou >=16.4.5; por isso a migração inclui atualização do framework nesta branch. Não se usou uma versão antiga do adaptador nem a opção de ignorar versões incompatíveis. A recomendação atual da Cloudflare para apps novos é vinext; aqui foi escolhido OpenNext para preservar o pipeline de build do Next e os fluxos existentes de Server Actions.
 
-Documentação: https://developers.cloudflare.com/workers/static-assets/migration-guides/vercel-to-workers/nextjs/
+`cookies()`, `params`, `searchParams` e o cliente Supabase de servidor foram adaptados para as APIs assíncronas do Next 15. A sessão continua sendo verificada com Supabase Auth e autorização pelas regras de banco e vínculo com lojas. Não se alteraram as versões dos SDKs Supabase nesta etapa.
 
-## Pré-requisitos
-- Conta Cloudflare com Workers Free habilitado; escolha um nome disponível para `workers.dev`.
-- Supabase de **testes** com autenticação e RLS configurados. **Não use dados reais durante o teste.**
-- Node.js e npm localmente, conectados à internet.
-- Não adicionar credenciais ao GitHub ou arquivos versionados.
+## Runtime
 
-## Etapa 1 — Diagnóstico (não publica nada)
+- `wrangler.jsonc` aponta para `.open-next/worker.js` e `.open-next/assets`, com compatibilidade Node do Workers. O Worker tem nome de teste, sem rotas públicas configuradas, `workers_dev=false` e `preview_urls=false`.
+- `open-next.config.ts` desabilita caches compartilhados de dados/ISR. As páginas autenticadas são dinâmicas; assets estáticos têm cache imutável. Não foi criado bucket de cache junto com as fotos.
+- O middleware foi movido da raiz para `src/middleware.ts`, compatível com `src/app`. A inclusão no manifesto de build e os redirecionamentos foram verificados. As APIs de fotos e cron passam às verificações próprias de sessão/bearer, sem redirecionamento HTML indevido.
+- `getBackend()` seleciona somente Supabase e recusa configuração ausente ou destino não autorizado. Não há fallback de dados, cookies de demonstração ou persistência em filesystem no app. Os módulos locais antigos permanecem somente para testes de regressão; não entram no artefato. As rotas de evidências locais e a vitrine pública fictícia foram desativadas nesta branch.
+- O segredo/URL de Supabase de teste deve ser explicitamente permitido por `PREVIEW_SUPABASE_URL`; qualquer divergência é recusada antes da criação do cliente. O ambiente de fotos Cloudflare recusa execução na Vercel.
+
+## Fotos e avatares
+
+No Worker, `createPhotoObjectStore()` usa o binding privado **PHOTOS_BUCKET**. Não são necessárias chaves S3 no Worker. A implementação S3 anterior continua disponível para testes Node com recursos isolados.
+
+Fotos e avatares passam pelo binding **IMAGES**. O build substitui o módulo Node de processamento antes da resolução de caminhos/externalização de dependências; a checagem do artefato recusa código nativo Sharp e o backend local. Apenas o Node de desenvolvimento/testes continua usando Sharp; não é carregado pelo Worker.
+
+O processamento verifica metadados decodificados, aceita JPEG/PNG/WebP, limita entrada a 10 MiB (foto) ou 5 MiB (avatar), limita a 24 milhões de pixels, remove metadados, gera WebP estático e limita saída a 1 MiB ou 8 KB. Fotos ficam em até 1600×1600 e avatares em 96×96. Animações são reduzidas a uma imagem estática pelo Images. Originais não são armazenados. Avatares mantêm o comportamento existente de miniatura em metadados de perfil; as evidências ficam no R2.
+
+As fotos são servidas pelo proxy autenticado, com autorização por loja e `private, no-store`. Permanecem as compensações de falha, o limite transacional por tarefa, a expiração de 90 dias, os metadados históricos e a auditoria descritos em [R2_IMPLEMENTATION.md](./R2_IMPLEMENTATION.md).
+
+**Images é um serviço separado do R2:** a ativação do binding em uma conta real pode exigir plano pago e as transformações têm cobrança própria. Nenhum plano foi contratado, binding remoto ativado ou transformação remota executada. A simulação local não exige credenciais Cloudflare.
+
+## Comandos que não publicam
+
+Requer Node >=22.12, npm e, preferencialmente, Linux/WSL para o build OpenNext. O build e a simulação também foram executados no Windows desta tarefa.
+
 ```bash
-git checkout cloudflare-workers-preview
 npm ci
-npx vinext check
-```
-
-Confira incompatibilidades relacionadas a Server Actions, middleware, `sharp`, geração de fotos, URLs assinadas e bibliotecas `node:fs`. A branch tem um job de GitHub Actions que executa somente a verificação de compatibilidade.
-
-## Etapa 2 — Gerar arquivos Cloudflare apenas nesta branch
-**Só após analisar o relatório da etapa anterior**:
-```bash
-npx vinext init --platform=cloudflare --name checklist-dd-preview --cdn-cache=none --data-cache=none --image-optimization=none
-```
-O comando instala as dependências, atualiza o lockfile e cria `vite.config.ts` e `cloudflare.config.ts`, além de scripts `dev:vinext`, `build:vinext`, `start:vinext` e `deploy:vinext`.
-
-Este projeto usa `next/font/google`, que vinext deve tratar no build. Se existirem componentes `next/image` com imagens raster/remotas, revise a estratégia de otimização antes de publicar. Caso o sistema precise de ISR/cache, a opção `none` deve ser revisada.
-
-Atualize os excludes do ESLint para `.cloudflare/**`, `.vinext/**`, `dist/**` e inclua `.cloudflare/types` no `tsconfig.json` conforme documentação oficial. Revise todo arquivo alterado pelo init.
-
-## Etapa 3 — Bloqueios de segurança antes do primeiro deploy
-1. **Fail-closed**: em Cloudflare, jamais ativar `createLocalBackend()`, pois usa `node:fs` e não é persistente. Se faltarem variáveis do Supabase, a implantação deve falhar com erro de configuração, não criar dados locais.
-2. Definir `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` nas variáveis de **build e runtime** do Workers; `SUPABASE_SERVICE_ROLE_KEY` é segredo exclusivo do servidor. Nunca expor essa chave no cliente.
-3. Usar um Supabase **separado para testes**; conferir políticas RLS, cadastro, sessão, redirecionamentos de autenticação e autorização por loja.
-4. **Fotos ainda usam Supabase Storage no backend atual.** Migrar uploads/leitura/exclusão para R2 privado é uma etapa própria, após validar o runtime e antes de colocar o uso real em produção.
-5. O agendamento `vercel.json` (/api/cron/gerar, 06:00 UTC) **não roda automaticamente na Cloudflare**. Criar uma rotina Cloudflare Cron Trigger com autenticação e idempotência; evitar disparar tarefas duas vezes quando Vercel e Cloudflare apontarem para o mesmo Supabase.
-6. O servidor local e a geração de arquivos usam APIs Node; testar funções de exportação PDF/XLSX e manipulação de imagens. Não pressupor compatibilidade.
-7. Configurar políticas de R2 para 90 dias e verificar logs/exclusão. Manter apenas referências de fotos expiradas no histórico do Supabase.
-8. Definir backups independentes e monitorar limites do plano gratuito.
-
-## Etapa 4 — Testes sem publicação
-```bash
-npm run dev:vinext
-npm run build:vinext
-npm run start:vinext
-```
-Validar rotas /login, /painel, /perfil, checklists, ações, perfil de supervisor, uploads e downloads, além dos testes existentes:
-```bash
-npm run typecheck
 npm test
-npm run build
+npm run typecheck
+npm run workers:build
+npm run workers:check
+npm run workers:smoke
 ```
 
-## Etapa 5 — Publicar só após testes e configuração da conta
-```bash
-npx cf auth login
-npx @vinext/cloudflare deploy --dry-run
-npx @vinext/cloudflare deploy
-```
+- `workers:build` compila Next/OpenNext e inspeciona os bundles finais para impedir dependências Node/demo proibidas. Recusa execução dentro da Vercel.
+- `workers:check` executa somente `wrangler deploy --dry-run`, sem publicar/upload remoto. O pacote verificado ficou em aproximadamente **2,0 MiB gzip**; o tamanho deve ser monitorado a cada atualização.
+- `workers:smoke` sobe processos locais do workerd/Wrangler e encerra-os ao terminar. Verifica página de login, redirecionamento protegido, cron sem segredo, resposta privada das fotos, processamento real de imagens/avatares e PUT/GET/DELETE em R2 local. O harness de bindings está em `tests/workers`; não é rota do app nem entrypoint de implantação.
+- `workers:preview` inicia o app já compilado em `127.0.0.1:8787`. Copiar `.dev.vars.example` para `.dev.vars` somente para usar um Supabase isolado real. A ausência de configuração não ativa demonstração local.
 
-A publicação criará endereço no formato `https://checklist-dd-preview.<subdominio-da-conta>.workers.dev`. Não há necessidade de domínio próprio. O domínio real só existirá após sucesso no deploy.
+Não existem scripts automáticos de deploy/upload. O workflow de CI da branch executa testes, tipos, build, dry-run e smoke local, sem tokens Cloudflare ou segredos de produção.
 
-## Nota importante
-Uma instalação do GitHub Actions, a criação desta branch ou o script de diagnóstico **não significam que o aplicativo foi migrado ou publicado**. A integração Cloudflare, autenticação, uploads privados para R2, retenção e backups precisam ser configurados e testados separadamente.
+## Evidência e limites da validação
+
+74 testes unitários/de integração passaram, incluindo migração PostgreSQL em PGlite, RLS, sessões, isolamento, imagens e R2. O build Next/OpenNext, a checagem de pacote e o smoke do workerd passaram localmente. O smoke usa os emuladores locais dos bindings, não uma conta Cloudflare.
+
+Foram corrigidos dois problemas revelados pela execução do Worker: middleware fora da pasta `src` e um alias de imagem que inicialmente não evitava a inclusão do Sharp. A verificação final cobre ambos. Nos testes legados de arquivos, uma trava transitória de renomeação do Windows foi tratada com repetição limitada, preservando a substituição atômica; esse código permanece fora do Worker.
+
+Ainda não foram exercitados login com usuário real, ações com banco hospedado, vínculo de duas lojas numa conta real ou limites de CPU/memória da implantação. Esses testes dependem de recursos isolados e credenciais de teste. Não confundir build local aprovado com sistema publicado ou operação completa aprovada remotamente.
+
+`npm audit` reportou 24 ocorrências (2 baixas, 12 moderadas, 7 altas e 3 críticas), incluindo ferramentas e bibliotecas existentes de exportação. A atualização removeu a versão antiga de Next 14; ainda há avisos de dependências que precisam de revisão antes de exposição pública. Não foi aplicado `audit fix --force`. O bundler também emite avisos de código de terceiros sobre casos duplicados e comparação com zero negativo; não impediram os testes.
+
+## Configuração pendente antes de qualquer publicação
+
+1. Criar/conferir um Supabase **separado e vazio de teste** e aplicar nele as migrações, inclusive a de R2. Não reaplicar nem apontar para produção.
+2. Fornecer `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` do teste no build e no runtime. Fornecer `PREVIEW_SUPABASE_URL` com exatamente o mesmo destino. Cadastrar `SUPABASE_SERVICE_ROLE_KEY` apenas como segredo de servidor do teste. Configurar o URL do app e os redirecionamentos de Auth correspondentes. Não herdar credenciais da Vercel.
+3. Criar R2 Standard privado de teste e ajustar `bucket_name` do binding `PHOTOS_BUCKET`. A opção `remote=false` mantém a simulação local nos comandos de desenvolvimento; não cria o bucket. Não habilitar acesso público/r2.dev.
+4. Avaliar/autorizar o plano Images e configurar o binding `IMAGES`. Se a exigência for custo zero absoluto, substituir esse processamento por uma alternativa WASM com testes de tamanho, CPU e memória antes de publicação; não há garantia de gratuidade desta solução.
+5. Aplicar lifecycle de 90 dias de `cloudflare/r2-lifecycle.example.json`, configurar alertas e segredos dos agendadores. O cron de fotos opcional está em `cloudflare/retention-worker.ts`; o cron de geração de tarefas da Vercel não é transplantado automaticamente. Agendar `/api/cron/gerar` com `CRON_SECRET` exclusivo do teste, sem duplicar execução em produção.
+6. Executar testes autenticados entre lojas e revisão de dependências, custo e retenção. Somente depois definir uma URL de preview e avaliar publicação separadamente. Esta tarefa não executou deploy.
+
+## Referências oficiais
+
+- [OpenNext: configuração e build](https://opennext.js.org/cloudflare/get-started)
+- [OpenNext: bindings por contexto](https://opennext.js.org/cloudflare/bindings)
+- [Cloudflare Images: processamento no Worker](https://developers.cloudflare.com/images/optimization/binding/)
+- [Next.js 15: APIs assíncronas](https://nextjs.org/docs/app/guides/upgrading/version-15)

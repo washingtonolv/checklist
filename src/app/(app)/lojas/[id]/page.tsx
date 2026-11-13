@@ -24,7 +24,8 @@ import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
-export default async function StoreDetailPage({ params }: { params: { id: string } }) {
+export default async function StoreDetailPage({ params: rawParams }: { params: Promise<{ id: string }> }) {
+  const params = await rawParams;
   const user = await requireUser();
   const backend = getBackend();
   let store: Store | null = null;

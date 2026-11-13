@@ -1,20 +1,19 @@
 import type { Metadata } from "next";
 import { LoginForm } from "@/components/auth/LoginForm";
-import { isLocalMode } from "@/lib/backend";
-import { DEMO_CREDENTIALS } from "@/lib/constants";
 
 export const metadata: Metadata = { title: "Entrar" };
 
-export default function LoginPage({
-  searchParams
+export default async function LoginPage({
+  searchParams: rawParams
 }: {
-  searchParams: { next?: string };
+  searchParams: Promise<{ next?: string }>;
 }) {
+  const searchParams = await rawParams;
   const next = searchParams.next?.startsWith("/") ? searchParams.next : "/painel";
   return (
     <LoginForm
       next={next}
-      demoCredentials={isLocalMode() ? DEMO_CREDENTIALS : []}
+      demoCredentials={[]}
     />
   );
 }

@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { supabaseAnonKey, supabaseUrl } from "./config";
-import { verifyLocalSessionToken } from "../backend/local/session";
+
 
 const PUBLIC_PATHS = [
   "/login",
@@ -9,6 +9,8 @@ const PUBLIC_PATHS = [
   "/redefinir-senha",
   "/auth/callback",
   "/api/cron/gerar",
+  "/api/cron/photos",
+  "/api/photos",
   "/api/health"
 ];
 
@@ -37,12 +39,6 @@ export async function updateSession(request: NextRequest) {
       data: { user }
     } = await supabase.auth.getUser();
     authenticated = Boolean(user);
-  } else {
-    const token = request.cookies.get("dd_session")?.value;
-    if (token) {
-      const payload = await verifyLocalSessionToken(token);
-      authenticated = Boolean(payload);
-    }
   }
 
   if (!authenticated && !isPublic) {

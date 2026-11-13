@@ -10,10 +10,11 @@ import { cn } from "@/lib/utils";
 export const dynamic = "force-dynamic";
 
 export default async function StoresPage({
-  searchParams
+  searchParams: rawParams
 }: {
-  searchParams: { sucesso?: string; visualizacao?: string };
+  searchParams: Promise<{ sucesso?: string; visualizacao?: string }>;
 }) {
+  const searchParams = await rawParams;
   const user = await requireUser();
   const stores = await getBackend().listStores(user);
   const grid = searchParams.visualizacao === "grade";
