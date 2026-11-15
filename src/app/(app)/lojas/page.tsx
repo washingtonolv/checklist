@@ -25,7 +25,7 @@ export default async function StoresPage({
       <PageHeader
         title="Lojas"
         subtitle={isAdmin ? "Cadastre, edite e acompanhe as unidades da rede." : "Unidades vinculadas ao seu perfil."}
-        actions={<><div className="flex gap-1" aria-label="Exibição das lojas"><Link href="/lojas?visualizacao=lista" className="btn-secondary btn-sm" aria-label="Exibir lojas em lista" title="Lista" aria-current={!grid ? "page" : undefined}><List className="h-4 w-4" aria-hidden="true" /></Link><Link href="/lojas?visualizacao=grade" className="btn-secondary btn-sm" aria-label="Exibir lojas em grade" title="Grade" aria-current={grid ? "page" : undefined}><LayoutGrid className="h-4 w-4" aria-hidden="true" /></Link></div>{isAdmin ? (
+        actions={<><div className="stores-view-toggle flex gap-1" aria-label="Exibição das lojas"><Link href="/lojas?visualizacao=lista" className="btn-secondary btn-sm" aria-label="Exibir lojas em lista" title="Lista" aria-current={!grid ? "page" : undefined}><List className="h-4 w-4" aria-hidden="true" /></Link><Link href="/lojas?visualizacao=grade" className="btn-secondary btn-sm" aria-label="Exibir lojas em grade" title="Grade" aria-current={grid ? "page" : undefined}><LayoutGrid className="h-4 w-4" aria-hidden="true" /></Link></div>{isAdmin ? (
           <Link href="/lojas/nova" className="btn-primary">
             <Plus className="h-4 w-4" />
             Nova loja
@@ -42,8 +42,9 @@ export default async function StoresPage({
       ) : null}
 
       {stores.length ? (
-        !grid ? (
-          <Card>
+        <>
+        {!grid ? (
+          <Card className="stores-list">
             <div className="table-wrap">
               <table className="table">
                 <thead>
@@ -97,8 +98,8 @@ export default async function StoresPage({
               </table>
             </div>
           </Card>
-        ) : (
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        ) : null}
+          <div className={cn("stores-grid grid gap-4 md:grid-cols-2 xl:grid-cols-3", !grid && "stores-grid-desktop-hidden")}>
             {stores.map((store) => (
               <Link key={store.id} href={`/lojas/${store.id}`} className="card group p-4 transition hover:border-turquesa">
                 <div className="mb-2 flex items-start justify-between gap-3">
@@ -118,7 +119,7 @@ export default async function StoresPage({
               </Link>
             ))}
           </div>
-        )
+        </>
       ) : (
         <Card>
           <EmptyState

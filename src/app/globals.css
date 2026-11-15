@@ -571,7 +571,7 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
 /* Thumb-friendly navigation; reserve space so it never covers the last action. */
 .mobile-bottom-nav {
   position: fixed; inset: auto 0 0; z-index: 40;
-  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
   padding: 6px max(8px, env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
   border-top: 1px solid rgb(var(--color-border));
   background: rgb(var(--color-surface));
@@ -591,7 +591,16 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
   [data-sonner-toaster] { bottom: calc(86px + env(safe-area-inset-bottom)) !important; }
 }
 @media (min-width: 1024px) { .mobile-bottom-nav { display: none; } }
+@media (min-width: 640px) { .stores-grid-desktop-hidden { display: none; } }
 @media (max-width: 639px) {
+  .stores-list, .stores-view-toggle { display: none !important; }
+  .dashboard-stats .stat-card { padding: 12px; }
+  .dashboard-stats .stat-card > div { position: relative; display: block; }
+  .dashboard-stats .stat-card > div > div { width: 100%; }
+  .dashboard-stats .stat-card > div > span { position: absolute; top: 0; right: 0; }
+  .dashboard-stats .stat-card .uppercase { min-height: 26px; padding-right: 32px; }
+  .dashboard-stats .stat-card .text-3xl { margin-top: 4px; }
+  .dashboard-stats .stat-card .text-xs { display: none; }
   .mobile-hidden-filters { display: none !important; }
   .mobile-stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .mobile-stat-grid .stat-card { min-width: 0; padding: 14px; }

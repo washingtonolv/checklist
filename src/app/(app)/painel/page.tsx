@@ -168,7 +168,7 @@ export default async function DashboardPage({
         </div>
       </form>
 
-      <div className="mobile-stat-grid grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="dashboard-stats mobile-stat-grid grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <StatCard
           label="Lojas ativas"
           value={data.totalStores}
