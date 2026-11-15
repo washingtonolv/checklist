@@ -72,7 +72,7 @@ export default async function TaskDetailPage({ params: rawParams }: { params: Pr
         }
       />
 
-      <div className="grid gap-5 xl:grid-cols-[1.7fr_1fr]">
+      <div className="grid min-w-0 grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)]">
         <div className="space-y-5">
           <Card>
             <CardHeader title="Detalhes da atividade" icon={<ClipboardList className="h-4 w-4" />} />

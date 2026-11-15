@@ -10,7 +10,7 @@ export function Card({
   className?: string;
   as?: "div" | "section" | "article";
 }) {
-  return <Component className={cn("card", className)}>{children}</Component>;
+  return <Component className={cn("card min-w-0", className)}>{children}</Component>;
 }
 
 export function CardHeader({

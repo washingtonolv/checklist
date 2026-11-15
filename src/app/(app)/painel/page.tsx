@@ -246,7 +246,7 @@ export default async function DashboardPage({
               <EmptyState
                 icon={<Building2 className="h-6 w-6" />}
                 title="Sem dados no período"
-                description="Ajuste os filtros ou aguarde a geração das atividades."
+                description="Ainda não há atividades para comparar neste período."
               />
             )}
           </div>

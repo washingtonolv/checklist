@@ -118,7 +118,7 @@ export default async function StoreDetailPage({ params: rawParams }: { params: P
         />
       </div>
 
-      <div className="mt-5 grid gap-5 xl:grid-cols-[1.6fr_1fr]">
+      <div className="mt-5 grid min-w-0 grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
         <div className="space-y-5">
           <Card>
             <CardHeader

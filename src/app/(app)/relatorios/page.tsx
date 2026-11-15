@@ -129,7 +129,7 @@ export default async function ReportsPage({
         <StatCard label="Atrasadas" value={overdue} hint="Prazo vencido no período" icon={<AlertTriangle className="h-5 w-5" />} tone="turquesa" />
       </div>
 
-      <div className="mb-5 grid gap-5 xl:grid-cols-[1fr_1.6fr]">
+      <div className="mb-5 grid min-w-0 grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)]">
         <Card>
           <CardHeader title="Execução do período" description="Percentual consolidado" icon={<Percent className="h-4 w-4" />} />
           <div className="space-y-4 p-5">

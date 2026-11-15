@@ -192,7 +192,7 @@ export default async function TasksPage({
           <EmptyState
             icon={<ClipboardList className="h-6 w-6" />}
             title="Nenhuma atividade encontrada"
-            description="Ajuste os filtros, o período ou aguarde a geração automática das tarefas recorrentes."
+          description="As atividades do período aparecerão aqui após a geração das tarefas recorrentes."
             action={user.role === "admin" ? <GenerateTasksButton /> : <Link href="/painel" className="btn-ghost btn-sm">Voltar ao painel</Link>}
           />
         </Card>
