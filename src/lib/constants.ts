@@ -71,7 +71,7 @@ export const NAV_ITEMS = [
   { href: "/categorias", label: "Categorias", icon: "FolderTree", roles: ["admin"] },
   { href: "/modelos", label: "Modelos de tarefas", icon: "ListChecks", roles: ["admin"] },
   { href: "/relatorios", label: "Relatórios", icon: "FileSpreadsheet", roles: ["admin", "supervisor", "manager"] },
-  { href: "/historico", label: "Histórico", icon: "History", roles: ["admin", "supervisor", "manager"] }
+  { href: "/historico", label: "Histórico", icon: "History", roles: ["admin"] }
 ] as const;
 
 export const MAX_PHOTO_MB = Number(process.env.NEXT_PUBLIC_MAX_PHOTO_MB ?? 10);

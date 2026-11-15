@@ -84,7 +84,7 @@ export default async function ReportsPage({
         }
       />
 
-      <Card className="pill-filters mb-4 p-3 no-print">
+      <Card className="mobile-hidden-filters pill-filters mb-4 p-3 no-print">
         <form method="get" action="/relatorios" className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">
           <div>
             <label className="label" htmlFor="storeId">Loja</label>
@@ -122,7 +122,7 @@ export default async function ReportsPage({
         </form>
       </Card>
 
-      <div className="mb-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mobile-stat-grid mb-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Atividades previstas" value={tasks.length} hint={periodLabel} icon={<ClipboardList className="h-5 w-5" />} />
         <StatCard label="Concluídas" value={completed} hint={`${rate}% de execução`} icon={<CheckCircle2 className="h-5 w-5" />} tone="pink" />
         <StatCard label="Em aberto" value={pending} hint="Pendentes, em andamento ou em correção" icon={<CalendarClock className="h-5 w-5" />} tone="outline" />

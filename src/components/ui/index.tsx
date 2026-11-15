@@ -146,7 +146,7 @@ export function StatCard({
     outline: "bg-surface text-ink border-line"
   };
   return (
-    <div className="card p-5">
+    <div className="stat-card card p-5">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-[11px] font-bold uppercase tracking-wider text-ink/70">{label}</p>

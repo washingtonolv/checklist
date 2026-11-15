@@ -101,7 +101,7 @@ export default async function DashboardPage({
         }
       />
 
-      <form key={JSON.stringify(filters)} className="card pill-filters mb-4 p-3" method="get" action="/painel">
+      <form key={JSON.stringify(filters)} className="card mobile-hidden-filters pill-filters mb-4 p-3" method="get" action="/painel">
         <p className="text-sm font-semibold">Filtrar indicadores · loja, período e equipe</p>
         <div className="dashboard-filter-fields mt-3 grid gap-2">
           <div>
@@ -168,7 +168,7 @@ export default async function DashboardPage({
         </div>
       </form>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="mobile-stat-grid grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <StatCard
           label="Lojas ativas"
           value={data.totalStores}

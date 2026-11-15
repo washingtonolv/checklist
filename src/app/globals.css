@@ -567,3 +567,46 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
   .filter-toggle { display: none; }
   .filter-heading, .responsive-filters .filter-content { display: block !important; }
 }
+
+/* Thumb-friendly navigation; reserve space so it never covers the last action. */
+.mobile-bottom-nav {
+  position: fixed; inset: auto 0 0; z-index: 40;
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+  padding: 6px max(8px, env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
+  border-top: 1px solid rgb(var(--color-border));
+  background: rgb(var(--color-surface));
+  box-shadow: 0 -4px 20px rgb(0 0 0 / .05);
+}
+.mobile-bottom-item {
+  display: flex; min-width: 0; min-height: 52px; flex-direction: column;
+  align-items: center; justify-content: center; gap: 4px; border-radius: 12px;
+  font-size: 10px; font-weight: 600; color: rgb(var(--color-text-muted));
+}
+.mobile-bottom-item > span { max-width: 100%; }
+.mobile-bottom-active { background: rgb(var(--color-accent) / .15); color: rgb(var(--color-text)); }
+@media (max-width: 1023px) {
+  .app-layout { padding-bottom: calc(82px + env(safe-area-inset-bottom)); }
+  #conteudo { scroll-margin-top: 72px; }
+  html { scroll-padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
+  [data-sonner-toaster] { bottom: calc(86px + env(safe-area-inset-bottom)) !important; }
+}
+@media (min-width: 1024px) { .mobile-bottom-nav { display: none; } }
+@media (max-width: 639px) {
+  .mobile-hidden-filters { display: none !important; }
+  .mobile-stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .mobile-stat-grid .stat-card { min-width: 0; padding: 14px; }
+  .mobile-stat-grid .stat-card > div { gap: 6px; }
+  .mobile-stat-grid .stat-card > div > div { min-width: 0; }
+  .mobile-stat-grid .stat-card > div > span { width: 30px; height: 30px; border-radius: 10px; }
+  .mobile-stat-grid .stat-card svg { width: 16px; height: 16px; }
+  .mobile-stat-grid .stat-card .text-3xl { font-size: 26px; }
+  .mobile-stat-grid .stat-card .uppercase { font-size: 9px; letter-spacing: .04em; }
+  .mobile-status-tabs { flex-wrap: nowrap; overflow-x: auto; padding: 3px 2px 8px; }
+  .mobile-status-tabs > a { flex-shrink: 0; white-space: nowrap; }
+  .app-layout #conteudo { padding-top: 20px; }
+  .app-layout .form-actions { bottom: calc(76px + env(safe-area-inset-bottom)); }
+}
+@media print {
+  .mobile-bottom-nav { display: none !important; }
+  .app-layout { padding-bottom: 0; }
+}

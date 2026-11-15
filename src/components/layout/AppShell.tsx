@@ -86,6 +86,8 @@ export function AppShell({
   }, [pathname]);
 
   const nav = NAV_ITEMS.filter((item) => (item.roles as readonly Role[]).includes(user.role));
+  const mobileNav = nav.filter(item => ["/painel", "/atividades", "/lojas", "/relatorios"].includes(item.href));
+  const moreActive = !mobileNav.some(item => pathname === item.href || pathname.startsWith(`${item.href}/`));
   const current = TITLES.find((item) => pathname === item.prefix || pathname.startsWith(`${item.prefix}/`));
 
   const sidebar = (
@@ -178,16 +180,6 @@ export function AppShell({
       <header className="sticky top-0 z-30 border-b border-line bg-surface">
         <div className="flex h-16 items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
           <div className="flex min-w-0 items-center gap-3">
-            <button
-              type="button"
-              className="rounded-lg p-2 text-ink hover:bg-pink/5 lg:hidden"
-              onClick={() => setOpen(true)}
-              ref={menuRef}
-              aria-label="Abrir menu"
-              aria-expanded={open}
-            >
-              <Menu className="h-5 w-5" />
-            </button>
             <div className="min-w-0">
               <p className="truncate text-sm font-bold text-ink">{current?.title ?? "Checklist Operacional"}</p>
               <p className="hidden truncate text-[11px] text-ink/70 sm:block">
@@ -223,6 +215,22 @@ export function AppShell({
           {demoMode ? "Dados locais de demonstração" : "Conectado ao Supabase"}
         </span>
       </footer>
+      <nav className="mobile-bottom-nav lg:hidden" aria-label="Navegação mobile">
+        {mobileNav.map(item => {
+          const Icon = ICONS[item.icon as keyof typeof ICONS];
+          const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+          return (
+            <Link key={item.href} href={item.href} className={cn("mobile-bottom-item", active && "mobile-bottom-active")} aria-current={active ? "page" : undefined}>
+              <Icon className="h-5 w-5" aria-hidden="true" />
+              <span>{item.label}</span>
+            </Link>
+          );
+        })}
+        <button ref={menuRef} type="button" className={cn("mobile-bottom-item", (open || moreActive) && "mobile-bottom-active")} onClick={() => setOpen(true)} aria-label="Mais opções de navegação" aria-expanded={open} aria-haspopup="dialog">
+          <Menu className="h-5 w-5" aria-hidden="true" />
+          <span>Mais</span>
+        </button>
+      </nav>
     </div>
   );
 }

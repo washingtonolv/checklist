@@ -68,7 +68,7 @@ export default async function TasksPage({
         actions={user.role === "admin" ? <GenerateTasksButton /> : null}
       />
 
-      <Card className="pill-filters mb-4 p-3">
+      <Card className="mobile-hidden-filters pill-filters mb-4 p-3">
         <form key={JSON.stringify(filters)} method="get" action="/atividades" className="grid gap-2 md:grid-cols-2 xl:grid-cols-6">
           <input type="hidden" name="status" value={filters.status} />
           <div className="xl:col-span-2">
@@ -111,7 +111,7 @@ export default async function TasksPage({
         </form>
       </Card>
 
-      <nav aria-label="Filtrar atividades por status" className="mb-5 flex flex-wrap gap-2">
+      <nav aria-label="Filtrar atividades por status" className="mobile-status-tabs mb-5 flex flex-wrap gap-2">
         <Link
           href={tabHref("")}
           aria-current={!filters.status ? "page" : undefined}

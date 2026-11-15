@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Activity, Filter, History, ScrollText, ShieldCheck } from "@/components/ui/illustrated-icons";
-import { requireUser } from "@/lib/auth-server";
+import { requireAdmin } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
 import { ACTION_LABELS } from "@/lib/constants";
 import { formatDateTime, monthRange } from "@/lib/dates";
@@ -18,7 +18,7 @@ export default async function HistoryPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const searchParams = await rawParams;
-  const user = await requireUser();
+  const user = await requireAdmin();
   const backend = getBackend();
   const range = monthRange();
   const tab = searchParams.aba === "auditoria" && user.role === "admin" ? "auditoria" : "execucoes";
