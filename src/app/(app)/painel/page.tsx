@@ -213,33 +213,8 @@ export default async function DashboardPage({
         />
       </div>
 
-      <div className="mt-6 grid gap-5 xl:grid-cols-3">
-        <Card className="xl:col-span-1">
-          <CardHeader title="Execução geral" description="Percentual de atividades concluídas" icon={<CheckCircle2 className="h-4 w-4" />} />
-          <div className="flex flex-col items-center gap-5 p-6">
-            <div
-              className="relative flex h-40 w-40 items-center justify-center rounded-full"
-              style={{ background: `conic-gradient(rgb(var(--color-success)) ${data.executionRate * 3.6}deg, rgb(var(--color-border)) 0deg)` }}
-              role="img"
-              aria-label={`Execução geral: ${data.executionRate}%`}
-            >
-              <div className="flex h-28 w-28 flex-col items-center justify-center rounded-full bg-surface shadow-inner">
-                <span className="text-4xl font-semibold text-ink">{data.executionRate}%</span>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-ink/70">execução</span>
-              </div>
-            </div>
-            <div className="w-full space-y-2">
-              {data.statusBreakdown.map((item) => (
-                <div key={item.status} className="flex items-center justify-between gap-3 text-xs">
-                  <span className="text-ink/65">{item.label}</span>
-                  <span className="font-bold text-ink">{item.count}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Card>
-
-        <Card className="xl:col-span-2">
+      <div className="mt-6">
+        <Card>
           <CardHeader
             title="Ranking de lojas"
             description="Melhor desempenho no período filtrado"
