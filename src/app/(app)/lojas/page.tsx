@@ -101,7 +101,7 @@ export default async function StoresPage({
         ) : null}
           <div className={cn("stores-grid grid gap-4 md:grid-cols-2 xl:grid-cols-3", !grid && "stores-grid-desktop-hidden")}>
             {stores.map((store) => (
-              <Link key={store.id} href={`/lojas/${store.id}`} className="card group p-4 transition hover:border-turquesa">
+              <Link key={store.id} href={`/lojas/${store.id}`} className="store-card card group min-w-0 p-4 transition hover:border-turquesa">
                 <div className="mb-2 flex items-start justify-between gap-3">
                   <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-turquesa/15 text-ink">
                     <Building2 className="h-5 w-5" />

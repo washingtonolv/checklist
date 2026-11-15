@@ -32,7 +32,7 @@ export default async function DashboardPage({
 }) {
   const searchParams = await rawParams;
   const user = await requireUser();
-  if (user.role === "manager") return <ManagerRoutine user={user} date={typeof searchParams.data === "string" ? searchParams.data : undefined} />;
+  if (user.role === "manager") return <ManagerRoutine user={user} date={typeof searchParams.data === "string" ? searchParams.data : undefined} basePath="/painel" />;
   const backend = getBackend();
   const range = monthRange();
   const filters: DashboardFilters = {

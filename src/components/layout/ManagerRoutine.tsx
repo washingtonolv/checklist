@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { RoutineCalendar } from "./RoutineCalendar";
 import { getBackend } from "@/lib/backend";
 import type { SessionUser } from "@/lib/types";
 import { addDays, startOfWeek, parseDateKey, toDateKey, formatDate } from "@/lib/dates";
@@ -32,15 +33,8 @@ export async function ManagerRoutine({ user, date: requestedDate, basePath = "/r
       <div><p className="mb-1 text-xs font-semibold text-ink/60">{store?.name ?? "Minha loja"}</p><h1 className="text-3xl font-semibold tracking-tight text-ink sm:text-4xl">Olá, {user.name.split(" ")[0]}<span className="text-[#CD4664]">.</span></h1><p className="mt-2 text-sm text-ink/65">Uma tarefa de cada vez. Uma loja sempre em ordem.</p></div>
       <Link href="/perfil" aria-label="Abrir meu perfil" className="btn-secondary rounded-full px-3"><UserRound className="h-5 w-5" /><span className="hidden sm:inline">Meu perfil</span></Link>
     </div>
-    <section aria-label="Seleção de dia" className="mb-7">
-      <div className="mb-3 flex items-center justify-between"><h2 className="text-sm font-semibold">{new Intl.DateTimeFormat("pt-BR",{month:"long",year:"numeric"}).format(parseDateKey(date)).replace(/^./, letter => letter.toLocaleUpperCase("pt-BR"))}</h2><div className="flex items-center gap-0"><Link href={`${basePath}?data=${toDateKey(addDays(start,-7))}`} aria-label="Semana anterior" className="btn-ghost btn-sm border-0 px-2">←</Link><Link href={basePath} className="btn-ghost btn-sm border-0 px-2">Hoje</Link><Link href={`${basePath}?data=${toDateKey(addDays(start,7))}`} aria-label="Próxima semana" className="btn-ghost btn-sm border-0 px-2">→</Link></div></div>
-      <div className="grid grid-cols-7 gap-1.5 sm:gap-3">{week.map(day => {
-        const items = tasks.filter(t => t.dueDate === day);
-        const complete = items.length > 0 && items.every(t => t.status === "completed");
-        const selected = day === date;
-        return <Link key={day} href={`${basePath}?data=${day}`} aria-label={`${formatDate(day)}${day === today ? ", hoje" : ""}, ${items.length} atividades`} aria-current={selected ? "date" : undefined} className="routine-day flex min-h-[84px] min-w-0 flex-col items-center justify-center gap-2 rounded-lg py-1 text-ink"><span className={`text-xs ${selected ? "font-semibold text-ink" : "font-medium text-ink/60"}`}>{new Intl.DateTimeFormat("pt-BR",{weekday:"short"}).format(parseDateKey(day)).replace(".","")}</span><span className={`flex aspect-square w-full max-w-[64px] items-center justify-center rounded-full text-xl font-semibold ${selected ? "bg-[#CD4664] text-white" : "bg-surface text-ink hover:bg-canvas"}`}>{Number(day.slice(-2))}</span><span aria-hidden="true" className={`h-1 w-1 rounded-full ${selected ? "bg-[#CD4664]" : complete ? "bg-[#05918C]" : items.length ? "bg-[#CD4664]" : "bg-[#E5E5E5]"}`} /></Link>;
-      })}</div>
-    </section>
+    <RoutineCalendar date={date} today={today} basePath={basePath} days={week.map(day => { const items = tasks.filter(task => task.dueDate === day); return { date: day, count: items.length, complete: items.length > 0 && items.every(task => task.status === "completed") }; })} />
+    <div key={date} className="routine-date-content">
     <section className="mb-5 flex items-center justify-between"><h2 className="text-lg font-semibold tracking-tight">{heading}</h2><Link href={allHref} className="inline-flex min-h-11 items-center text-xs font-semibold text-ink/65 underline underline-offset-4">Ver todas</Link></section>
     <section className="routine-hero relative mb-6 overflow-hidden rounded-[24px] border border-[#F5DAE0] bg-[#FAEDF0] p-6 sm:p-8" aria-label="Próxima ação">
       <div className="relative z-10 max-w-[540px] sm:pr-32"><span className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/85 px-3 py-1.5 text-[11px] font-semibold text-ink/75"><ClipboardCheck className="h-4 w-4" />{next ? correcting ? "Correção solicitada" : "Seu próximo passo" : dayTasks.length ? "Rotina em dia" : "Tudo tranquilo"}</span>
@@ -57,6 +51,7 @@ export async function ManagerRoutine({ user, date: requestedDate, basePath = "/r
       <Link href={`/atividades?${new URLSearchParams({...(store ? {storeId:store.id}:{}),...(isToday ? {} : {from:date}),to:date,status:"correction_requested"})}`} className="card p-5 hover:border-[#CD4664]/30"><RotateCcw className="mb-3 h-5 w-5" /><h3 className="text-sm font-semibold">Precisam de correção</h3><p className="mt-1 text-xs text-ink/65">{priority.corrections} para ajustar</p></Link>
       <Link href={`${allHref}&status=completed`} className="card p-5 hover:border-[#CD4664]/30"><CheckCircle2 className="mb-3 h-5 w-5" /><h3 className="text-sm font-semibold">Enviadas para revisão</h3><p className="mt-1 text-xs text-ink/65">{review} aguardando · {done} concluídas</p></Link>
       <Link href={allHref} className="card p-5 hover:border-[#CD4664]/30"><ListChecks className="mb-3 h-5 w-5" /><h3 className="text-sm font-semibold">Todas as atividades</h3><p className="mt-1 text-xs text-ink/65">Consulte a lista completa do dia</p></Link>
+    </div>
     </div>
     <nav aria-label="Navegação da rotina" className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-3 border-t border-line bg-white/95 px-4 pb-[env(safe-area-inset-bottom)] backdrop-blur-md lg:hidden"><Link href={basePath} aria-current="page" className="flex min-h-[64px] flex-col items-center justify-center gap-1 text-[10px] font-semibold text-[#CD4664]"><LayoutDashboard className="h-5 w-5" />Hoje</Link><Link href={allHref} className="flex min-h-[64px] flex-col items-center justify-center gap-1 text-[10px] font-medium"><ListChecks className="h-5 w-5" />Atividades</Link><Link href="/perfil" className="flex min-h-[64px] flex-col items-center justify-center gap-1 text-[10px] font-medium"><UserRound className="h-5 w-5" />Perfil</Link></nav>
   </div>;
