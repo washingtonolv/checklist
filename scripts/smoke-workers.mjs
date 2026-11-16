@@ -32,7 +32,12 @@ try {
   const evidence = await fetch(base + "/api/photos/11111111-1111-1111-1111-111111111111", { redirect: "manual" });
   if (evidence.status === 500) await new Promise(resolve => setTimeout(resolve, 500));
   assert.ok([401,403].includes(evidence.status), `Evidence returned ${evidence.status}: ${await evidence.clone().text()}`);
-  assert.equal(evidence.headers.get("cache-control"), "private, no-store");
+  // Assert the privacy directives, allowing additional protective directives
+  // emitted by the SSR session middleware.
+  for (const response of [login, protectedPage, evidence]) {
+    const directives = new Set((response.headers.get("cache-control") ?? "").split(",").map(value => value.trim().toLowerCase()));
+    assert.ok(directives.has("private") && directives.has("no-store"), "Auth/evidence responses must not enter shared caches");
+  }
   }
   const fixture = await start("tests/workers/wrangler.jsonc", 8792);
   const png = await sharp({ create: { width: 200, height: 100, channels: 3, background: "red" } }).png().toBuffer();
