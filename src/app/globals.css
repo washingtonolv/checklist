@@ -618,13 +618,14 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
 
 .routine-calendar .routine-day { grid-template-rows: 16px 44px 4px; }
 .routine-date-number { width: 44px; height: 44px; max-width: 100%; transition: color 160ms ease; }
+.routine-day[aria-current="date"] .routine-date-number { color: rgb(var(--color-on-brand)); transition-delay: 70ms; }
 .routine-calendar-indicator {
   position: absolute; top: 28px; left: 0; width: calc(100% / 7); height: 44px;
   pointer-events: none; transition: transform 240ms cubic-bezier(.22, 1, .36, 1), opacity 120ms ease;
 }
 .routine-calendar-indicator::before {
   content: ""; display: block; width: 44px; max-width: calc(100% - 4px); height: 100%; margin: auto;
-  border-radius: 999px; background: rgb(var(--color-brand) / .14); border: 1px solid rgb(var(--color-brand) / .3);
+  border-radius: 999px; background: var(--action-primary); border: 1px solid var(--action-primary);
 }
 .routine-date-content { animation: routine-date-in 180ms ease-out; }
 @keyframes routine-date-in { from { opacity: .65; } to { opacity: 1; } }
