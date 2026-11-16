@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { RoutineCalendar } from "./RoutineCalendar";
+import { calendarWindow } from "@/lib/calendar-window";
 import { getBackend } from "@/lib/backend";
 import type { SessionUser } from "@/lib/types";
-import { addDays, startOfWeek, parseDateKey, toDateKey, formatDate } from "@/lib/dates";
+import { formatDate } from "@/lib/dates";
 import { storeToday, validRoutineDate, routinePriority } from "@/lib/manager-routine";
 import { ProgressBar } from "@/components/ui";
 import { ClipboardCheck, Camera, ArrowUpRight, CheckCircle2, RotateCcw, Clock3, ListChecks, LayoutDashboard, UserRound } from "@/components/ui/illustrated-icons";
@@ -14,9 +15,8 @@ export async function ManagerRoutine({ user, date: requestedDate, basePath = "/r
   const backend = getBackend();
   const stores = await backend.listStores(user);
   const store = stores.find(s => s.active) ?? stores[0];
-  const start = startOfWeek(parseDateKey(date));
-  const week = Array.from({ length: 7 }, (_, i) => toDateKey(addDays(start, i)));
-  const tasks = store ? await backend.listTasks(user, {storeId: store.id, to: week[6]}) : [];
+  const calendarDays = calendarWindow(date);
+  const tasks = store ? await backend.listTasks(user, {storeId: store.id, to: calendarDays[calendarDays.length - 1]}) : [];
   const dayTasks = tasks.filter(t => t.dueDate === date);
   const done = dayTasks.filter(t => t.status === "completed").length;
   const review = dayTasks.filter(t => t.status === "completed" && !t.approvedAt).length;
@@ -33,7 +33,7 @@ export async function ManagerRoutine({ user, date: requestedDate, basePath = "/r
       <div><p className="mb-1 text-xs font-semibold text-ink/60">{store?.name ?? "Minha loja"}</p><h1 className="text-3xl font-semibold tracking-tight text-ink sm:text-4xl">Olá, {user.name.split(" ")[0]}<span className="text-[#CD4664]">.</span></h1><p className="mt-2 text-sm text-ink/65">Uma tarefa de cada vez. Uma loja sempre em ordem.</p></div>
       <Link href="/perfil" aria-label="Abrir meu perfil" className="btn-secondary rounded-full px-3"><UserRound className="h-5 w-5" /><span className="hidden sm:inline">Meu perfil</span></Link>
     </div>
-    <RoutineCalendar date={date} today={today} basePath={basePath} days={week.map(day => { const items = tasks.filter(task => task.dueDate === day); return { date: day, count: items.length, complete: items.length > 0 && items.every(task => task.status === "completed") }; })} />
+    <RoutineCalendar date={date} today={today} basePath={basePath} days={calendarDays.map(day => { const items = tasks.filter(task => task.dueDate === day); return { date: day, count: items.length, complete: items.length > 0 && items.every(task => task.status === "completed") }; })} />
     <div key={date} className="routine-date-content">
     <section className="mb-5 flex items-center justify-between"><h2 className="text-lg font-semibold tracking-tight">{heading}</h2><Link href={allHref} className="inline-flex min-h-11 items-center text-xs font-semibold text-ink/65 underline underline-offset-4">Ver todas</Link></section>
     <section className="routine-hero relative mb-6 overflow-hidden rounded-[24px] border border-[#F5DAE0] bg-[#FAEDF0] p-6 sm:p-8" aria-label="Próxima ação">
