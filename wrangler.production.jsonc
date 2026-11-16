@@ -10,6 +10,6 @@
   "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "checklist-dd" }],
   "r2_buckets": [{ "binding": "PHOTOS_BUCKET", "bucket_name": "checklist-photos", "remote": false }],
   "images": { "binding": "IMAGES" },
-  "vars": { "CLOUDFLARE_WORKERS": "true", "PHOTO_ENV": "cloudflare" },
+  "vars": { "CLOUDFLARE_WORKERS": "true", "PHOTO_ENV": "cloudflare", "PASSKEYS_ENABLED": "true" },
   "observability": { "enabled": true }
 }

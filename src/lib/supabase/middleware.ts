@@ -28,10 +28,11 @@ export async function updateSession(request: NextRequest) {
         getAll() {
           return request.cookies.getAll();
         },
-        setAll(cookiesToSet) {
+        setAll(cookiesToSet, headers) {
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
           response = NextResponse.next({ request });
           cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
+          Object.entries(headers).forEach(([name, value]) => response.headers.set(name, value));
         }
       }
     });
@@ -45,20 +46,30 @@ export async function updateSession(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("next", pathname);
-    return withSecurityHeaders(NextResponse.redirect(url));
+    return sessionRedirect(url, response);
   }
 
   if (authenticated && (pathname === "/login" || pathname === "/recuperar-senha")) {
     const url = request.nextUrl.clone();
     url.pathname = "/painel";
     url.search = "";
-    return withSecurityHeaders(NextResponse.redirect(url));
+    return sessionRedirect(url, response);
   }
 
   return withSecurityHeaders(response);
 }
 
+function sessionRedirect(url: URL, response: NextResponse): NextResponse {
+  const redirect = NextResponse.redirect(url);
+  response.cookies.getAll().forEach(cookie => redirect.cookies.set(cookie));
+  return withSecurityHeaders(redirect);
+}
+
 function withSecurityHeaders(response: NextResponse): NextResponse {
+  // Authenticated HTML and session refresh responses must never enter a shared CDN cache.
+  response.headers.set("Cache-Control", "private, no-cache, no-store, must-revalidate, max-age=0");
+  response.headers.set("Pragma", "no-cache");
+  response.headers.set("Expires", "0");
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("X-Frame-Options", "DENY");
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");

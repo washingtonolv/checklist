@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LoginForm } from "@/components/auth/LoginForm";
+import { passkeysEnabled } from "@/lib/passkeys";
 
 export const metadata: Metadata = { title: "Entrar" };
 
@@ -14,6 +15,7 @@ export default async function LoginPage({
     <LoginForm
       next={next}
       demoCredentials={[]}
+      passkeys={passkeysEnabled()}
     />
   );
 }

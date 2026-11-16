@@ -6,6 +6,8 @@ import { ROLE_DESCRIPTIONS, ROLE_LABELS } from "@/lib/constants";
 import { Avatar, Card, CardHeader, PageHeader } from "@/components/ui";
 import { RoleBadge } from "@/components/ui/badges";
 import { ProfilePasswordForm } from "@/components/auth/ProfilePasswordForm";
+import { ProfilePasskeys } from "@/components/auth/ProfilePasskeys";
+import { passkeysEnabled } from "@/lib/passkeys";
 
 export const dynamic = "force-dynamic";
 
@@ -77,6 +79,10 @@ export default async function ProfilePage() {
             <ProfilePasswordForm />
           </div>
         </Card>
+        {passkeysEnabled() ? <Card className="lg:col-span-2">
+          <CardHeader title="Biometria e chaves de acesso" description="Uma forma prática de entrar, com a senha como alternativa" icon={<KeyRound className="h-4 w-4" />} />
+          <div className="max-w-xl p-5"><ProfilePasskeys /></div>
+        </Card> : null}
       </div>
     </div>
   );

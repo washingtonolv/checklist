@@ -7,6 +7,7 @@ import { Eye, EyeOff, Loader2, LogIn } from "@/components/ui/illustrated-icons";
 import { loginAction } from "@/actions/auth";
 import { initialActionState } from "@/actions/state";
 import { Alert } from "@/components/ui";
+import { PasskeyLogin } from "./PasskeyLogin";
 
 interface DemoCredential {
   role: string;
@@ -26,10 +27,12 @@ function SubmitButton() {
 
 export function LoginForm({
   next,
-  demoCredentials
+  demoCredentials,
+  passkeys = false
 }: {
   next: string;
   demoCredentials: DemoCredential[];
+  passkeys?: boolean;
 }) {
   const [state, action] = useFormState(loginAction, initialActionState);
   const [showPassword, setShowPassword] = useState(false);
@@ -105,6 +108,8 @@ export function LoginForm({
         </div>
         <SubmitButton />
       </form>
+
+      {passkeys ? <PasskeyLogin next={next} /> : null}
 
       {demoCredentials.length ? (
         <details className="mt-6 rounded-xl border border-line bg-surface p-3">
