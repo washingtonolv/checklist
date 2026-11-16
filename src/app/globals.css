@@ -617,6 +617,9 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
 }
 
 .routine-calendar .routine-day { grid-template-rows: 16px 44px 4px; }
+.routine-calendar-viewport { overflow: hidden; padding: 4px; margin: -4px; }
+.routine-calendar-track { touch-action: pan-y pinch-zoom; user-select: none; cursor: grab; transition: transform 220ms cubic-bezier(.22, 1, .36, 1); }
+.routine-calendar-track[data-dragging="true"] { cursor: grabbing; transition: none; }
 .routine-date-number { width: 44px; height: 44px; max-width: 100%; transition: color 160ms ease; }
 .routine-day[aria-current="date"] .routine-date-number { color: rgb(var(--color-on-brand)); transition-delay: 70ms; }
 .routine-calendar-indicator {
@@ -647,6 +650,6 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
   .store-card > div:last-child { margin-top: 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .routine-calendar-indicator, .routine-date-number { transition: none; }
+  .routine-calendar-indicator, .routine-date-number, .routine-calendar-track { transition: none; }
   .routine-date-content { animation: none; }
 }
