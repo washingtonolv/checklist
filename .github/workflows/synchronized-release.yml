@@ -1,0 +1,175 @@
+name: Vercel and Cloudflare release
+
+# Production approval remains the explicit approval to merge a release into main.
+# Pull requests only simulate integration and test; they cannot publish.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: synchronized-release-${{ github.event_name == 'pull_request' && github.event.pull_request.number || 'production' }}
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    outputs:
+      commit: ${{ steps.integrate.outputs.commit }}
+      previous: ${{ steps.integrate.outputs.previous }}
+      source: ${{ steps.integrate.outputs.source }}
+    env:
+      WRANGLER_SEND_METRICS: "false"
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          path: control
+          persist-credentials: false
+      - name: Test release coordination
+        run: node --test control/scripts/release-coordination.test.mjs
+      - name: Checkout Cloudflare compatibility branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: cloudflare-workers-preview
+          path: app
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Integrate this exact source without overwriting Cloudflare adaptations
+        id: integrate
+        working-directory: app
+        env:
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          [[ "$SOURCE_SHA" =~ ^[a-f0-9]{40}$ ]]
+          echo "previous=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin "$SOURCE_SHA"
+          if ! git merge --no-ff --no-edit "$SOURCE_SHA"; then
+            echo '::error::Cloudflare compatibility conflict. Resolve and test the integration before publishing. No Cloudflare publication was made.'
+            git diff --name-only --diff-filter=U
+            exit 1
+          fi
+          echo "source=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
+          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - name: Test and build the integrated Cloudflare version
+        working-directory: app
+        run: |
+          npm ci
+          npm test
+          npm run typecheck
+          npm run workers:build
+          npm run workers:check
+          npm run workers:smoke
+      - name: Preserve the exact tested integration commit
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        working-directory: app
+        run: git bundle create "$RUNNER_TEMP/cloudflare-release.bundle" HEAD
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        with:
+          name: tested-cloudflare-source
+          path: ${{ runner.temp }}/cloudflare-release.bundle
+          retention-days: 3
+          if-no-files-found: error
+
+  publish:
+    needs: prepare
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    concurrency:
+      group: cloudflare-refs/heads/cloudflare-workers-preview
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      statuses: read
+    env:
+      WRANGLER_SEND_METRICS: "false"
+      NEXT_TELEMETRY_DISABLED: "1"
+      PHOTO_ENV: cloudflare
+      NEXT_PUBLIC_SUPABASE_URL: https://vnngqilclvxaeewzpinl.supabase.co
+      SUPABASE_ALLOWED_URL: https://vnngqilclvxaeewzpinl.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      NEXT_PUBLIC_APP_URL: https://checklist-dd.checklist-operacional-dd.workers.dev
+      SOURCE_SHA: ${{ needs.prepare.outputs.source }}
+      TESTED_SHA: ${{ needs.prepare.outputs.commit }}
+      PREVIOUS_SHA: ${{ needs.prepare.outputs.previous }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          path: control
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: tested-cloudflare-source
+          path: ${{ runner.temp }}/release
+      - name: Restore the tested commit
+        run: |
+          git clone --no-checkout "$RUNNER_TEMP/release/cloudflare-release.bundle" app
+          git -C app checkout --detach "$TESTED_SHA"
+          git -C app remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          git -C app merge-base --is-ancestor "$SOURCE_SHA" HEAD
+          git -C app merge-base --is-ancestor "$PREVIOUS_SHA" HEAD
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - name: Build and check the production configuration
+        working-directory: app
+        run: |
+          test -n "$NEXT_PUBLIC_SUPABASE_ANON_KEY"
+          npm ci
+          npm run workers:build
+          node node_modules/wrangler/bin/wrangler.js deploy --config wrangler.production.jsonc --dry-run
+          npm run workers:smoke
+      - name: Require successful Vercel publication of this exact main commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node control/scripts/release-coordination.mjs wait "$SOURCE_SHA"
+      - name: Advance Cloudflare only if its branch has not changed
+        working-directory: app
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          current=$(git ls-remote origin refs/heads/cloudflare-workers-preview | cut -f1)
+          test "$current" = "$PREVIOUS_SHA" || { echo '::error::Cloudflare changed during testing. Rerun the latest release.'; exit 1; }
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0=http.https://github.com/.extraheader
+          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git push origin "$TESTED_SHA:refs/heads/cloudflare-workers-preview"
+      # GITHUB_TOKEN pushes do not trigger another push workflow. Publish here.
+      - name: Publish Cloudflare and the photo-retention scheduler
+        working-directory: app
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$CLOUDFLARE_ACCOUNT_ID"
+          test -n "$CLOUDFLARE_API_TOKEN"
+          node node_modules/wrangler/bin/wrangler.js deploy --config wrangler.production.jsonc --keep-vars --message "Approved main $SOURCE_SHA; Cloudflare $TESTED_SHA"
+          node node_modules/wrangler/bin/wrangler.js deploy --config cloudflare/wrangler.retention.production.jsonc --keep-vars --message "Approved main $SOURCE_SHA; Cloudflare $TESTED_SHA"
+      - name: Verify both production addresses
+        run: node control/scripts/release-coordination.mjs verify
+      - name: Record release versions
+        run: |
+          echo "Both production addresses verified. Main: $SOURCE_SHA; Cloudflare: $TESTED_SHA" >> "$GITHUB_STEP_SUMMARY"
+      - name: Mark incomplete publication
+        if: failure()
+        run: echo '::error::Publication incomplete. Check both providers before reporting success; the previous Cloudflare deployment is preserved if publishing has not started. Rerun the latest main workflow after resolving the failure.'
