@@ -58,7 +58,8 @@ jobs:
           git merge --no-ff --no-commit "$SOURCE_SHA" || merge_result=$?
           # Workflows belong to each hosting branch. Sync application code only:
           # GITHUB_TOKEN deliberately cannot create or modify workflow files.
-          git restore --source="$previous" --staged --worktree .github/workflows
+          git rm -r --force --ignore-unmatch .github/workflows
+          git checkout "$previous" -- .github/workflows
           if test -n "$(git diff --name-only --diff-filter=U)"; then
             echo '::error::Cloudflare compatibility conflict. Resolve and test the integration before publishing. No Cloudflare publication was made.'
             git diff --name-only --diff-filter=U
