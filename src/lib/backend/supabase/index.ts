@@ -344,7 +344,7 @@ export function createSupabaseBackend(): Backend {
       assertAdmin(actor);
       const supabase = createSupabaseServerClient();
       const [profilesResult, storesResult, linksResult] = await Promise.all([
-        supabase.from("profiles").select("id,name,email,username,role,active,created_at").neq("id", GENERAL_ADMIN_ID).order("name"),
+        supabase.from("profiles").select("id,name,email,username,role,active,created_at").order("name"),
         supabase.from("stores").select("id,name,manager_id"),
         supabase.from("store_supervisors").select("store_id,supervisor_id")
       ]);
