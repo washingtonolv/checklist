@@ -14,18 +14,27 @@ export const dynamic = "force-dynamic";
 export async function TemplatesPanel({
   searchParams
 }: {
-  searchParams: { sucesso?: string };
+  searchParams: { sucesso?: string; categoria?: string };
 }) {
   const user = await requireAdmin();
   const backend = getBackend();
   const [templates, categories] = await Promise.all([backend.listTemplates(user), backend.listCategories(user)]);
+  const categoryIds = new Set(categories.map((category) => category.id));
+  const selectedCategory = categoryIds.has(searchParams.categoria ?? "") || searchParams.categoria === "sem-categoria"
+    ? searchParams.categoria ?? ""
+    : "";
+  const visibleTemplates = templates.filter((template) => {
+    if (!selectedCategory) return true;
+    if (selectedCategory === "sem-categoria") return !categoryIds.has(template.categoryId ?? "");
+    return template.categoryId === selectedCategory;
+  });
   const grouped = categories
     .map((category) => ({
       category,
-      templates: templates.filter((template) => template.categoryId === category.id)
+      templates: visibleTemplates.filter((template) => template.categoryId === category.id)
     }))
     .filter((group) => group.templates.length > 0);
-  const uncategorized = templates.filter((template) => !categories.some((category) => category.id === template.categoryId));
+  const uncategorized = visibleTemplates.filter((template) => !categoryIds.has(template.categoryId ?? ""));
 
   return (
     <div>
@@ -45,7 +54,21 @@ export async function TemplatesPanel({
         <Summary label="Com foto obrigatória" value={templates.filter((template) => template.photoRequirement === "required").length} />
       </div>
 
-      {templates.length ? (
+      <form action="/gerenciamento-tarefas" method="get" className="mb-5 flex flex-wrap items-end gap-3">
+        <input type="hidden" name="aba" value="modelos" />
+        <div className="w-full sm:w-72">
+          <label htmlFor="category-filter" className="label">Filtrar por categoria</label>
+          <select key={selectedCategory} id="category-filter" name="categoria" defaultValue={selectedCategory} className="input">
+            <option value="">Todas as categorias</option>
+            {categories.map((category) => <option key={category.id} value={category.id}>{category.name}{category.active ? "" : " (arquivada)"}</option>)}
+            <option value="sem-categoria">Sem categoria</option>
+          </select>
+        </div>
+        <button type="submit" className="btn-secondary">Filtrar</button>
+        {selectedCategory ? <Link href="/gerenciamento-tarefas?aba=modelos" className="btn-ghost">Limpar filtro</Link> : null}
+      </form>
+
+      {visibleTemplates.length ? (
         <div className="space-y-6">
           {[...grouped, ...(uncategorized.length ? [{ category: { id: "sem-categoria", name: "Sem categoria", description: "" }, templates: uncategorized }] : [])].map((group) => (
             <Card key={group.category.id}>
@@ -129,8 +152,8 @@ export async function TemplatesPanel({
         <Card>
           <EmptyState
             icon={<ListChecks className="h-6 w-6" />}
-            title="Nenhum modelo de tarefa"
-            description="Crie as rotinas recorrentes que serão geradas automaticamente para as lojas."
+            title={selectedCategory ? "Nenhum modelo nesta categoria" : "Nenhum modelo de tarefa"}
+            description={selectedCategory ? "Selecione outra categoria ou crie um modelo de tarefa." : "Crie as rotinas recorrentes que serão geradas automaticamente para as lojas."}
             action={<Link href="/modelos/novo" className="btn-primary">Criar modelo</Link>}
           />
         </Card>

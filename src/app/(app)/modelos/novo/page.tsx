@@ -33,7 +33,7 @@ export default async function NewTemplatePage() {
             <Alert tone="info">
               Para criar um modelo, cadastre pelo menos uma loja ativa.
               <span className="mt-3 flex flex-wrap gap-2">
-                <Link href="/gerenciamento-tarefas?aba=categorias" className="btn-secondary btn-sm">Cadastrar categoria</Link>
+                <Link href="/gerenciamento-tarefas?aba=modelos&categorias=abertas" className="btn-secondary btn-sm">Cadastrar categoria</Link>
                 <Link href="/lojas/nova" className="btn-ghost btn-sm">Cadastrar loja</Link>
               </span>
             </Alert>
