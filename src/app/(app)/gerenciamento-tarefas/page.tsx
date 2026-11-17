@@ -4,9 +4,11 @@ import { PageHeader } from "@/components/ui";
 import { TemplatesPanel } from "@/components/management/TemplatesPanel";
 import { CategoriesPanel } from "@/components/management/CategoriesPanel";
 export const dynamic = "force-dynamic";
-export default async function TaskManagementPage({ searchParams }: { searchParams: { aba?: string; categorias?: string; categoria?: string; sucesso?: string } }) {
+export default async function TaskManagementPage({ searchParams: rawParams }: { searchParams: Promise<{ aba?: string; sucesso?: string }> }) {
+  const searchParams = await rawParams;
   await requireAdmin();
-  const categoriesOpen = searchParams.categorias === "abertas" || searchParams.aba === "categorias";
+  const filters = searchParams as typeof searchParams & { categorias?: string; categoria?: string };
+  const categoriesOpen = filters.categorias === "abertas" || searchParams.aba === "categorias";
   return <div>
     <PageHeader title="Gerenciamento de Tarefas" subtitle="Cadastre modelos de tarefa e organize-os por categoria." actions={<Link href="/modelos/novo" className="btn-primary">Novo modelo</Link>} />
     <div className="mb-5 border-b border-ink/15 pb-3">
@@ -20,6 +22,6 @@ export default async function TaskManagementPage({ searchParams }: { searchParam
       </div>
     </details>
     <p className="mb-5 text-xs text-ink/70">Arquivar um modelo interrompe novas gerações e mantém as atividades existentes. A exclusão é permitida somente sem vínculos ou histórico.</p>
-    <TemplatesPanel searchParams={searchParams} />
+    <TemplatesPanel searchParams={filters} />
   </div>;
 }
