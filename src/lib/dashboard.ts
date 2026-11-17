@@ -69,7 +69,7 @@ export function computeDashboard(
 
   const pendingRanking = [...storeRanking].sort((a, b) => b.pending - a.pending || b.overdue - a.overdue);
 
-  const categoryMap = new Map<string, { categoryName: string; total: number; completed: number }>();
+  const categoryMap = new Map<string | null, { categoryName: string; total: number; completed: number }>();
   for (const task of filtered) {
     const row = categoryMap.get(task.categoryId) ?? {
       categoryName: task.categoryName,

@@ -91,7 +91,7 @@ export interface TaskTemplate {
   id: string;
   title: string;
   description: string;
-  categoryId: string;
+  categoryId: string | null;
   categoryName: string;
   recurrence: Recurrence;
   dueTime: string;
@@ -106,7 +106,7 @@ export interface TaskTemplate {
 export interface TaskTemplateInput {
   title: string;
   description: string;
-  categoryId: string;
+  categoryId: string | null;
   recurrence: Recurrence;
   dueTime: string;
   onceDueDate: string | null;
@@ -159,7 +159,7 @@ export interface Task {
   storeCode: string;
   title: string;
   description: string;
-  categoryId: string;
+  categoryId: string | null;
   categoryName: string;
   recurrence: Recurrence;
   periodKey: string;

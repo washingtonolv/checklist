@@ -14,7 +14,7 @@ export default async function NewTemplatePage() {
 
   return (
     <div className="mx-auto max-w-4xl">
-      <Link href="/modelos" className="mb-4 inline-flex items-center gap-1.5 text-xs font-semibold text-ink/70 hover:text-ink">
+      <Link href="/gerenciamento-tarefas?aba=modelos" className="mb-4 inline-flex items-center gap-1.5 text-xs font-semibold text-ink/70 hover:text-ink">
         <ArrowLeft className="h-4 w-4" />
         Voltar para modelos
       </Link>
@@ -23,7 +23,7 @@ export default async function NewTemplatePage() {
         title="Criar atividade recorrente"
         subtitle="A atividade será gerada automaticamente para as lojas selecionadas, respeitando a periodicidade."
       />
-      {categories.length && stores.length ? (
+      {stores.some((store) => store.active) ? (
         <Card className="p-5 sm:p-6">
           <TemplateForm categories={categories} stores={stores} />
         </Card>
@@ -31,9 +31,9 @@ export default async function NewTemplatePage() {
         <Card>
           <div className="p-6">
             <Alert tone="info">
-              Para criar um modelo, cadastre pelo menos uma categoria e uma loja ativa.
+              Para criar um modelo, cadastre pelo menos uma loja ativa.
               <span className="mt-3 flex flex-wrap gap-2">
-                <Link href="/categorias" className="btn-secondary btn-sm">Cadastrar categoria</Link>
+                <Link href="/gerenciamento-tarefas?aba=categorias" className="btn-secondary btn-sm">Cadastrar categoria</Link>
                 <Link href="/lojas/nova" className="btn-ghost btn-sm">Cadastrar loja</Link>
               </span>
             </Alert>

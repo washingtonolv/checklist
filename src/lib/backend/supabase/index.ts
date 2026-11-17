@@ -36,6 +36,9 @@ function fail(error: { message: string } | null, fallback: string): never {
 
 function translateError(message: string, fallback: string): string {
   const lower = message.toLowerCase();
+  if (lower.includes("task_instances_template_id_fkey")) return "Modelo com atividades geradas. Arquive para preservar o histórico.";
+  if (lower.includes("task_templates_category_id_fkey")) return "Transfira os modelos para outra categoria ou para Sem categoria antes de excluir.";
+  if (lower.includes("task_instances_category_id_fkey")) return "Categoria com histórico. Arquive para preservar as atividades.";
   if (lower.includes("duplicate key") && lower.includes("username")) return "Este nome de usuário já está em uso.";
   if (lower.includes("duplicate key") && lower.includes("code")) return "Já existe uma loja com este código.";
   if (lower.includes("duplicate key")) return "Este registro já existe.";
@@ -484,6 +487,7 @@ export function createSupabaseBackend(): Backend {
         supabase.from("task_templates").select("id,category_id")
       ]);
       if (categoriesResult.error) fail(categoriesResult.error, "Não foi possível carregar as categorias.");
+      if (templatesResult.error) fail(templatesResult.error, "Não foi possível carregar os vínculos das categorias.");
       const counts = new Map<string, number>();
       for (const template of templatesResult.data ?? []) {
         counts.set(template.category_id, (counts.get(template.category_id) ?? 0) + 1);
@@ -568,58 +572,46 @@ export function createSupabaseBackend(): Backend {
     async createTemplate(actor, input) {
       assertAdmin(actor);
       const supabase = createSupabaseServerClient();
-      const { data, error } = await supabase
-        .from("task_templates")
-        .insert({
-          title: input.title,
-          description: input.description,
-          category_id: input.categoryId,
-          recurrence: input.recurrence,
-          due_time: input.dueTime,
-          once_due_date: input.recurrence === "once" ? input.onceDueDate : null,
-          photo_requirement: input.photoRequirement,
-          active: input.active,
-          created_by: actor.id
-        })
-        .select("id")
-        .single();
-      if (error || !data) fail(error, "Não foi possível criar o modelo de tarefa.");
-      const { error: linkError } = await supabase.from("template_stores").insert(
-        input.storeIds.map((storeId) => ({ template_id: data.id, store_id: storeId }))
-      );
-      if (linkError) fail(linkError, "Modelo criado, mas não foi possível vincular as lojas.");
-      await audit(supabase, "template.created", "template", data.id, { title: input.title });
-      const template = await this.getTemplate(actor, data.id);
-      if (!template) throw new Error("Modelo criado, mas não foi possível recarregá-lo.");
+      const { data, error } = await supabase.rpc("save_task_template", { p_id: null, p_input: input });
+      if (error || !data) fail(error, "Não foi possível criar o modelo.");
+      const template = await this.getTemplate(actor, data);
+      if (!template) throw new Error("Modelo não encontrado.");
       return template;
     },
-
     async updateTemplate(actor, id, input) {
       assertAdmin(actor);
       const supabase = createSupabaseServerClient();
-      const { error } = await supabase
-        .from("task_templates")
-        .update({
-          title: input.title,
-          description: input.description,
-          category_id: input.categoryId,
-          recurrence: input.recurrence,
-          due_time: input.dueTime,
-          once_due_date: input.recurrence === "once" ? input.onceDueDate : null,
-          photo_requirement: input.photoRequirement,
-          active: input.active
-        })
-        .eq("id", id);
-      if (error) fail(error, "Não foi possível atualizar o modelo.");
-      await supabase.from("template_stores").delete().eq("template_id", id);
-      const { error: linkError } = await supabase.from("template_stores").insert(
-        input.storeIds.map((storeId) => ({ template_id: id, store_id: storeId }))
-      );
-      if (linkError) fail(linkError, "Não foi possível atualizar as lojas do modelo.");
-      await audit(supabase, "template.updated", "template", id, { title: input.title, active: input.active });
-      const template = await this.getTemplate(actor, id);
-      if (!template) throw new Error("Modelo atualizado, mas não foi possível recarregá-lo.");
+      const { data, error } = await supabase.rpc("save_task_template", { p_id: id, p_input: input });
+      if (error || !data) fail(error, "Não foi possível atualizar o modelo.");
+      const template = await this.getTemplate(actor, data);
+      if (!template) throw new Error("Modelo não encontrado.");
       return template;
+    },
+    async deleteTemplate(actor, id) {
+      assertGeneralAdmin(actor);
+      const supabase = createSupabaseServerClient();
+      const { error } = await supabase.from("task_templates").delete().eq("id", id).select("id").single();
+      if (error) fail(error, "Não foi possível excluir o modelo.");
+    },
+    async deleteCategory(actor, id) {
+      assertGeneralAdmin(actor);
+      const supabase = createSupabaseServerClient();
+      const { error } = await supabase.from("categories").delete().eq("id", id).select("id").single();
+      if (error) fail(error, "Não foi possível excluir a categoria.");
+    },
+    async setTemplateActive(actor, id, active) {
+      assertAdmin(actor);
+      const supabase = createSupabaseServerClient();
+      const { error } = await supabase.from("task_templates").update({ active }).eq("id", id).select("id").single();
+      if (error) fail(error, "Não foi possível alterar o modelo.");
+      await audit(supabase, active ? "template.restored" : "template.archived", "template", id);
+    },
+    async setCategoryActive(actor, id, active) {
+      assertAdmin(actor);
+      const supabase = createSupabaseServerClient();
+      const { error } = await supabase.from("categories").update({ active }).eq("id", id).select("id").single();
+      if (error) fail(error, "Não foi possível alterar a categoria.");
+      await audit(supabase, active ? "category.restored" : "category.archived", "category", id);
     },
 
     async listTasks(actor, filters = {}) {

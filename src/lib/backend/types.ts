@@ -45,6 +45,10 @@ export interface Backend {
   listCategories(actor: SessionUser): Promise<Category[]>;
   createCategory(actor: SessionUser, input: CategoryInput): Promise<Category>;
   updateCategory(actor: SessionUser, id: string, input: CategoryInput): Promise<Category>;
+  deleteCategory(actor: SessionUser, id: string): Promise<void>;
+  setCategoryActive(actor: SessionUser, id: string, active: boolean): Promise<void>;
+  deleteTemplate(actor: SessionUser, id: string): Promise<void>;
+  setTemplateActive(actor: SessionUser, id: string, active: boolean): Promise<void>;
   listTemplates(actor: SessionUser): Promise<TaskTemplate[]>;
   getTemplate(actor: SessionUser, id: string): Promise<TaskTemplate | null>;
   createTemplate(actor: SessionUser, input: TaskTemplateInput): Promise<TaskTemplate>;

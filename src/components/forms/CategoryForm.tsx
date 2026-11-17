@@ -54,7 +54,7 @@ export function CategoryForm({ category }: { category?: Category }) {
       </div>
 
       <div className="form-actions flex flex-wrap items-center justify-end gap-2 border-t border-ink/10 pt-4">
-        <Link href="/categorias" className="btn-ghost">Cancelar</Link>
+        <Link href="/gerenciamento-tarefas?aba=categorias" className="btn-ghost">Cancelar</Link>
         <Submit editing={editing} />
       </div>
     </FormExperience>

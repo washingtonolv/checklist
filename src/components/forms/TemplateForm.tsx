@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { FormExperience } from "./FormExperience";
-import { useState } from "react";
+import { createInlineCategoryAction } from "@/actions/categories";
+import { useState, useRef } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { Camera, CalendarClock, Save } from "@/components/ui/illustrated-icons";
 import { saveTemplateAction } from "@/actions/templates";
@@ -33,8 +34,15 @@ export function TemplateForm({
   const [state, action] = useFormState(saveTemplateAction, initialActionState);
   const [recurrence, setRecurrence] = useState<Recurrence>(template?.recurrence ?? "daily");
   const editing = Boolean(template);
+  const [availableCategories, setCategories] = useState(categories);
+  const [categoryId, setCategoryId] = useState(template?.categoryId ?? "");
+  const [creatingCategory, setCreatingCategory] = useState(false);
+  const [categoryError, setCategoryError] = useState("");
+  const [creating, setCreating] = useState(false);
+  const categorySelect = useRef<HTMLSelectElement>(null);
 
   return (
+    <>
     <FormExperience action={action} className="space-y-5">
       {template ? <input type="hidden" name="id" value={template.id} /> : null}
       {state?.error ? <Alert tone="error">{state.error}</Alert> : null}
@@ -51,13 +59,15 @@ export function TemplateForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="categoryId" className="label">Categoria *</label>
-          <select id="categoryId" name="categoryId" required defaultValue={template?.categoryId ?? ""} className="input">
-            <option value="">Selecione</option>
-            {categories.map((category) => (
+          <label htmlFor="categoryId" className="label">Categoria (opcional)</label>
+          <select id="categoryId" name="categoryId" ref={categorySelect} value={categoryId} onChange={(event) => setCategoryId(event.target.value)} className="input">
+            <option value="">Sem categoria</option>
+            {availableCategories.filter((category) => category.active || category.id === template?.categoryId).map((category) => (
               <option key={category.id} value={category.id}>{category.name}</option>
             ))}
           </select>
+          <p className="hint">Você pode classificar o modelo posteriormente.</p>
+          <button type="button" className="btn-ghost btn-sm" onClick={() => setCreatingCategory(true)}>Criar categoria sem perder o preenchimento</button>
         </div>
         <div>
           <label htmlFor="recurrence" className="label">Periodicidade *</label>
@@ -121,7 +131,9 @@ export function TemplateForm({
         {stores.length ? (
           <div className="grid gap-2 sm:grid-cols-2">
             {stores.map((store) => (
-              <label key={store.id} className="flex cursor-pointer items-center gap-3 rounded-xl border border-ink/15 bg-surface px-3.5 py-2.5 hover:border-turquesa">
+              <div key={store.id}>
+              {!store.active && template?.storeIds.includes(store.id) ? <input type="hidden" name="storeIds" value={store.id} /> : null}
+              <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-ink/15 bg-surface px-3.5 py-2.5 hover:border-turquesa">
                 <input
                   type="checkbox"
                   name="storeIds"
@@ -133,6 +145,7 @@ export function TemplateForm({
                 <span className="text-sm text-ink/75">{store.name}</span>
                 {!store.active ? <span className="badge border border-ink/15 text-ink/70">Inativa</span> : null}
               </label>
+              </div>
             ))}
           </div>
         ) : (
@@ -150,10 +163,25 @@ export function TemplateForm({
       </label>
 
       <div className="form-actions flex flex-wrap items-center justify-end gap-2 border-t border-ink/10 pt-4">
-        <Link href="/modelos" className="btn-ghost">Cancelar</Link>
+        <Link href="/gerenciamento-tarefas?aba=modelos" className="btn-ghost">Cancelar</Link>
         <Submit editing={editing} />
       </div>
     </FormExperience>
+    {creatingCategory ? <form className="mt-5 space-y-3 rounded-xl border border-ink/15 p-4" action={async (data) => {
+      setCreating(true);
+      try {
+      const result = await createInlineCategoryAction(data);
+      if (result.error) { setCategoryError(result.error); return; }
+      if (result.category) { setCategories((items) => [...items, result.category!]); setCategoryId(result.category.id); setCreatingCategory(false); setCategoryError(""); categorySelect.current?.focus(); }
+      } catch { setCategoryError("Não foi possível criar a categoria. Tente novamente."); } finally { setCreating(false); }
+    }}>
+      <label htmlFor="inline-category-name" className="label">Nome da nova categoria</label>
+      <input id="inline-category-name" name="name" className="input" required minLength={2} autoFocus />
+      {categoryError ? <p role="alert" className="text-sm text-red-700">{categoryError}</p> : null}
+      <button className="btn-primary" disabled={creating}>{creating ? "Criando…" : "Criar e selecionar categoria"}</button>
+      <button type="button" className="btn-ghost" onClick={() => { setCreatingCategory(false); categorySelect.current?.focus(); }}>Cancelar</button>
+    </form> : null}
+    </>
   );
 }
 

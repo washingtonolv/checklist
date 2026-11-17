@@ -35,7 +35,7 @@ export interface LocalTemplate {
   id: string;
   title: string;
   description: string;
-  categoryId: string;
+  categoryId: string | null;
   recurrence: Recurrence;
   dueTime: string;
   onceDueDate: string | null;
@@ -51,7 +51,7 @@ export interface LocalTask {
   storeId: string;
   title: string;
   description: string;
-  categoryId: string;
+  categoryId: string | null;
   recurrence: Recurrence;
   periodKey: string;
   dueDate: string;

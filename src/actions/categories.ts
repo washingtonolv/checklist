@@ -31,7 +31,21 @@ export async function saveCategoryAction(_prev: ActionState, formData: FormData)
     return { ok: false, error: safeErrorMessage(error, "Não foi possível salvar a categoria.") };
   }
   revalidatePath("/categorias");
+  revalidatePath("/gerenciamento-tarefas");
   revalidatePath("/modelos");
-  redirect(`/categorias?sucesso=${encodeURIComponent(id ? "Categoria atualizada." : "Categoria criada.")}`);
+  redirect(`/gerenciamento-tarefas?aba=categorias&sucesso=${encodeURIComponent(id ? "Categoria atualizada." : "Categoria criada.")}`);
 }
 
+
+export async function createInlineCategoryAction(formData: FormData): Promise<{ category?: import("@/lib/types").Category; error?: string }> {
+  const actor = await requireAdmin();
+  const parsed = categorySchema.safeParse({ name: formString(formData.get("name")), description: "", active: true, sortOrder: 0 });
+  if (!parsed.success) return { error: zodMessage(parsed.error) };
+  try {
+    const category = await getBackend().createCategory(actor, parsed.data);
+    revalidatePath("/gerenciamento-tarefas");
+    return { category };
+  } catch (error) {
+    return { error: safeErrorMessage(error, "Não foi possível criar a categoria.") };
+  }
+}
