@@ -422,7 +422,6 @@ export function createLocalBackend(): Backend {
       assertAdmin(actor);
       const db = await getDb();
       return db.users
-        .filter((user) => user.role !== "admin")
         .map((user) => mapUser(db, user))
         .sort((a, b) => a.name.localeCompare(b.name));
     },
