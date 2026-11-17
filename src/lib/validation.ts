@@ -20,12 +20,14 @@ export const newPasswordSchema = z
   });
 
 export const storeSchema = z.object({
+  region: z.enum(["rio_de_janeiro", "nordeste"], { required_error: "Selecione a região da loja." }),
+  operationType: z.enum(["dd_multimarcas", "franquia_natura"], { required_error: "Selecione o tipo da loja." }),
   name: z.string().trim().min(2, "Informe o nome da loja."),
   code: z.string().trim().min(1, "Informe o código da loja.").max(30, "Código muito longo."),
   managerId: z.string().uuid().nullable(),
   supervisorIds: z.array(z.string().uuid()).default([]),
   active: z.boolean().default(true)
-});
+}).refine((data) => data.region !== "nordeste" || data.operationType === "dd_multimarcas", { message: "No Nordeste, selecione D&D Multimarcas.", path: ["operationType"] });
 
 export const usernameSchema = z.string().trim().toLowerCase().regex(/^[a-z0-9_.-]{3,40}$/, "Use de 3 a 40 letras, números, pontos, traços ou sublinhados, sem espaços.");
 
@@ -64,7 +66,7 @@ export const templateSchema = z
   .object({
     title: z.string().trim().min(2, "Informe o nome da atividade."),
     description: z.string().trim().max(1000, "Descrição muito longa.").default(""),
-    categoryId: z.string().uuid("Selecione uma categoria."),
+    categoryId: z.preprocess((value) => value === "" ? null : value, z.string().uuid("Categoria inválida.").nullable()),
     recurrence: z.enum(["daily", "weekly", "monthly", "once"]),
     dueTime: z
       .string()

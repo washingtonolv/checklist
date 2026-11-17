@@ -1,3 +1,5 @@
+import { STORE_REGIONS, STORE_OPERATION_TYPES } from "@/lib/store-classification";
+import type { StoreRegion, StoreOperationType } from "@/lib/types";
 import Link from "next/link";
 import { LayoutGrid, List } from "lucide-react";
 import { Building2, CheckCircle2, MapPin, Plus, Store, UserRound, Users } from "@/components/ui/illustrated-icons";
@@ -12,11 +14,19 @@ export const dynamic = "force-dynamic";
 export default async function StoresPage({
   searchParams: rawParams
 }: {
-  searchParams: Promise<{ sucesso?: string; visualizacao?: string }>;
+  searchParams: Promise<{ sucesso?: string; visualizacao?: string; regiao?: string; tipo?: string }>;
 }) {
   const searchParams = await rawParams;
   const user = await requireUser();
-  const stores = await getBackend().listStores(user);
+  const allStores = await getBackend().listStores(user);
+  const region: StoreRegion = searchParams.regiao === "nordeste" ? "nordeste" : searchParams.regiao === "rio_de_janeiro" ? "rio_de_janeiro" : allStores.length && !allStores.some((store) => store.region === "rio_de_janeiro") ? "nordeste" : "rio_de_janeiro";
+  const regionalStores = allStores.filter((store) => store.region === region);
+  const operationType: StoreOperationType = region === "nordeste" ? "dd_multimarcas" : searchParams.tipo === "franquia_natura" ? "franquia_natura" : searchParams.tipo === "dd_multimarcas" ? "dd_multimarcas" : regionalStores.length && !regionalStores.some((store) => store.operationType === "dd_multimarcas") ? "franquia_natura" : "dd_multimarcas";
+  const stores = regionalStores.filter((store) => store.operationType === operationType).sort((a, b) => a.code.localeCompare(b.code, "pt-BR", { numeric: true }) || a.name.localeCompare(b.name, "pt-BR"));
+  function viewUrl(next: { region?: StoreRegion; operationType?: StoreOperationType; view?: string } = {}) {
+    return `/lojas?${new URLSearchParams({ regiao: next.region ?? region, tipo: (next.region ?? region) === "nordeste" ? "dd_multimarcas" : next.operationType ?? operationType, visualizacao: next.view ?? (searchParams.visualizacao === "grade" ? "grade" : "lista") })}`;
+  }
+  const createUrl = `/lojas/nova?regiao=${region}&tipo=${operationType}`;
   const grid = searchParams.visualizacao === "grade";
   const isAdmin = user.role === "admin";
 
@@ -24,9 +34,9 @@ export default async function StoresPage({
     <div>
       <PageHeader
         title="Lojas"
-        subtitle={isAdmin ? "Cadastre, edite e acompanhe as unidades da rede." : "Unidades vinculadas ao seu perfil."}
-        actions={<><div className="stores-view-toggle flex gap-1" aria-label="Exibição das lojas"><Link href="/lojas?visualizacao=lista" className="btn-secondary btn-sm" aria-label="Exibir lojas em lista" title="Lista" aria-current={!grid ? "page" : undefined}><List className="h-4 w-4" aria-hidden="true" /></Link><Link href="/lojas?visualizacao=grade" className="btn-secondary btn-sm" aria-label="Exibir lojas em grade" title="Grade" aria-current={grid ? "page" : undefined}><LayoutGrid className="h-4 w-4" aria-hidden="true" /></Link></div>{isAdmin ? (
-          <Link href="/lojas/nova" className="btn-primary">
+        subtitle={isAdmin ? "Rede organizada por região e tipo de operação." : "Unidades vinculadas ao seu perfil."}
+        actions={<><div className="stores-view-toggle flex gap-1" aria-label="Exibição das lojas"><Link href={viewUrl({ view: "lista" })} className="btn-secondary btn-sm" aria-label="Exibir lojas em lista" title="Lista" aria-current={!grid ? "page" : undefined}><List className="h-4 w-4" aria-hidden="true" /></Link><Link href={viewUrl({ view: "grade" })} className="btn-secondary btn-sm" aria-label="Exibir lojas em grade" title="Grade" aria-current={grid ? "page" : undefined}><LayoutGrid className="h-4 w-4" aria-hidden="true" /></Link></div>{isAdmin ? (
+          <Link href={createUrl} className="btn-primary">
             <Plus className="h-4 w-4" />
             Nova loja
           </Link>
@@ -40,6 +50,12 @@ export default async function StoresPage({
           </Alert>
         </div>
       ) : null}
+
+      <nav aria-label="Região das lojas" className="mb-5 flex flex-wrap gap-2 border-b border-ink/10 pb-4">
+        {(Object.entries(STORE_REGIONS) as [StoreRegion, string][]).map(([value, label]) => <Link key={value} href={viewUrl({ region: value, operationType: "dd_multimarcas" })} className={region === value ? "btn-primary" : "btn-secondary"} aria-current={region === value ? "page" : undefined}>{label}<span className="text-xs tabular-nums">{allStores.filter((store) => store.region === value).length}</span></Link>)}
+      </nav>
+      {region === "rio_de_janeiro" ? <nav aria-label="Tipo de loja" className="mb-5 flex flex-wrap gap-2">{(Object.entries(STORE_OPERATION_TYPES) as [StoreOperationType, string][]).map(([value, label]) => <Link key={value} href={viewUrl({ operationType: value })} className={operationType === value ? "btn-primary btn-sm" : "btn-secondary btn-sm"} aria-current={operationType === value ? "page" : undefined}>{label}<span className="text-xs tabular-nums">{regionalStores.filter((store) => store.operationType === value).length}</span></Link>)}</nav> : null}
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2"><h2 className="text-base font-semibold text-ink">{STORE_OPERATION_TYPES[operationType]}</h2><p className="text-xs text-ink/70">{STORE_REGIONS[region]} · {stores.length} loja(s)</p></div>
 
       {stores.length ? (
         <>
@@ -124,9 +140,9 @@ export default async function StoresPage({
         <Card>
           <EmptyState
             icon={<Building2 className="h-6 w-6" />}
-            title="Nenhuma loja vinculada"
-            description={isAdmin ? "Cadastre a primeira unidade da rede D&D." : "Procure a gerente comercial para ser vinculado a uma loja."}
-            action={isAdmin ? <Link href="/lojas/nova" className="btn-primary">Cadastrar loja</Link> : null}
+            title="Nenhuma loja neste grupo"
+            description={isAdmin ? "Cadastre uma unidade para esta região e tipo de operação." : "Procure a gerente comercial para ser vinculado a uma loja."}
+            action={isAdmin ? <Link href={createUrl} className="btn-primary">Cadastrar loja</Link> : null}
           />
         </Card>
       )}

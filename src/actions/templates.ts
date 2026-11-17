@@ -41,10 +41,11 @@ export async function saveTemplateAction(_prev: ActionState, formData: FormData)
   } catch (error) {
     return { ok: false, error: safeErrorMessage(error, "Não foi possível salvar o modelo de tarefa.") };
   }
+  revalidatePath("/gerenciamento-tarefas");
   revalidatePath("/modelos");
   revalidatePath("/atividades");
   revalidatePath("/painel");
-  redirect(`/modelos?sucesso=${encodeURIComponent(id ? "Modelo atualizado." : "Modelo criado.")}`);
+  redirect(`/gerenciamento-tarefas?aba=modelos&sucesso=${encodeURIComponent(id ? "Modelo atualizado." : "Modelo criado.")}`);
 }
 
 export async function generateTasksAction(): Promise<ActionState> {

@@ -30,7 +30,12 @@ export interface SessionUser {
   storeIds: string[];
 }
 
+export type StoreRegion = "rio_de_janeiro" | "nordeste";
+export type StoreOperationType = "dd_multimarcas" | "franquia_natura";
+
 export interface Store {
+  region: StoreRegion;
+  operationType: StoreOperationType;
   id: string;
   name: string;
   code: string;
@@ -42,6 +47,8 @@ export interface Store {
 }
 
 export interface StoreInput {
+  region: StoreRegion;
+  operationType: StoreOperationType;
   name: string;
   code: string;
   managerId: string | null;
@@ -91,7 +98,7 @@ export interface TaskTemplate {
   id: string;
   title: string;
   description: string;
-  categoryId: string;
+  categoryId: string | null;
   categoryName: string;
   recurrence: Recurrence;
   dueTime: string;
@@ -106,7 +113,7 @@ export interface TaskTemplate {
 export interface TaskTemplateInput {
   title: string;
   description: string;
-  categoryId: string;
+  categoryId: string | null;
   recurrence: Recurrence;
   dueTime: string;
   onceDueDate: string | null;
@@ -160,7 +167,7 @@ export interface Task {
   storeCode: string;
   title: string;
   description: string;
-  categoryId: string;
+  categoryId: string | null;
   categoryName: string;
   recurrence: Recurrence;
   periodKey: string;

@@ -9,7 +9,7 @@ import { saveUserAction } from "@/actions/users";
 import { initialActionState } from "@/actions/state";
 import { Alert } from "@/components/ui";
 import { ROLE_DESCRIPTIONS, ROLE_LABELS } from "@/lib/constants";
-import type { UserAccount } from "@/lib/types";
+import type { Role, UserAccount } from "@/lib/types";
 
 function Submit({ editing }: { editing: boolean }) {
   const { pending } = useFormStatus();
@@ -24,14 +24,16 @@ function Submit({ editing }: { editing: boolean }) {
 export function UserForm({
   user,
   stores,
-  canManageAdmins = false
+  canManageAdmins = false,
+  initialRole = "manager"
 }: {
   user?: UserAccount;
+  initialRole?: Role;
   canManageAdmins?: boolean;
   stores: { id: string; name: string }[];
 }) {
   const [state, action] = useFormState(saveUserAction, initialActionState);
-  const [role, setRole] = useState<"admin" | "supervisor" | "manager">(user?.role ?? "manager");
+  const [role, setRole] = useState<"admin" | "supervisor" | "manager">(user?.role ?? (initialRole === "admin" && !canManageAdmins ? "manager" : initialRole));
   const [showPassword, setShowPassword] = useState(false);
   const editing = Boolean(user);
   const selectedStoreIds = user?.storeIds ?? [];
@@ -146,7 +148,7 @@ export function UserForm({
       </label>
 
       <div className="form-actions flex flex-wrap items-center justify-end gap-2 border-t border-ink/10 pt-4">
-        <Link href="/usuarios" className="btn-ghost">Cancelar</Link>
+        <Link href={`/usuarios?perfil=${user?.role ?? initialRole}`} className="btn-ghost">Cancelar</Link>
         <Submit editing={editing} />
       </div>
     </FormExperience>

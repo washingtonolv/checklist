@@ -68,8 +68,7 @@ export const NAV_ITEMS = [
   { href: "/atividades", label: "Atividades", icon: "ClipboardCheck", roles: ["admin", "supervisor", "manager"] },
   { href: "/lojas", label: "Lojas", icon: "Store", roles: ["admin", "supervisor", "manager"] },
   { href: "/usuarios", label: "Usuários", icon: "Users", roles: ["admin"] },
-  { href: "/categorias", label: "Categorias", icon: "FolderTree", roles: ["admin"] },
-  { href: "/modelos", label: "Modelos de tarefas", icon: "ListChecks", roles: ["admin"] },
+  { href: "/gerenciamento-tarefas", label: "Gerenciamento de Tarefas", icon: "ListChecks", roles: ["admin"] },
   { href: "/relatorios", label: "Relatórios", icon: "FileSpreadsheet", roles: ["admin", "supervisor", "manager"] },
   { href: "/historico", label: "Histórico", icon: "History", roles: ["admin"] }
 ] as const;

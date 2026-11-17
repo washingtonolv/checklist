@@ -51,7 +51,7 @@ export async function saveUserAction(_prev: ActionState, formData: FormData): Pr
   }
   revalidatePath("/usuarios");
   revalidatePath("/lojas");
-  redirect(`/usuarios?sucesso=${encodeURIComponent(id ? "Usuário atualizado com sucesso." : "Usuário cadastrado com sucesso.")}`);
+  redirect(`/usuarios?perfil=${parsed.data.role}&sucesso=${encodeURIComponent(id ? "Usuário atualizado com sucesso." : "Usuário cadastrado com sucesso.")}`);
 }
 
 

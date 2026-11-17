@@ -8,13 +8,15 @@ import { UserForm } from "@/components/forms/UserForm";
 
 export const dynamic = "force-dynamic";
 
-export default async function NewUserPage() {
+export default async function NewUserPage({ searchParams: rawParams }: { searchParams: Promise<{ perfil?: string }> }) {
+  const searchParams = await rawParams;
   const user = await requireAdmin();
+  const initialRole = searchParams.perfil === "supervisor" ? "supervisor" : searchParams.perfil === "admin" && isGeneralAdmin(user) ? "admin" : "manager";
   const stores = await getBackend().listStores(user);
 
   return (
     <div className="mx-auto max-w-3xl">
-      <Link href="/usuarios" className="mb-4 inline-flex items-center gap-1.5 text-xs font-semibold text-ink/70 hover:text-ink">
+      <Link href={`/usuarios?perfil=${initialRole}`} className="mb-4 inline-flex items-center gap-1.5 text-xs font-semibold text-ink/70 hover:text-ink">
         <ArrowLeft className="h-4 w-4" />
         Voltar para usuários
       </Link>
@@ -24,7 +26,7 @@ export default async function NewUserPage() {
         subtitle="Defina o perfil de acesso e vincule o responsável às lojas da rede."
       />
       <Card className="p-5 sm:p-6">
-        <UserForm canManageAdmins={isGeneralAdmin(user)} stores={stores.map((store) => ({ id: store.id, name: store.name }))} />
+        <UserForm initialRole={initialRole} canManageAdmins={isGeneralAdmin(user)} stores={stores.map((store) => ({ id: store.id, name: store.name }))} />
       </Card>
     </div>
   );
