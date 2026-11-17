@@ -4,16 +4,22 @@ import { PageHeader } from "@/components/ui";
 import { TemplatesPanel } from "@/components/management/TemplatesPanel";
 import { CategoriesPanel } from "@/components/management/CategoriesPanel";
 export const dynamic = "force-dynamic";
-export default async function TaskManagementPage({ searchParams }: { searchParams: { aba?: string; sucesso?: string } }) {
+export default async function TaskManagementPage({ searchParams }: { searchParams: { aba?: string; categorias?: string; categoria?: string; sucesso?: string } }) {
   await requireAdmin();
-  const categories = searchParams.aba === "categorias";
+  const categoriesOpen = searchParams.categorias === "abertas" || searchParams.aba === "categorias";
   return <div>
-    <PageHeader title="Gerenciamento de Tarefas" subtitle="Cadastre e organize seus modelos e categorias." actions={!categories ? <Link href="/modelos/novo" className="btn-primary">Novo modelo</Link> : undefined} />
-    <nav aria-label="Abas de gerenciamento" className="mb-5 flex gap-2 border-b border-ink/15 pb-3">
-      <Link href="/gerenciamento-tarefas?aba=modelos" aria-current={!categories ? "page" : undefined} className={!categories ? "btn-primary" : "btn-secondary"}>Modelos de Tarefas</Link>
-      <Link href="/gerenciamento-tarefas?aba=categorias" aria-current={categories ? "page" : undefined} className={categories ? "btn-primary" : "btn-secondary"}>Categorias</Link>
-    </nav>
-    <p className="mb-5 text-xs text-ink/70">Arquivar um modelo interrompe novas gerações e mantém as atividades existentes. Arquivar uma categoria apenas a retira dos novos cadastros; seus modelos continuam com o próprio status. A exclusão é permitida somente sem vínculos ou histórico.</p>
-    {categories ? <CategoriesPanel searchParams={searchParams} /> : <TemplatesPanel searchParams={searchParams} />}
+    <PageHeader title="Gerenciamento de Tarefas" subtitle="Cadastre modelos de tarefa e organize-os por categoria." actions={<Link href="/modelos/novo" className="btn-primary">Novo modelo</Link>} />
+    <div className="mb-5 border-b border-ink/15 pb-3">
+      <h2 className="text-sm font-semibold text-ink">Modelos de tarefa</h2>
+    </div>
+    <details key={categoriesOpen ? "open" : "closed"} open={categoriesOpen} id="categorias" className="mb-6 rounded-2xl border border-ink/15 bg-surface p-4">
+      <summary className="cursor-pointer text-sm font-semibold text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">Gerenciar categorias</summary>
+      <div className="mt-4">
+        <p className="mb-4 text-xs text-ink/70">Crie, edite e organize as categorias dos modelos. Arquivar uma categoria a retira dos novos cadastros; seus modelos mantêm o próprio status. A exclusão é permitida somente sem vínculos ou histórico.</p>
+        <CategoriesPanel searchParams={{}} />
+      </div>
+    </details>
+    <p className="mb-5 text-xs text-ink/70">Arquivar um modelo interrompe novas gerações e mantém as atividades existentes. A exclusão é permitida somente sem vínculos ou histórico.</p>
+    <TemplatesPanel searchParams={searchParams} />
   </div>;
 }

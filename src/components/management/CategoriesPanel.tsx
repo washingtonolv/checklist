@@ -1,7 +1,7 @@
 import { RecordActions } from "@/components/forms/RecordActions";
 import { isGeneralAdmin } from "@/lib/access";
 import Link from "next/link";
-import { CheckCircle2, FolderTree, Layers, ListChecks, Pencil } from "@/components/ui/illustrated-icons";
+import { CheckCircle2, FolderTree, Layers, Pencil } from "@/components/ui/illustrated-icons";
 import { requireAdmin } from "@/lib/auth-server";
 import { getBackend } from "@/lib/backend";
 import { Card, CardHeader, EmptyState } from "@/components/ui";
@@ -38,7 +38,6 @@ export async function CategoriesPanel({
             title="Categorias cadastradas"
             description={`${categories.length} categoria(s) na estrutura atual`}
             icon={<FolderTree className="h-4 w-4" />}
-            action={<Link href="/modelos" className="btn-ghost btn-sm"><ListChecks className="h-4 w-4" />Ver modelos</Link>}
           />
           {categories.length ? (
             <div className="table-wrap">

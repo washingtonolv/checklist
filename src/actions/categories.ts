@@ -33,7 +33,7 @@ export async function saveCategoryAction(_prev: ActionState, formData: FormData)
   revalidatePath("/categorias");
   revalidatePath("/gerenciamento-tarefas");
   revalidatePath("/modelos");
-  redirect(`/gerenciamento-tarefas?aba=categorias&sucesso=${encodeURIComponent(id ? "Categoria atualizada." : "Categoria criada.")}`);
+  redirect(`/gerenciamento-tarefas?aba=modelos&categorias=abertas&sucesso=${encodeURIComponent(id ? "Categoria atualizada." : "Categoria criada.")}`);
 }
 
 
