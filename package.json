@@ -33,6 +33,7 @@
     "zod": "3.23.8"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.16",
     "@types/bcryptjs": "2.4.6",
     "@types/node": "22.9.0",
     "@types/react": "18.3.12",
@@ -46,4 +47,3 @@
     "vitest": "2.1.4"
   }
 }
-

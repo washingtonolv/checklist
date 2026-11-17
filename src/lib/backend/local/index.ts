@@ -557,6 +557,45 @@ export function createLocalBackend(): Backend {
       });
     },
 
+    async deleteCategory(actor, id) {
+      assertAdmin(actor);
+      return mutateDb((db) => {
+        const category = db.categories.find((item) => item.id === id);
+        if (!category) throw new Error("Categoria não encontrada.");
+        if (db.templates.some((item) => item.categoryId === id)) throw new Error("Transfira os modelos para outra categoria ou para Sem categoria antes de excluir.");
+        if (db.tasks.some((item) => item.categoryId === id)) throw new Error("Categoria com histórico. Arquive para preservar as atividades.");
+        db.categories = db.categories.filter((item) => item.id !== id);
+        addAudit(db, actor, "category.deleted", "category", id, { name: category.name });
+      });
+    },
+    async deleteTemplate(actor, id) {
+      assertAdmin(actor);
+      return mutateDb((db) => {
+        const template = db.templates.find((item) => item.id === id);
+        if (!template) throw new Error("Modelo não encontrado.");
+        if (db.tasks.some((item) => item.templateId === id)) throw new Error("Modelo com atividades geradas. Arquive para preservar o histórico.");
+        db.templates = db.templates.filter((item) => item.id !== id);
+        addAudit(db, actor, "template.deleted", "template", id, { title: template.title });
+      });
+    },
+    async setCategoryActive(actor, id, active) {
+      assertAdmin(actor);
+      return mutateDb((db) => {
+        const category = db.categories.find((item) => item.id === id);
+        if (!category) throw new Error("Categoria não encontrada.");
+        category.active = active;
+        addAudit(db, actor, active ? "category.restored" : "category.archived", "category", id);
+      });
+    },
+    async setTemplateActive(actor, id, active) {
+      assertAdmin(actor);
+      return mutateDb((db) => {
+        const template = db.templates.find((item) => item.id === id);
+        if (!template) throw new Error("Modelo não encontrado.");
+        template.active = active;
+        addAudit(db, actor, active ? "template.restored" : "template.archived", "template", id);
+      });
+    },
     async listTemplates(actor) {
       const db = await getDb();
       return db.templates
@@ -582,7 +621,7 @@ export function createLocalBackend(): Backend {
     async createTemplate(actor, input) {
       assertAdmin(actor);
       return mutateDb((db) => {
-        if (!db.categories.some((category) => category.id === input.categoryId)) {
+        if (input.categoryId && !db.categories.some((category) => category.id === input.categoryId && category.active)) {
           throw new Error("Categoria inválida.");
         }
         for (const storeId of input.storeIds) {
@@ -613,7 +652,7 @@ export function createLocalBackend(): Backend {
       return mutateDb((db) => {
         const template = db.templates.find((item) => item.id === id);
         if (!template) throw new Error("Modelo de tarefa não encontrado.");
-        if (!db.categories.some((category) => category.id === input.categoryId)) {
+        if (input.categoryId && !db.categories.some((category) => category.id === input.categoryId && (category.active || template.categoryId === category.id))) {
           throw new Error("Categoria inválida.");
         }
         for (const storeId of input.storeIds) {

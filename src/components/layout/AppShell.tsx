@@ -43,6 +43,7 @@ const TITLES: { prefix: string; title: string; description: string }[] = [
   { prefix: "/atividades", title: "Atividades", description: "Checklists e evidências" },
   { prefix: "/lojas", title: "Lojas", description: "Unidades da rede" },
   { prefix: "/usuarios", title: "Usuários", description: "Equipe e permissões" },
+  { prefix: "/gerenciamento-tarefas", title: "Gerenciamento de Tarefas", description: "Modelos e categorias" },
   { prefix: "/categorias", title: "Categorias", description: "Estrutura dos checklists" },
   { prefix: "/modelos", title: "Modelos de tarefas", description: "Rotinas e periodicidade" },
   { prefix: "/relatorios", title: "Relatórios", description: "Indicadores e exportações" },
@@ -105,7 +106,7 @@ export function AppShell({
       <nav className="sidebar-groups flex-1 overflow-y-auto px-3 pb-4" aria-label="Navegação principal">
         {[
           { title: "Operação", paths: ["/painel", "/atividades", "/lojas"] },
-          { title: "Gestão", paths: ["/usuarios", "/categorias", "/modelos"] },
+          { title: "Gestão", paths: ["/gerenciamento-tarefas", "/usuarios"] },
           { title: "Acompanhamento", paths: ["/relatorios", "/historico"] }
         ].map((group) => {
           const items = nav.filter(item => group.paths.includes(item.href));
@@ -116,7 +117,7 @@ export function AppShell({
               <div className="space-y-1">
                 {items.map(item => {
                   const Icon = ICONS[item.icon as keyof typeof ICONS];
-                  const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                  const active = pathname === item.href || pathname.startsWith(`${item.href}/`) || (item.href === "/gerenciamento-tarefas" && (/^\/(modelos|categorias)(\/|$)/).test(pathname));
                   return (
                     <Link key={item.href} href={item.href} title={item.label} aria-label={item.label}
                       className={cn("sidebar-nav-link flex min-h-11 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium", active && "sidebar-nav-active")}

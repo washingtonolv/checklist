@@ -12,7 +12,7 @@ export function assertStoreAccess(actor: SessionUser, storeId: string): void {
 }
 
 export function assertAdmin(actor: SessionUser): void {
-  if (actor.role !== "admin") {
+  if (actor.role !== "admin" || !actor.active) {
     throw new Error("Somente a gerente comercial pode executar esta ação.");
   }
 }

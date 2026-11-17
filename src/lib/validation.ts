@@ -64,7 +64,7 @@ export const templateSchema = z
   .object({
     title: z.string().trim().min(2, "Informe o nome da atividade."),
     description: z.string().trim().max(1000, "Descrição muito longa.").default(""),
-    categoryId: z.string().uuid("Selecione uma categoria."),
+    categoryId: z.preprocess((value) => value === "" ? null : value, z.string().uuid("Categoria inválida.").nullable()),
     recurrence: z.enum(["daily", "weekly", "monthly", "once"]),
     dueTime: z
       .string()
