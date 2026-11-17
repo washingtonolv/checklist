@@ -1,3 +1,4 @@
+import { assertStoreClassification } from "../../store-classification";
 import { assertAdmin, assertGeneralAdmin, isGeneralAdmin, GENERAL_ADMIN_ID, canReview } from "../../access";
 import { MAX_PHOTOS_PER_TASK } from "../../constants";
 import { todayKey } from "../../dates";
@@ -64,6 +65,8 @@ function mapStoreRow(row: Row): Store {
     id: row.id,
     name: row.name,
     code: row.code,
+    region: row.region,
+    operationType: row.operation_type,
     active: row.active,
     managerId: row.manager_id,
     managerName: row.manager?.name ?? null,
@@ -262,7 +265,7 @@ export function createSupabaseBackend(): Backend {
       const { data, error } = await supabase
         .from("stores")
         .select(
-          "id,name,code,active,manager_id,created_at,manager:profiles!stores_manager_id_fkey(id,name),store_supervisors(supervisor:profiles!store_supervisors_supervisor_id_fkey(id,name))"
+          "id,name,code,region,operation_type,active,manager_id,created_at,manager:profiles!stores_manager_id_fkey(id,name),store_supervisors(supervisor:profiles!store_supervisors_supervisor_id_fkey(id,name))"
         )
         .order("name");
       if (error) fail(error, "Não foi possível carregar as lojas.");
@@ -276,7 +279,7 @@ export function createSupabaseBackend(): Backend {
       const { data, error } = await supabase
         .from("stores")
         .select(
-          "id,name,code,active,manager_id,created_at,manager:profiles!stores_manager_id_fkey(id,name),store_supervisors(supervisor:profiles!store_supervisors_supervisor_id_fkey(id,name))"
+          "id,name,code,region,operation_type,active,manager_id,created_at,manager:profiles!stores_manager_id_fkey(id,name),store_supervisors(supervisor:profiles!store_supervisors_supervisor_id_fkey(id,name))"
         )
         .eq("id", id)
         .maybeSingle();
@@ -287,12 +290,15 @@ export function createSupabaseBackend(): Backend {
 
     async createStore(actor, input) {
       assertAdmin(actor);
+      assertStoreClassification(input.region, input.operationType);
       const supabase = createSupabaseServerClient();
       const { data, error } = await supabase
         .from("stores")
         .insert({
           name: input.name,
           code: input.code,
+          region: input.region,
+          operation_type: input.operationType,
           manager_id: input.managerId,
           active: input.active
         })
@@ -308,7 +314,7 @@ export function createSupabaseBackend(): Backend {
         );
         if (linkError) fail(linkError, "Loja criada, mas não foi possível vincular supervisores.");
       }
-      await audit(supabase, "store.created", "store", data.id, { name: input.name, code: input.code });
+      await audit(supabase, "store.created", "store", data.id, { name: input.name, code: input.code, region: input.region, operationType: input.operationType });
       const store = await this.getStore(actor, data.id);
       if (!store) throw new Error("Loja criada, mas não foi possível recarregá-la.");
       return store;
@@ -316,12 +322,15 @@ export function createSupabaseBackend(): Backend {
 
     async updateStore(actor, id, input) {
       assertAdmin(actor);
+      assertStoreClassification(input.region, input.operationType);
       const supabase = createSupabaseServerClient();
       const { error } = await supabase
         .from("stores")
         .update({
           name: input.name,
           code: input.code,
+          region: input.region,
+          operation_type: input.operationType,
           manager_id: input.managerId,
           active: input.active
         })
@@ -334,7 +343,7 @@ export function createSupabaseBackend(): Backend {
         );
         if (linkError) fail(linkError, "Não foi possível atualizar os supervisores.");
       }
-      await audit(supabase, "store.updated", "store", id, { name: input.name, active: input.active });
+      await audit(supabase, "store.updated", "store", id, { name: input.name, active: input.active, region: input.region, operationType: input.operationType });
       const store = await this.getStore(actor, id);
       if (!store) throw new Error("Loja atualizada, mas não foi possível recarregá-la.");
       return store;

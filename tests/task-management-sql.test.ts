@@ -35,6 +35,16 @@ beforeAll(async () => {
   await db.exec("update public.profiles set role='admin'");
   await db.query("insert into public.stores(id,name,code) values ($1,'Loja teste','TEST')", [store]);
   await db.query("insert into public.categories(id,name) values ($1,'Categoria teste')", [category]);
+  await db.exec(`insert into auth.users(id,email) values ('00000000-0000-4000-8000-000000000010','layane@test.local');
+    update public.profiles set name='Layane Andrade',role='supervisor' where id='00000000-0000-4000-8000-000000000010';
+    insert into public.stores(id,name,code) values
+      ('00000000-0000-4000-8000-000000000011','Natura de teste','NAT'),
+      ('00000000-0000-4000-8000-000000000012','D&D PB - Teste','PB'),
+      ('00000000-0000-4000-8000-000000000013','LOJA TESTE','TEST-DEMO');
+    insert into public.store_supervisors(store_id,supervisor_id) values
+      ('00000000-0000-4000-8000-000000000011','00000000-0000-4000-8000-000000000010'),
+      ('00000000-0000-4000-8000-000000000012','00000000-0000-4000-8000-000000000010');`);
+  await db.exec(fs.readFileSync("supabase/migrations/20261117033318_store_classification.sql", "utf8"));
   await actor(owner);
 }, 60_000);
 afterAll(async () => { await db?.close(); });
@@ -94,4 +104,22 @@ it("keeps archived category names visible on historical tasks to their store man
   await actor(owner);
   await save(id, { ...input, active: false });
   await expect(db.query("delete from public.categories where id=$1", [cat])).rejects.toThrow(/task_instances_category_id_fkey/);
+});
+
+it("backfills store classification from PB and Layane once, including PB precedence", async () => {
+  const result = await db.query<{ code: string; region: string; operation_type: string }>("select code,region,operation_type from public.stores where code in ('NAT','PB','TEST-DEMO') order by code");
+  expect(result.rows).toEqual([
+    { code: "NAT", region: "rio_de_janeiro", operation_type: "franquia_natura" },
+    { code: "PB", region: "nordeste", operation_type: "dd_multimarcas" },
+    { code: "TEST-DEMO", region: "rio_de_janeiro", operation_type: "dd_multimarcas" }
+  ]);
+  await db.exec("update public.stores set name='D&D PB - Nome alterado' where code='NAT'; delete from public.store_supervisors where store_id='00000000-0000-4000-8000-000000000011'");
+  expect((await db.query("select region,operation_type from public.stores where code='NAT'")).rows).toEqual([{ region: "rio_de_janeiro", operation_type: "franquia_natura" }]);
+});
+it("enforces allowed store classifications in PostgreSQL and preserves store RLS", async () => {
+  await expect(db.exec("update public.stores set region='invalid' where code='NAT'")).rejects.toThrow(/stores_region_check/);
+  await expect(db.exec("update public.stores set region='nordeste' where code='NAT'")).rejects.toThrow(/stores_region_operation_check/);
+  await actor(other);
+  expect((await db.query("update public.stores set region='nordeste' where id=$1 returning id", [store])).rows).toHaveLength(0);
+  await actor(owner);
 });
