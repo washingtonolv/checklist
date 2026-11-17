@@ -49,14 +49,25 @@ jobs:
         run: |
           set -euo pipefail
           [[ "$SOURCE_SHA" =~ ^[a-f0-9]{40}$ ]]
-          echo "previous=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          previous=$(git rev-parse HEAD)
+          echo "previous=$previous" >> "$GITHUB_OUTPUT"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git fetch origin "$SOURCE_SHA"
-          if ! git merge --no-ff --no-edit "$SOURCE_SHA"; then
+          merge_result=0
+          git merge --no-ff --no-commit "$SOURCE_SHA" || merge_result=$?
+          # Workflows belong to each hosting branch. Sync application code only:
+          # GITHUB_TOKEN deliberately cannot create or modify workflow files.
+          git restore --source="$previous" --staged --worktree .github/workflows
+          if test -n "$(git diff --name-only --diff-filter=U)"; then
             echo '::error::Cloudflare compatibility conflict. Resolve and test the integration before publishing. No Cloudflare publication was made.'
             git diff --name-only --diff-filter=U
             exit 1
+          fi
+          if git rev-parse --verify -q MERGE_HEAD > /dev/null; then
+            git commit -m "Integrate approved main $SOURCE_SHA; preserve Cloudflare workflows"
+          else
+            test "$merge_result" = 0
           fi
           echo "source=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
           echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"

@@ -16,6 +16,7 @@ Os provedores não oferecem uma transação conjunta: a Vercel pode ficar pronta
 
 - Vercel continua ligada à branch `main`, com seus previews e endereço existentes.
 - Cloudflare mantém sua versão de Next/OpenNext, fotos R2, Images, passkeys e agendador. A sincronização é de `main` para Cloudflare. Não enviar essas adaptações de volta à Vercel automaticamente.
+- Os arquivos `.github/workflows` da branch Cloudflare são preservados explicitamente durante a integração. Cada branch mantém seus próprios workflows; mudanças de infraestrutura Cloudflare precisam de revisão específica. Isso também evita conceder ao token automático permissão para alterar workflows.
 - Reutilizar `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` do repositório. Nenhuma credencial Vercel nova é necessária. O token Cloudflare só é disponibilizado ao passo de publicação; o token GitHub de escrita só ao passo de envio.
 - `CLOUDFLARE_AUTODEPLOY` continua controlando o workflow antigo para publicações diretas da branch Cloudflare. O fluxo conjunto publica explicitamente após os testes e a confirmação da Vercel. O push com `GITHUB_TOKEN` não dispara o workflow antigo, conforme a [documentação do GitHub](https://docs.github.com/en/actions/concepts/security/github_token).
 - Não executar migrações automaticamente. Toda mudança no banco segue precisando da aprovação e conferência do destino.
