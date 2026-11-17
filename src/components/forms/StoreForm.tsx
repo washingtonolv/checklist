@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { STORE_REGIONS, STORE_OPERATION_TYPES } from "@/lib/store-classification";
 import Link from "next/link";
 import { FormExperience } from "./FormExperience";
 import { useFormState, useFormStatus } from "react-dom";
@@ -7,7 +9,7 @@ import { Save } from "@/components/ui/illustrated-icons";
 import { saveStoreAction } from "@/actions/stores";
 import { initialActionState } from "@/actions/state";
 import { Alert } from "@/components/ui";
-import type { Store } from "@/lib/types";
+import type { Store, StoreRegion, StoreOperationType } from "@/lib/types";
 
 function Submit({ editing }: { editing: boolean }) {
   const { pending } = useFormStatus();
@@ -22,14 +24,20 @@ function Submit({ editing }: { editing: boolean }) {
 export function StoreForm({
   store,
   managers,
-  supervisors
+  supervisors,
+  initialRegion = "rio_de_janeiro",
+  initialOperationType = "dd_multimarcas"
 }: {
   store?: Store;
+  initialRegion?: StoreRegion;
+  initialOperationType?: StoreOperationType;
   managers: { id: string; name: string }[];
   supervisors: { id: string; name: string }[];
 }) {
   const [state, action] = useFormState(saveStoreAction, initialActionState);
   const editing = Boolean(store);
+  const [region, setRegion] = useState<StoreRegion>(store?.region ?? initialRegion);
+  const [operationType, setOperationType] = useState<StoreOperationType>(store?.operationType ?? initialOperationType);
 
   return (
     <FormExperience action={action} className="space-y-5">
@@ -45,6 +53,11 @@ export function StoreForm({
           <label htmlFor="code" className="label">Código / identificação *</label>
           <input id="code" name="code" required defaultValue={store?.code} className="input" placeholder="LOJA-001" />
         </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div><label htmlFor="region" className="label">Região *</label><select id="region" name="region" required className="input" value={region} onChange={(event) => setRegion(event.target.value as StoreRegion)}>{Object.entries(STORE_REGIONS).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></div>
+        <div><label htmlFor="operationType" className="label">Tipo de loja *</label>{region === "nordeste" ? <><input type="hidden" name="operationType" value="dd_multimarcas" /><select id="operationType" disabled className="input" value="dd_multimarcas"><option value="dd_multimarcas">D&D Multimarcas</option></select></> : <select id="operationType" name="operationType" required className="input" value={operationType} onChange={(event) => setOperationType(event.target.value as StoreOperationType)}>{Object.entries(STORE_OPERATION_TYPES).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select>}<p className="hint">A classificação é própria da loja e não muda ao trocar os responsáveis.</p></div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -92,7 +105,7 @@ export function StoreForm({
       </div>
 
       <div className="form-actions flex flex-wrap items-center justify-end gap-2 border-t border-ink/10 pt-4">
-        <Link href="/lojas" className="btn-ghost">Cancelar</Link>
+        <Link href={`/lojas?regiao=${store?.region ?? initialRegion}&tipo=${store?.operationType ?? initialOperationType}`} className="btn-ghost">Cancelar</Link>
         <Submit editing={editing} />
       </div>
     </FormExperience>

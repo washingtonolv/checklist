@@ -138,6 +138,8 @@ describe("local backend: permissões e isolamento por loja", () => {
   it("bloqueia criação de loja para gerente de loja", async () => {
     await expect(
       backend.createStore(manager, {
+        region: "rio_de_janeiro",
+        operationType: "dd_multimarcas",
         name: "Loja não autorizada",
         code: "LOJA-999",
         managerId: null,

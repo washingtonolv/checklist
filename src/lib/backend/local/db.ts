@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { PhotoRequirement, Recurrence, Role, TaskStatus } from "../../types";
+import type { PhotoRequirement, Recurrence, Role, TaskStatus, StoreRegion, StoreOperationType } from "../../types";
 
 export interface LocalUser {
   avatar?: string | null;
@@ -14,6 +14,8 @@ export interface LocalUser {
 }
 
 export interface LocalStore {
+  region: StoreRegion;
+  operationType: StoreOperationType;
   id: string;
   name: string;
   code: string;
@@ -156,7 +158,19 @@ export async function getDb(): Promise<LocalDb> {
 async function loadOrCreate(dir: string): Promise<LocalDb> {
   const file = path.join(dir, "data.json");
   if (fs.existsSync(file)) {
-    return JSON.parse(fs.readFileSync(file, "utf8")) as LocalDb;
+    const db = JSON.parse(fs.readFileSync(file, "utf8")) as LocalDb;
+    let changed = false;
+    for (const store of db.stores) {
+      // One-time upgrade of legacy demo files, never reclassify saved records.
+      if (!store.region || !store.operationType) {
+        store.region ??= /\bPB\s*-/i.test(store.name) ? "nordeste" : "rio_de_janeiro";
+        const layane = db.users.filter((user) => user.name.trim().toLocaleLowerCase("pt-BR") === "layane andrade").map((user) => user.id);
+        store.operationType ??= store.region === "rio_de_janeiro" && store.supervisorIds.some((id) => layane.includes(id)) ? "franquia_natura" : "dd_multimarcas";
+        changed = true;
+      }
+    }
+    if (changed) await saveDb(db);
+    return db;
   }
   const { createSeedDb } = await import("./seed");
   const db = await createSeedDb(dir);

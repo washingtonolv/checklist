@@ -17,6 +17,8 @@ export async function saveStoreAction(_prev: ActionState, formData: FormData): P
   const actor = await requireAdmin();
   const id = formString(formData.get("id"));
   const parsed = storeSchema.safeParse({
+    region: formString(formData.get("region")),
+    operationType: formString(formData.get("operationType")),
     name: formString(formData.get("name")),
     code: formString(formData.get("code")),
     managerId: formString(formData.get("managerId")) || null,
@@ -34,9 +36,10 @@ export async function saveStoreAction(_prev: ActionState, formData: FormData): P
   } catch (error) {
     return { ok: false, error: safeErrorMessage(error, "Não foi possível salvar a loja.") };
   }
+  if (id) revalidatePath(`/lojas/${id}`);
   revalidatePath("/lojas");
   revalidatePath("/painel");
   revalidatePath("/usuarios");
-  redirect(`/lojas?sucesso=${encodeURIComponent(id ? "Loja atualizada com sucesso." : "Loja cadastrada com sucesso.")}`);
+  redirect(`/lojas?regiao=${parsed.data.region}&tipo=${parsed.data.operationType}&sucesso=${encodeURIComponent(id ? "Loja atualizada com sucesso." : "Loja cadastrada com sucesso.")}`);
 }
 

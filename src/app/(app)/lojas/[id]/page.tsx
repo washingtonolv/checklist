@@ -1,3 +1,4 @@
+import { STORE_REGIONS, STORE_OPERATION_TYPES } from "@/lib/store-classification";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -63,7 +64,7 @@ export default async function StoreDetailPage({ params }: { params: { id: string
 
   return (
     <div>
-      <Link href="/lojas" className="mb-4 inline-flex items-center gap-1.5 text-xs font-semibold text-ink/70 hover:text-ink">
+      <Link href={`/lojas?regiao=${store.region}&tipo=${store.operationType}`} className="mb-4 inline-flex items-center gap-1.5 text-xs font-semibold text-ink/70 hover:text-ink">
         <ArrowLeft className="h-4 w-4" />
         Voltar para lojas
       </Link>
@@ -71,7 +72,7 @@ export default async function StoreDetailPage({ params }: { params: { id: string
       <PageHeader
         eyebrow={store.code}
         title={store.name}
-        subtitle="Indicadores do mês, equipe responsável e histórico recente da unidade."
+        subtitle={`${STORE_REGIONS[store.region]} · ${STORE_OPERATION_TYPES[store.operationType]}`}
         actions={
           <div className="flex flex-wrap items-center gap-2">
             <span className={cn("badge", store.active ? "bg-pink text-white" : "border border-ink/20 bg-surface text-ink/70")}>

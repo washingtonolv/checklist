@@ -1,3 +1,4 @@
+import { assertStoreClassification } from "../../store-classification";
 import fs from "node:fs";
 import path from "node:path";
 import { assertAdmin, assertStoreAccess, canReview } from "../../access";
@@ -61,6 +62,8 @@ function mapStore(db: LocalDb, store: LocalStore): Store {
     id: store.id,
     name: store.name,
     code: store.code,
+    region: store.region,
+    operationType: store.operationType,
     active: store.active,
     managerId: store.managerId,
     managerName: manager?.name ?? null,
@@ -377,17 +380,20 @@ export function createLocalBackend(): Backend {
           throw new Error("Já existe uma loja com este código.");
         }
         validateStoreRelations(db, input);
+        assertStoreClassification(input.region, input.operationType);
         const store: LocalStore = {
           id: newId(),
           name: input.name,
           code: input.code,
+          region: input.region,
+          operationType: input.operationType,
           active: input.active,
           managerId: input.managerId,
           supervisorIds: input.supervisorIds,
           createdAt: nowIso()
         };
         db.stores.push(store);
-        addAudit(db, actor, "store.created", "store", store.id, { name: store.name, code: store.code });
+        addAudit(db, actor, "store.created", "store", store.id, { name: store.name, code: store.code, region: store.region, operationType: store.operationType });
         return mapStore(db, store);
       });
     },
@@ -405,13 +411,18 @@ export function createLocalBackend(): Backend {
           throw new Error("Já existe uma loja com este código.");
         }
         validateStoreRelations(db, input);
+        assertStoreClassification(input.region, input.operationType);
         store.name = input.name;
         store.code = input.code;
+        store.region = input.region;
+        store.operationType = input.operationType;
         store.active = input.active;
         store.managerId = input.managerId;
         store.supervisorIds = input.supervisorIds;
         addAudit(db, actor, "store.updated", "store", store.id, {
           name: store.name,
+          region: store.region,
+          operationType: store.operationType,
           active: store.active
         });
         return mapStore(db, store);
